@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rummy Familiar Online</title>
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Rummy Familiar" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <style>
+    :root{
+      --bg:#111827; --panel:#172033; --panel2:#0f172a; --soft:#243049; --card:#f8fafc;
+      --ink:#e5e7eb; --muted:#9ca3af; --accent:#38bdf8; --accent2:#a78bfa;
+      --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --line:rgba(255,255,255,.12);
+      --shadow: 0 18px 50px rgba(0,0,0,.35); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top left,#1f3a5c 0%,var(--bg) 38%,#050816 100%);color:var(--ink);min-height:100vh}
+    button,input,textarea,select{font:inherit}
+    button{border:0;border-radius:12px;padding:10px 14px;background:linear-gradient(135deg,var(--accent),#2563eb);color:white;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(37,99,235,.22);transition:transform .08s ease,opacity .2s ease,filter .2s ease}
+    button:hover{filter:brightness(1.08)} button:active{transform:scale(.98)} button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.45)}
+    .btn2{background:#334155;box-shadow:none}.btn3{background:#475569;box-shadow:none}.danger{background:linear-gradient(135deg,#fb7185,#dc2626)}.ok{background:linear-gradient(135deg,#34d399,#16a34a)}.warn{background:linear-gradient(135deg,#fbbf24,#d97706)}
+    .ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--ink)}
+    .topbar{position:sticky;top:0;z-index:10;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(5,8,22,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.3px}.brand .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#a78bfa);display:grid;place-items:center;box-shadow:0 8px 25px rgba(56,189,248,.2)}
+    .status{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;flex-wrap:wrap;justify-content:flex-end}.pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--ink)}.pill.okdot:before{content:'●';color:var(--ok);margin-right:6px}.pill.baddot:before{content:'●';color:var(--danger);margin-right:6px}
+    .wrap{display:grid;grid-template-columns:320px minmax(0,1fr) 340px;gap:16px;padding:16px;max-width:1580px;margin:0 auto}.panel{background:rgba(15,23,42,.88);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.panel h2,.panel h3{margin:0;padding:16px;border-bottom:1px solid var(--line);font-size:18px}.panel .body{padding:16px}.small{font-size:13px;color:var(--muted);line-height:1.35}.hint{border:1px dashed rgba(56,189,248,.42);background:rgba(56,189,248,.08);padding:12px;border-radius:14px;color:#dbeafe}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stack{display:flex;flex-direction:column;gap:10px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:8px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}.field input,.field textarea,.field select{width:100%;background:#0b1222;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px;outline:none}.field textarea{min-height:92px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(56,189,248,.8);box-shadow:0 0 0 3px rgba(56,189,248,.15)}
+    .hidden{display:none!important}.divider{height:1px;background:var(--line);margin:12px 0}.players{display:flex;flex-direction:column;gap:8px}.player{padding:10px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;align-items:center}.player.me{outline:2px solid rgba(56,189,248,.5)}.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#8b5cf6);display:grid;place-items:center;font-weight:900;color:white}.player-name{display:flex;align-items:center;gap:8px}.turnBadge{font-size:11px;background:rgba(34,197,94,.16);border:1px solid rgba(34,197,94,.35);color:#bbf7d0;border-radius:999px;padding:3px 7px}.hostBadge{font-size:11px;background:rgba(251,191,36,.14);border:1px solid rgba(251,191,36,.35);color:#fde68a;border-radius:999px;padding:3px 7px}
+    .table{min-height:620px;background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(17,24,39,.78));position:relative}.gameHeader{display:flex;justify-content:space-between;gap:12px;align-items:stretch;padding:14px;border-bottom:1px solid var(--line);flex-wrap:wrap}.pileArea{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.pile{width:88px;height:122px;border-radius:14px;border:2px solid rgba(255,255,255,.18);display:grid;place-items:center;background:linear-gradient(135deg,#1d4ed8,#7c3aed);font-weight:900;position:relative;box-shadow:0 8px 20px rgba(0,0,0,.25)}.pile.empty{background:#111827;color:var(--muted)}.pileCount{position:absolute;bottom:6px;right:8px;font-size:12px;background:rgba(0,0,0,.35);padding:2px 6px;border-radius:999px}.discardTop{background:transparent;border:0;box-shadow:none;padding:0}.phaseBox{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);min-width:250px}.phaseBox strong{display:block;font-size:16px}.phaseBox span{color:var(--muted);font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .board{padding:16px;display:flex;flex-direction:column;gap:14px}.melds{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.meld{border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:16px;padding:10px}.meldHead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;color:var(--muted);font-size:12px}.meldCards{display:flex;gap:6px;flex-wrap:wrap}.card{user-select:none;width:54px;height:76px;border-radius:10px;background:var(--card);color:#111827;border:1px solid #cbd5e1;display:flex;flex-direction:column;justify-content:space-between;padding:6px;box-shadow:0 6px 14px rgba(0,0,0,.2);font-weight:900;position:relative;cursor:pointer}.card.red{color:#dc2626}.card.black{color:#111827}.card.joker{background:linear-gradient(135deg,#fff7ed,#e0f2fe);color:#7c3aed}.card .r{font-size:18px;line-height:1}.card .s{font-size:18px;align-self:flex-end}.card.selected{transform:translateY(-10px);outline:3px solid var(--accent);box-shadow:0 0 0 4px rgba(56,189,248,.18),0 10px 22px rgba(0,0,0,.35)}.card.back{background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:white;border-color:rgba(255,255,255,.2);display:grid;place-items:center}.card.smallCard{width:42px;height:60px;border-radius:8px;padding:5px}.card.smallCard .r,.card.smallCard .s{font-size:14px}.handPanel{position:sticky;bottom:0;background:rgba(5,8,22,.94);border-top:1px solid var(--line);padding:14px;backdrop-filter:blur(12px)}.handTop{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.hand{display:flex;gap:8px;flex-wrap:wrap;min-height:92px;padding-top:8px}.selectedInfo{font-size:13px;color:var(--muted)}.valid{color:#86efac}.invalid{color:#fca5a5}
+    .chatBox{height:320px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);padding:10px;display:flex;flex-direction:column;gap:8px}.msg{padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.06);font-size:13px}.msg b{color:#bae6fd}.msg .time{float:right;color:var(--muted);font-size:11px;margin-left:8px}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#020617;color:white;border:1px solid var(--line);padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);z-index:50;max-width:min(680px,calc(100vw - 24px));display:none}.toast.show{display:block;animation:pop .18s ease}@keyframes pop{from{transform:translateX(-50%) translateY(8px);opacity:.1}to{transform:translateX(-50%) translateY(0);opacity:1}}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;display:grid;place-items:center;padding:18px}.modalCard{max-width:920px;width:100%;max-height:88vh;overflow:auto;background:#0f172a;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.modalCard header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:16px;border-bottom:1px solid var(--line)}.modalCard main{padding:16px}.steps{counter-reset:step;display:grid;gap:10px}.step{counter-increment:step;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);padding:12px}.step:before{content:counter(step);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#00111a;font-weight:900;margin-right:8px}.code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#020617;border:1px solid var(--line);border-radius:12px;padding:10px;white-space:pre-wrap;overflow:auto;color:#d1fae5;font-size:12px}.win{border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.12);border-radius:18px;padding:16px;margin:16px}.scoreTable{width:100%;border-collapse:collapse}.scoreTable th,.scoreTable td{border-bottom:1px solid var(--line);padding:8px;text-align:left}.scoreTable th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+    .mobileNote{display:none}.kbd{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:rgba(255,255,255,.1);padding:2px 6px;border-radius:6px;border:1px solid var(--line)}
+    @media (max-width:1180px){.wrap{grid-template-columns:1fr}.sideLeft{order:1}.main{order:2}.sideRight{order:3}.table{min-height:auto}.mobileNote{display:block}.panel{border-radius:16px}.card{width:50px;height:72px}.topbar{align-items:flex-start;flex-direction:column}.status{justify-content:flex-start}.handPanel{position:relative}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><div class="logo">♣</div><div><div>Rummy Familiar Online</div><div class="small">PWA instalable · salas en lista · turnos en vivo</div></div></div>
+    <div class="status">
+      <span id="connPill" class="pill baddot">Sin conectar</span>
+      <span id="roomPill" class="pill">Sin sala</span>
+      <span id="mePill" class="pill">Jugador sin nombre</span>
+      <button class="ghost" id="helpBtn">Ayuda / Firebase</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <aside class="panel sideLeft">
+      <h2>Entrada</h2>
+      <div class="body stack">
+        <div class="hint small">
+          Para jugar entre países, todos abren el mismo link. La conexión online ya viene configurada: solo escriben su nombre y eligen una sala de la lista.
+        </div>
+        <div class="field"><label>Tu nombre</label><input id="playerName" placeholder="Ej.: Aldo" maxlength="26"></div>
+        <button id="saveNameBtn" class="btn2">Guardar nombre</button>
+        <div class="divider"></div>
+        <div id="firebaseStatus" class="small">Firebase no configurado.</div>
+        <button id="openConfigBtn" class="warn">Configurar conexión online</button>
+        <div class="divider"></div>
+        <div class="field"><label>Salas disponibles</label><select id="roomSelect" disabled><option value="">Conectando...</option></select></div>
+        <div class="grid2">
+          <button id="refreshRoomsBtn" class="btn2" disabled>Actualizar salas</button>
+          <button id="joinRoomBtn" disabled>Entrar a sala</button>
+        </div>
+        <div class="small">Los jugadores eligen una sala de la lista. No tienen que escribir códigos.</div>
+        <div class="divider"></div>
+        <h3 style="padding:0;border:0">Administrador</h3>
+        <div class="field"><label>Crear nueva sala</label><input id="adminRoomName" placeholder="Ej.: FAMILIA, SABADO o PRIMOS" maxlength="24"></div>
+        <button id="createRoomBtn" class="ok" disabled>Crear sala</button>
+        <div class="small">Solo el anfitrión necesita crear salas. Al crear una sala, aparecerá automáticamente en el desplegable de todos.</div>
+        <div id="sharePanel" class="stack hidden">
+          <div class="divider"></div>
+          <button id="copyInviteBtn" class="btn2">Copiar link de invitación</button>
+          <button id="copyShareTextBtn" class="btn3">Copiar texto para enviar</button>
+          <div class="small">El link funciona directo si subiste este HTML a una web estática. Si lo abrís como archivo local, enviá también el HTML.</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="panel main table">
+      <div class="gameHeader">
+        <div class="pileArea">
+          <button id="drawDeckBtn" class="discardTop" disabled title="Robar del mazo"><div class="pile"><div>MAZO</div><div id="deckCount" class="pileCount">0</div></div></button>
+          <button id="drawDiscardBtn" class="discardTop" disabled title="Tomar descarte"><div id="discardPile" class="pile empty">DESCARTE</div></button>
+        </div>
+        <div class="phaseBox">
+          <strong id="turnTitle">No hay partida iniciada</strong>
+          <span id="turnSubtitle">Crea o entra a una sala para comenzar.</span>
+          <div class="actions">
+            <button id="startGameBtn" class="ok" disabled>Iniciar mano</button>
+            <button id="newRoundBtn" class="warn hidden">Nueva mano</button>
+            <button id="resetRoomBtn" class="danger hidden">Reiniciar sala</button>
+          </div>
+        </div>
+      </div>
+      <div id="winnerBox" class="win hidden"></div>
+      <div class="board">
+        <div class="between"><h3 style="padding:0;border:0">Mesa</h3><div class="small">Puedes bajar combinaciones o agregar cartas a una jugada existente.</div></div>
+        <div id="melds" class="melds"><div class="small">Todavía no hay jugadas en la mesa.</div></div>
+      </div>
+      <div class="handPanel">
+        <div class="handTop">
+          <div><b>Tu mano</b> <span id="handCount" class="small">0 cartas</span><div id="selectedInfo" class="selectedInfo">Selecciona cartas para bajar, descartar o agregar.</div></div>
+          <div class="row">
+            <button id="sortHandBtn" class="btn2" disabled>Ordenar</button>
+            <button id="meldBtn" class="ok" disabled>Bajar selección</button>
+            <button id="discardBtn" class="warn" disabled>Descartar</button>
+            <button id="clearSelBtn" class="ghost">Limpiar</button>
+          </div>
+        </div>
+        <div id="hand" class="hand"></div>
+      </div>
+    </main>
+
+    <aside class="panel sideRight">
+      <h2>Sala</h2>
+      <div class="body stack">
+        <div id="roomInfo" class="small">Sin sala activa.</div>
+        <div class="players" id="players"></div>
+        <div class="divider"></div>
+        <h3 style="padding:0;border:0">Reglas de esta versión</h3>
+        <div class="small">
+          Roba del mazo o descarte, baja <b>piernas</b> de mismo número o <b>escaleras</b> del mismo palo, ambas de mínimo 3 cartas. Los comodines sirven como carta libre. Para terminar, queda sin cartas bajando o descartando.
+        </div>
+        <div class="divider"></div>
+        <h3 style="padding:0;border:0">Chat</h3>
+        <div id="chatBox" class="chatBox"></div>
+        <div class="row"><input id="chatInput" placeholder="Mensaje..." style="flex:1;background:#0b1222;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px"><button id="sendChatBtn" class="btn2">Enviar</button></div>
+        <div class="mobileNote small">En celular se puede jugar, pero es más cómodo en PC/tablet por la cantidad de cartas.</div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="configModal" class="modal hidden">
+    <div class="modalCard">
+      <header><h2 style="padding:0;border:0">Configurar conexión online</h2><button class="ghost" id="closeConfigBtn">Cerrar</button></header>
+      <main class="stack">
+        <div class="hint">
+          Este juego es un único HTML. Para que varias casas vean la misma partida necesita una base online. Firebase Realtime Database tiene plan gratuito y alcanza para jugar con familia. La configuración pública de Firebase no es una contraseña, pero no uses esto para apuestas ni partidas donde importe evitar trampas.
+        </div>
+        <div class="steps small">
+          <div class="step"><b>Crear proyecto Firebase:</b> entra a Firebase Console, crea un proyecto y agrega una “Web App”. Copia el objeto <span class="kbd">firebaseConfig</span>.</div>
+          <div class="step"><b>Activar Auth:</b> Authentication → Sign-in method → Anonymous → Enable.</div>
+          <div class="step"><b>Activar Realtime Database:</b> Realtime Database → Create Database. Reglas recomendadas para uso familiar:</div>
+        </div>
+        <div class="code">{
+  "rules": {
+    "rummyRoomsV1": {
+      ".read": "auth != null",
+      "$room": {
+        ".write": "auth != null"
+      }
+    }
+  }
+}</div>
+        <div class="field"><label>Pega aquí tu firebaseConfig</label><textarea id="firebaseConfigInput" placeholder="{
+  apiKey: '...',
+  authDomain: '...',
+  databaseURL: 'https://....firebaseio.com',
+  projectId: '...',
+  storageBucket: '...',
+  messagingSenderId: '...',
+  appId: '...'
+}"></textarea></div>
+        <div class="row"><button id="saveConfigBtn" class="ok">Guardar y conectar</button><button id="clearConfigBtn" class="danger">Borrar configuración local</button></div>
+        <div class="small">Consejo: subí este HTML a Netlify Drop, GitHub Pages o cualquier hosting estático. Luego copiás el link de invitación desde la sala.</div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    const ROOM_PATH = 'rummyRoomsV1';
+    const DEFAULT_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyB44y1oNQ_VMsQdKqCZNk52UivV0P62dyQ",
+      authDomain: "rummy-familiar.firebaseapp.com",
+      databaseURL: "https://rummy-familiar-default-rtdb.firebaseio.com",
+      projectId: "rummy-familiar",
+      storageBucket: "rummy-familiar.firebasestorage.app",
+      messagingSenderId: "164902041970",
+      appId: "1:164902041970:web:cf948efd46c7e64a6085eb"
+    };
+    const SUITS = ['♠','♥','♦','♣'];
+    const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    const RED_SUITS = new Set(['♥','♦']);
+    const els = id => document.getElementById(id);
+    const me = loadMe();
+    let firebaseConfig = null, db = null, authUser = null, roomRef = null, currentRoomCode = '', state = null;
+    let roomsListRef = null, roomsCache = {}, pendingRoomFromHash = '';
+    let selected = new Set();
+
+    function loadMe(){
+      let id = localStorage.getItem('rummy_me_id');
+      if(!id){ id = 'p_' + rand(10); localStorage.setItem('rummy_me_id', id); }
+      return { id, name: localStorage.getItem('rummy_me_name') || '' };
+    }
+    function rand(n=6){ const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s=''; for(let i=0;i<n;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s; }
+    function now(){ return Date.now(); }
+    function clone(x){ return JSON.parse(JSON.stringify(x)); }
+    function toast(msg, ms=2800){ const t=els('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._timer); t._timer=setTimeout(()=>t.classList.remove('show'), ms); }
+    function setBusy(btn, busy){ btn.disabled = !!busy; }
+    function fmtTime(ts){ try{return new Date(ts||Date.now()).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}catch(e){return ''} }
+    function safeName(pid){ return state?.players?.[pid]?.name || 'Jugador'; }
+
+    function parseHash(){
+      const h = new URLSearchParams(location.hash.replace(/^#/,''));
+      const cfg = h.get('cfg'), room = h.get('room');
+      if(cfg){
+        try { const obj = JSON.parse(b64urlDecode(cfg)); localStorage.setItem('rummy_firebase_config', JSON.stringify(obj)); }
+        catch(e){ console.warn(e); }
+      }
+      if(room) pendingRoomFromHash = normalizeRoomCode(room);
+    }
+    function updateHash(){
+      if(!firebaseConfig || !currentRoomCode) return;
+      const h = new URLSearchParams();
+      h.set('room', currentRoomCode);
+      h.set('cfg', b64urlEncode(JSON.stringify(firebaseConfig)));
+      history.replaceState(null, '', '#' + h.toString());
+    }
+    function b64urlEncode(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+    function b64urlDecode(str){ str=str.replace(/-/g,'+').replace(/_/g,'/'); while(str.length%4) str+='='; return decodeURIComponent(escape(atob(str))); }
+
+    function parseConfigText(txt){
+      txt = (txt||'').trim();
+      if(!txt) throw new Error('Pegá el objeto firebaseConfig.');
+      const first = txt.indexOf('{'), last = txt.lastIndexOf('}');
+      if(first >= 0 && last > first) txt = txt.slice(first, last+1);
+      try { return JSON.parse(txt); }
+      catch(e){
+        try { return (new Function('return (' + txt + ')'))(); }
+        catch(err){ throw new Error('No pude leer esa configuración. Pegá el objeto completo firebaseConfig.'); }
+      }
+    }
+    async function initFirebase(config){
+      if(!config || !config.apiKey || !config.databaseURL) throw new Error('La configuración debe incluir apiKey y databaseURL.');
+      firebaseConfig = config;
+      if(firebase.apps.length) await firebase.app().delete().catch(()=>{});
+      firebase.initializeApp(config);
+      await firebase.auth().signInAnonymously();
+      authUser = firebase.auth().currentUser;
+      db = firebase.database();
+      els('connPill').className='pill okdot'; els('connPill').textContent='Conectado online';
+      els('firebaseStatus').innerHTML='Firebase configurado y conectado.';
+      els('createRoomBtn').disabled = false;
+      els('refreshRoomsBtn').disabled = false;
+      els('roomSelect').disabled = false;
+      localStorage.setItem('rummy_firebase_config', JSON.stringify(config));
+      startRoomListListener();
+      return true;
+    }
+
+    function makeDeck(decks=2, jokers=4){
+      const cards=[];
+      for(let d=1; d<=decks; d++){
+        for(const suit of SUITS){ for(const rank of RANKS){ cards.push({id:`${d}-${suit}-${rank}-${rand(4)}`, suit, rank, joker:false}); } }
+      }
+      for(let j=1; j<=jokers; j++) cards.push({id:`JOKER-${j}-${rand(5)}`, joker:true, rank:'COMODÍN', suit:'★'});
+      return shuffle(cards);
+    }
+    function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+    function rankVal(rank, aceHigh=false){ if(rank==='A') return aceHigh?14:1; const ix=RANKS.indexOf(rank); return ix+1; }
+    function cardPoints(c){ if(c.joker) return 25; if(['J','Q','K'].includes(c.rank)) return 10; if(c.rank==='A') return 15; return Number(c.rank)||0; }
+
+    function cardHTML(c, small=false, clickable=true){
+      const red = !c.joker && RED_SUITS.has(c.suit);
+      const cls = ['card', small?'smallCard':'', c.joker?'joker':(red?'red':'black'), selected.has(c.id)?'selected':''].join(' ');
+      const attrs = clickable ? `data-card-id="${c.id}"` : '';
+      if(c.joker) return `<div class="${cls}" ${attrs}><div class="r">★</div><div style="font-size:${small?'11px':'13px'}">COMODÍN</div><div class="s">★</div></div>`;
+      return `<div class="${cls}" ${attrs}><div class="r">${c.rank}</div><div class="s">${c.suit}</div></div>`;
+    }
+    function sortCards(cards){
+      return [...cards].sort((a,b)=>{
+        if(a.joker && !b.joker) return 1; if(!a.joker && b.joker) return -1; if(a.joker && b.joker) return a.id.localeCompare(b.id);
+        const s = SUITS.indexOf(a.suit)-SUITS.indexOf(b.suit); if(s) return s;
+        return rankVal(a.rank)-rankVal(b.rank);
+      });
+    }
+    function selectedCardsFromHand(){
+      const hand = state?.hands?.[me.id] || [];
+      return hand.filter(c=>selected.has(c.id));
+    }
+
+    function isValidMeld(cards){
+      cards = cards || [];
+      if(cards.length < 3) return {ok:false, why:'mínimo 3 cartas'};
+      const jokers = cards.filter(c=>c.joker).length;
+      const non = cards.filter(c=>!c.joker);
+      if(non.length === 0) return {ok:true, type:'comodines'};
+      const set = validateSet(non, jokers, cards.length);
+      if(set.ok) return set;
+      const run = validateRun(non, jokers, cards.length);
+      if(run.ok) return run;
+      return {ok:false, why:'no forma pierna ni escalera válida'};
+    }
+    function validateSet(non, jokers, total){
+      const rank = non[0].rank;
+      if(!non.every(c=>c.rank===rank)) return {ok:false};
+      const suits = non.map(c=>c.suit);
+      if(new Set(suits).size !== suits.length) return {ok:false};
+      if(total > 4) return {ok:false};
+      return {ok:true, type:`pierna de ${rank}`};
+    }
+    function validateRun(non, jokers, total){
+      const suit = non[0].suit;
+      if(!non.every(c=>c.suit===suit)) return {ok:false};
+      return tryRun(non, jokers, false, suit) || tryRun(non, jokers, true, suit) || {ok:false};
+    }
+    function tryRun(non, jokers, aceHigh, suit){
+      let vals = non.map(c=>rankVal(c.rank, aceHigh)).sort((a,b)=>a-b);
+      if(new Set(vals).size !== vals.length) return null;
+      let gaps=0; for(let i=1;i<vals.length;i++) gaps += vals[i]-vals[i-1]-1;
+      if(gaps > jokers) return null;
+      const minAllowed = aceHigh ? 2 : 1, maxAllowed = aceHigh ? 14 : 13;
+      const extra = jokers - gaps;
+      const room = (vals[0]-minAllowed) + (maxAllowed-vals[vals.length-1]);
+      if(extra > room) return null;
+      return {ok:true, type:`escalera de ${suit}`};
+    }
+
+    function normalizeRoomCode(raw){
+      let code = (raw || '').trim();
+      if(!code) return '';
+      code = code.normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .toUpperCase()
+        .replace(/[^A-Z0-9-]+/g,'-')
+        .replace(/-+/g,'-')
+        .replace(/^-|-$/g,'')
+        .slice(0,24);
+      return code;
+    }
+    function roomPath(code=currentRoomCode){ return `${ROOM_PATH}/${code}`; }
+    function startRoomListListener(){
+      if(!db) return;
+      if(roomsListRef) roomsListRef.off();
+      roomsListRef = db.ref(ROOM_PATH);
+      roomsListRef.on('value', snap=>{
+        roomsCache = snap.val() || {};
+        renderRoomList();
+      }, err=>{
+        console.warn(err);
+        toast('No puedo leer la lista de salas. Revisá las reglas de Firebase.', 5200);
+      });
+    }
+    function roomStatusLabel(r){
+      const n = Object.keys(r?.players||{}).length;
+      const status = r?.status === 'playing' ? 'jugando' : (r?.status === 'finished' ? 'terminada' : 'en espera');
+      return `${n} jugador${n===1?'':'es'} · ${status}`;
+    }
+    function renderRoomList(){
+      const sel = els('roomSelect');
+      if(!sel) return;
+      const previous = sel.value || pendingRoomFromHash || currentRoomCode;
+      const entries = Object.entries(roomsCache || {})
+        .filter(([code,r])=>r && r.version)
+        .sort((a,b)=>(b[1].updatedAt||b[1].createdAt||0)-(a[1].updatedAt||a[1].createdAt||0));
+      if(!entries.length){
+        sel.innerHTML = '<option value="">No hay salas creadas todavía</option>';
+        sel.disabled = false;
+        els('joinRoomBtn').disabled = true;
+        return;
+      }
+      sel.innerHTML = '<option value="">Elegí una sala...</option>' + entries.map(([code,r])=>{
+        const name = escapeHTML(r.displayName || code);
+        return `<option value="${escapeHTML(code)}">${name} — ${escapeHTML(roomStatusLabel(r))}</option>`;
+      }).join('');
+      if(previous && entries.some(([code])=>code===previous)) sel.value = previous;
+      else sel.value = '';
+      pendingRoomFromHash = '';
+      sel.disabled = false;
+      els('joinRoomBtn').disabled = !sel.value;
+    }
+    async function transaction(mutator, label='acción'){
+      if(!roomRef) return toast('Primero entrá a una sala.');
+      let localError = '';
+      const res = await roomRef.transaction(s=>{
+        if(!s){ localError='La sala no existe.'; return; }
+        try { const r = mutator(s); if(r===false) return; return s; }
+        catch(e){ localError = e.message || String(e); return; }
+      }, (error, committed)=>{
+        if(error) toast('Error: ' + error.message, 5200);
+        else if(!committed && localError) toast(localError, 4200);
+        else if(!committed) toast('No se pudo completar la acción.', 3600);
+      });
+      return res;
+    }
+    function ensureTurn(s){
+      if(s.status !== 'playing') throw new Error('La partida no está en juego.');
+      if(s.turn?.playerId !== me.id) throw new Error('No es tu turno.');
+    }
+    function ensurePhase(s, phase){ if(s.turn?.phase !== phase) throw new Error(phase==='draw'?'Primero debes robar.':'Ahora debes robar antes de jugar.'); }
+    function removeFromHand(hand, ids){
+      const set = new Set(ids); const picked=[]; const left=[];
+      for(const c of hand){ if(set.has(c.id)) picked.push(c); else left.push(c); }
+      if(picked.length !== ids.length) throw new Error('Alguna carta seleccionada ya no está en tu mano.');
+      return {picked,left};
+    }
+    function finishIfEmpty(s, pid){
+      if((s.hands?.[pid]||[]).length === 0){
+        s.status='finished'; s.winnerId=pid; s.finishedAt=now(); s.turn.phase='finished';
+        s.scores = s.scores || {};
+        for(const p of Object.keys(s.players||{})){
+          const pts = (s.hands?.[p]||[]).reduce((acc,c)=>acc+cardPoints(c),0);
+          s.scores[p] = (s.scores[p]||0) + (p===pid?0:pts);
+        }
+        pushLog(s, `🏆 ${safeNameLocal(s,pid)} cerró la mano.`);
+        return true;
+      }
+      return false;
+    }
+    function safeNameLocal(s,pid){ return s.players?.[pid]?.name || 'Jugador'; }
+    function advanceTurn(s){
+      const order = (s.turn?.order || []).filter(pid=>s.players?.[pid]);
+      if(!order.length) throw new Error('No hay jugadores.');
+      let ix = order.indexOf(s.turn.playerId); if(ix < 0) ix = 0;
+      ix = (ix + 1) % order.length;
+      s.turn = { ...s.turn, order, index:ix, playerId:order[ix], phase:'draw', number:(s.turn.number||1)+1 };
+      pushLog(s, `Turno de ${safeNameLocal(s, order[ix])}.`);
+    }
+    function pushLog(s, text){ s.log = (s.log||[]).slice(-80); s.log.push({t:now(), text}); }
+
+    async function createRoom(){
+      if(!db) return toast('Configurá Firebase primero.');
+      const rawName = (els('adminRoomName').value || '').trim();
+      const code = normalizeRoomCode(rawName);
+      if(!code) return toast('Escribí un nombre de sala. Ej.: FAMILIA');
+      const pName = getPlayerName(); if(!pName) return;
+      const ref = db.ref(roomPath(code));
+      const exists = await ref.once('value');
+      if(exists.exists()) return toast('Ya existe una sala con ese nombre. Elegila de la lista o usá otro nombre.');
+      const initial = {version:1, roomCode:code, displayName:rawName || code, createdAt:now(), updatedAt:now(), hostId:me.id, status:'lobby',
+        settings:{decks:2,jokers:4,maxPlayers:6,handSize:10},
+        players:{[me.id]:{id:me.id,name:pName,host:true,joinedAt:now(),connected:true}},
+        hands:{}, deck:[], discard:[], melds:[], chat:[], log:[{t:now(),text:'Sala creada.'}], scores:{}}
+      await ref.set(initial);
+      els('adminRoomName').value = '';
+      await joinRoom(code);
+      toast('Sala creada: ' + code);
+    }
+    async function joinRoom(code){
+      if(!db) return toast('Configurá Firebase primero.');
+      code = normalizeRoomCode(code); if(!code) return toast('Elegí una sala de la lista.');
+      const pName = getPlayerName(); if(!pName) return;
+      const ref = db.ref(roomPath(code));
+      let err='';
+      const res = await ref.transaction(s=>{
+        if(!s){ err='No encontré esa sala.'; return; }
+        s.players = s.players || {};
+        if(!s.players[me.id] && Object.keys(s.players).length >= (s.settings?.maxPlayers||6)){ err='La sala está llena.'; return; }
+        if(!s.players[me.id] && s.status !== 'lobby'){ err='La mano ya empezó. Pedí al anfitrión que inicie una nueva sala o nueva mano.'; return; }
+        s.players[me.id] = {...(s.players[me.id]||{}), id:me.id, name:pName, connected:true, joinedAt:s.players[me.id]?.joinedAt||now(), host:s.hostId===me.id};
+        s.updatedAt=now();
+        return s;
+      });
+      if(!res.committed){ toast(err || 'No pude entrar a la sala.'); return; }
+      if(roomRef) roomRef.off();
+      currentRoomCode = code; roomRef = ref;
+      roomRef.on('value', snap=>{ state=snap.val(); render(); });
+      db.ref(`${roomPath(code)}/players/${me.id}/connected`).onDisconnect().set(false);
+      db.ref(`${roomPath(code)}/players/${me.id}/connected`).set(true);
+      els('roomPill').textContent = code; els('roomInfo').textContent = 'Sala ' + code;
+      if(els('roomSelect')) els('roomSelect').value = code;
+      els('sharePanel').classList.remove('hidden');
+      updateHash();
+    }
+    function getPlayerName(){
+      const name = (els('playerName').value || '').trim().slice(0,26);
+      if(!name){ toast('Escribí tu nombre primero.'); return ''; }
+      me.name = name; localStorage.setItem('rummy_me_name', name); els('mePill').textContent = name; return name;
+    }
+
+    async function startGame(newRound=false){
+      await transaction(s=>{
+        if(s.hostId !== me.id) throw new Error('Solo el anfitrión puede iniciar.');
+        const pids = Object.keys(s.players||{});
+        if(pids.length < 2) throw new Error('Necesitás al menos 2 jugadores.');
+        const deck = makeDeck(s.settings?.decks||2, s.settings?.jokers||4);
+        const handSize = s.settings?.handSize || (pids.length<=2?10:7);
+        const hands = {};
+        for(const pid of pids) hands[pid] = [];
+        for(let i=0;i<handSize;i++) for(const pid of pids) hands[pid].push(deck.pop());
+        const discard = [deck.pop()];
+        const startPid = newRound && s.turn?.order?.length ? s.turn.order[((s.turn.index||0)+1)%pids.length] : pids[0];
+        const order = [...pids];
+        let ix = order.indexOf(startPid); if(ix < 0) ix = 0;
+        s.hands = hands; s.deck = deck; s.discard = discard; s.melds=[]; s.status='playing'; s.winnerId=null; s.finishedAt=null;
+        s.turn = {order, index:ix, playerId:order[ix], phase:'draw', number:1};
+        s.updatedAt=now(); selected.clear();
+        pushLog(s, `Mano iniciada. Empieza ${safeNameLocal(s, order[ix])}.`);
+      });
+    }
+    async function resetRoom(){
+      if(!confirm('¿Reiniciar toda la sala y volver al lobby?')) return;
+      await transaction(s=>{
+        if(s.hostId !== me.id) throw new Error('Solo el anfitrión puede reiniciar.');
+        s.status='lobby'; s.hands={}; s.deck=[]; s.discard=[]; s.melds=[]; s.turn=null; s.winnerId=null; s.finishedAt=null; s.scores={}; s.log=[]; selected.clear(); pushLog(s,'Sala reiniciada.');
+      });
+    }
+    async function drawDeck(){
+      await transaction(s=>{
+        ensureTurn(s); ensurePhase(s,'draw');
+        s.deck = s.deck || []; s.discard = s.discard || [];
+        if(!s.deck.length){
+          if(s.discard.length <= 1) throw new Error('No quedan cartas para robar.');
+          const top = s.discard.pop(); s.deck = shuffle(s.discard); s.discard = [top]; pushLog(s,'Se mezcló el descarte para formar nuevo mazo.');
+        }
+        const c = s.deck.pop(); s.hands[me.id].push(c); s.turn.phase='play'; s.updatedAt=now(); pushLog(s, `${safeNameLocal(s,me.id)} robó del mazo.`);
+      });
+    }
+    async function drawDiscard(){
+      await transaction(s=>{
+        ensureTurn(s); ensurePhase(s,'draw');
+        if(!s.discard?.length) throw new Error('No hay carta en descarte.');
+        const c = s.discard.pop(); s.hands[me.id].push(c); s.turn.phase='play'; s.updatedAt=now(); pushLog(s, `${safeNameLocal(s,me.id)} tomó el descarte.`);
+      });
+    }
+    async function meldSelected(){
+      const ids = [...selected]; if(ids.length < 3) return toast('Seleccioná al menos 3 cartas.');
+      await transaction(s=>{
+        ensureTurn(s); ensurePhase(s,'play');
+        const {picked,left} = removeFromHand(s.hands[me.id]||[], ids);
+        const valid = isValidMeld(picked); if(!valid.ok) throw new Error('Selección inválida: ' + valid.why);
+        s.hands[me.id]=left; s.melds=s.melds||[]; s.melds.push({id:'m_'+rand(8), ownerId:me.id, type:valid.type, cards:picked, createdAt:now()});
+        selected.clear(); s.updatedAt=now(); pushLog(s, `${safeNameLocal(s,me.id)} bajó ${valid.type}.`);
+        finishIfEmpty(s, me.id);
+      });
+    }
+    async function addToMeld(meldId){
+      const ids = [...selected]; if(!ids.length) return toast('Seleccioná cartas de tu mano para agregar.');
+      await transaction(s=>{
+        ensureTurn(s); ensurePhase(s,'play');
+        const idx = (s.melds||[]).findIndex(m=>m.id===meldId); if(idx<0) throw new Error('Esa jugada ya no existe.');
+        const {picked,left} = removeFromHand(s.hands[me.id]||[], ids);
+        const combined = [...s.melds[idx].cards, ...picked];
+        const valid = isValidMeld(combined); if(!valid.ok) throw new Error('No se puede agregar: la jugada dejaría de ser válida.');
+        s.melds[idx].cards = combined; s.melds[idx].type = valid.type; s.hands[me.id]=left; selected.clear(); s.updatedAt=now(); pushLog(s, `${safeNameLocal(s,me.id)} agregó carta(s) a una jugada.`);
+        finishIfEmpty(s, me.id);
+      });
+    }
+    async function discardSelected(){
+      const ids = [...selected]; if(ids.length !== 1) return toast('Seleccioná exactamente 1 carta para descartar.');
+      await transaction(s=>{
+        ensureTurn(s); ensurePhase(s,'play');
+        const {picked,left} = removeFromHand(s.hands[me.id]||[], ids);
+        s.hands[me.id]=left; s.discard=s.discard||[]; s.discard.push(picked[0]); selected.clear(); s.updatedAt=now(); pushLog(s, `${safeNameLocal(s,me.id)} descartó.`);
+        if(!finishIfEmpty(s, me.id)) advanceTurn(s);
+      });
+    }
+    async function sortMyHand(){
+      await transaction(s=>{
+        if(!s.hands?.[me.id]) throw new Error('No tenés cartas para ordenar.');
+        s.hands[me.id] = sortCards(s.hands[me.id]); s.updatedAt=now();
+      });
+    }
+    async function sendChat(){
+      const text = (els('chatInput').value||'').trim(); if(!text || !roomRef) return;
+      els('chatInput').value='';
+      await transaction(s=>{ s.chat=(s.chat||[]).slice(-50); s.chat.push({id:'c_'+rand(8), pid:me.id, name:safeNameLocal(s,me.id), text:text.slice(0,240), t:now()}); s.updatedAt=now(); });
+    }
+
+    function render(){
+      els('playerName').value = me.name || '';
+      els('mePill').textContent = me.name || 'Jugador sin nombre';
+      if(!state){ renderEmpty(); return; }
+      const isHost = state.hostId === me.id;
+      const isPlaying = state.status === 'playing';
+      const isFinished = state.status === 'finished';
+      const myTurn = isPlaying && state.turn?.playerId === me.id;
+      const phase = state.turn?.phase;
+      els('roomPill').textContent = currentRoomCode || 'Sin sala';
+      els('roomInfo').innerHTML = `<b>${currentRoomCode}</b> · Estado: <b>${state.status}</b><br>Cartas en mazo: ${state.deck?.length||0}`;
+      els('deckCount').textContent = state.deck?.length || 0;
+      renderDiscard(); renderPlayers(); renderMelds(); renderHand(); renderChat(); renderWinner();
+      els('startGameBtn').disabled = !(isHost && state.status==='lobby' && Object.keys(state.players||{}).length>=2);
+      els('startGameBtn').classList.toggle('hidden', state.status!=='lobby');
+      els('newRoundBtn').classList.toggle('hidden', !(isHost && isFinished));
+      els('resetRoomBtn').classList.toggle('hidden', !isHost || state.status==='lobby');
+      els('drawDeckBtn').disabled = !(myTurn && phase==='draw');
+      els('drawDiscardBtn').disabled = !(myTurn && phase==='draw' && (state.discard||[]).length);
+      els('meldBtn').disabled = !(myTurn && phase==='play' && selected.size>=3 && isValidMeld(selectedCardsFromHand()).ok);
+      els('discardBtn').disabled = !(myTurn && phase==='play' && selected.size===1);
+      els('sortHandBtn').disabled = !(state.hands?.[me.id]?.length);
+      if(isPlaying){
+        const nm = safeName(state.turn.playerId);
+        els('turnTitle').textContent = myTurn ? 'Es tu turno' : `Turno de ${nm}`;
+        els('turnSubtitle').textContent = phase==='draw' ? 'Fase: robar del mazo o tomar el descarte.' : 'Fase: bajar cartas si puedes y descartar una para pasar.';
+      } else if(isFinished){
+        els('turnTitle').textContent = `Ganó ${safeName(state.winnerId)}`;
+        els('turnSubtitle').textContent = isHost ? 'El anfitrión puede iniciar una nueva mano.' : 'Esperando nueva mano.';
+      } else {
+        els('turnTitle').textContent = 'Sala en espera';
+        els('turnSubtitle').textContent = isHost ? 'Cuando sean al menos 2 jugadores, inicia la mano.' : 'Esperando que el anfitrión inicie.';
+      }
+      updateSelectedInfo(); updateHash();
+    }
+    function renderEmpty(){
+      els('players').innerHTML=''; els('melds').innerHTML='<div class="small">Todavía no hay sala activa.</div>'; els('hand').innerHTML=''; els('chatBox').innerHTML='';
+    }
+    function renderDiscard(){
+      const d = state?.discard || []; const top = d[d.length-1];
+      els('discardPile').className = top ? 'pile' : 'pile empty';
+      els('discardPile').innerHTML = top ? cardHTML(top,false,false) + `<div class="pileCount">${d.length}</div>` : 'DESCARTE';
+    }
+    function renderPlayers(){
+      const pids = Object.keys(state.players||{});
+      els('players').innerHTML = pids.map(pid=>{
+        const p = state.players[pid]; const cards = state.hands?.[pid]?.length ?? 0; const score = state.scores?.[pid] || 0;
+        return `<div class="player ${pid===me.id?'me':''}"><div class="player-name"><span class="avatar">${(p.name||'?').slice(0,1).toUpperCase()}</span><div><b>${escapeHTML(p.name||'Jugador')}</b><div class="small">${p.connected?'online':'desconectado'} · ${cards} cartas · ${score} pts</div></div></div><div class="row">${pid===state.hostId?'<span class="hostBadge">host</span>':''}${pid===state.turn?.playerId?'<span class="turnBadge">turno</span>':''}</div></div>`;
+      }).join('') || '<div class="small">Sin jugadores.</div>';
+    }
+    function renderMelds(){
+      const ms = state.melds || [];
+      if(!ms.length){ els('melds').innerHTML='<div class="small">Todavía no hay jugadas en la mesa.</div>'; return; }
+      const canAdd = state.status==='playing' && state.turn?.playerId===me.id && state.turn?.phase==='play' && selected.size>0;
+      els('melds').innerHTML = ms.map(m=>`<div class="meld"><div class="meldHead"><span>${escapeHTML(m.type||'jugada')} · ${escapeHTML(safeName(m.ownerId))}</span>${canAdd?`<button class="btn2 addMeldBtn" data-meld-id="${m.id}">Agregar aquí</button>`:''}</div><div class="meldCards">${(m.cards||[]).map(c=>cardHTML(c,true,false)).join('')}</div></div>`).join('');
+      document.querySelectorAll('.addMeldBtn').forEach(b=>b.addEventListener('click',()=>addToMeld(b.dataset.meldId)));
+    }
+    function renderHand(){
+      const hand = state.hands?.[me.id] || [];
+      els('handCount').textContent = `${hand.length} carta${hand.length===1?'':'s'}`;
+      if(!hand.length && state.status==='playing') { els('hand').innerHTML='<div class="small">Sin cartas.</div>'; return; }
+      els('hand').innerHTML = hand.map(c=>cardHTML(c,false,true)).join('') || '<div class="small">Tu mano aparecerá cuando empiece la partida.</div>';
+      els('hand').querySelectorAll('[data-card-id]').forEach(el=>el.addEventListener('click',()=>{
+        const id = el.dataset.cardId; selected.has(id) ? selected.delete(id) : selected.add(id); renderHand(); renderMelds(); updateSelectedInfo();
+      }));
+    }
+    function renderChat(){
+      const msgs = state.chat || [];
+      const box = els('chatBox');
+      box.innerHTML = msgs.map(m=>`<div class="msg"><span class="time">${fmtTime(m.t)}</span><b>${escapeHTML(m.name||'Jugador')}:</b> ${escapeHTML(m.text||'')}</div>`).join('') || '<div class="small">Sin mensajes.</div>';
+      box.scrollTop = box.scrollHeight;
+    }
+    function renderWinner(){
+      const box=els('winnerBox');
+      if(state.status!=='finished'){ box.classList.add('hidden'); return; }
+      const rows = Object.keys(state.players||{}).map(pid=>{
+        const handPts = (state.hands?.[pid]||[]).reduce((a,c)=>a+cardPoints(c),0);
+        return `<tr><td>${escapeHTML(safeName(pid))}</td><td>${pid===state.winnerId?'Ganó':'Quedó con cartas'}</td><td>${handPts}</td><td>${state.scores?.[pid]||0}</td></tr>`;
+      }).join('');
+      box.innerHTML = `<h2 style="margin-top:0">🏆 Ganó ${escapeHTML(safeName(state.winnerId))}</h2><table class="scoreTable"><thead><tr><th>Jugador</th><th>Resultado</th><th>Puntos mano</th><th>Total acumulado</th></tr></thead><tbody>${rows}</tbody></table>`;
+      box.classList.remove('hidden');
+    }
+    function updateSelectedInfo(){
+      const cs = selectedCardsFromHand();
+      const info = els('selectedInfo');
+      if(!cs.length){ info.textContent='Selecciona cartas para bajar, descartar o agregar.'; info.className='selectedInfo'; return; }
+      const v = isValidMeld(cs);
+      info.innerHTML = `${cs.length} seleccionada(s). ${v.ok ? '<span class="valid">Válida: '+escapeHTML(v.type)+'</span>' : '<span class="invalid">No baja: '+escapeHTML(v.why||'inválida')+'</span>'}`;
+    }
+    function escapeHTML(str){ return String(str).replace(/[&<>'"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[m])); }
+
+    // Eventos UI
+    els('saveNameBtn').addEventListener('click',()=>{ if(getPlayerName()) toast('Nombre guardado.'); });
+    els('openConfigBtn').addEventListener('click',()=>els('configModal').classList.remove('hidden'));
+    els('helpBtn').addEventListener('click',()=>els('configModal').classList.remove('hidden'));
+    els('closeConfigBtn').addEventListener('click',()=>els('configModal').classList.add('hidden'));
+    els('saveConfigBtn').addEventListener('click', async()=>{
+      try{ const cfg = parseConfigText(els('firebaseConfigInput').value); await initFirebase(cfg); els('configModal').classList.add('hidden'); toast('Conectado. Ya podés crear o entrar a una sala.'); }
+      catch(e){ toast(e.message || String(e), 5200); }
+    });
+    els('clearConfigBtn').addEventListener('click',()=>{ localStorage.removeItem('rummy_firebase_config'); firebaseConfig=null; toast('Configuración local borrada.'); location.hash=''; location.reload(); });
+    els('createRoomBtn').addEventListener('click',createRoom);
+    els('joinRoomBtn').addEventListener('click',()=>joinRoom(els('roomSelect').value));
+    els('roomSelect').addEventListener('change',()=>{ els('joinRoomBtn').disabled = !els('roomSelect').value; });
+    els('refreshRoomsBtn').addEventListener('click',()=>{ renderRoomList(); toast('Lista actualizada.'); });
+    els('startGameBtn').addEventListener('click',()=>startGame(false));
+    els('newRoundBtn').addEventListener('click',()=>startGame(true));
+    els('resetRoomBtn').addEventListener('click',resetRoom);
+    els('drawDeckBtn').addEventListener('click',drawDeck);
+    els('drawDiscardBtn').addEventListener('click',drawDiscard);
+    els('meldBtn').addEventListener('click',meldSelected);
+    els('discardBtn').addEventListener('click',discardSelected);
+    els('sortHandBtn').addEventListener('click',sortMyHand);
+    els('clearSelBtn').addEventListener('click',()=>{selected.clear(); renderHand(); renderMelds(); updateSelectedInfo();});
+    els('sendChatBtn').addEventListener('click',sendChat);
+    els('chatInput').addEventListener('keydown',e=>{ if(e.key==='Enter') sendChat(); });
+    els('copyInviteBtn').addEventListener('click', async()=>{
+      updateHash();
+      try{ await navigator.clipboard.writeText(location.href); toast('Link copiado.'); }
+      catch(e){ toast('No pude copiar automáticamente. Copiá la URL de la barra.'); }
+    });
+    els('copyShareTextBtn').addEventListener('click', async()=>{      const txt = `Rummy online familiar
+Sala: ${currentRoomCode}
+
+1) Abrí el link del juego.
+2) Escribí tu nombre.
+3) Elegí la sala ${currentRoomCode} en la lista desplegable y entrá.`;
+      try{ await navigator.clipboard.writeText(txt); toast('Texto copiado.'); }
+      catch(e){ toast('No pude copiar el texto.'); }
+    });
+
+    (async function boot(){
+      parseHash();
+      els('playerName').value = me.name || '';
+      els('mePill').textContent = me.name || 'Jugador sin nombre';
+      const saved = localStorage.getItem('rummy_firebase_config');
+      const cfgSource = saved ? JSON.parse(saved) : DEFAULT_FIREBASE_CONFIG;
+      try{
+        els('firebaseConfigInput').value = JSON.stringify(cfgSource, null, 2);
+        await initFirebase(cfgSource);
+        if(pendingRoomFromHash) setTimeout(()=>joinRoom(pendingRoomFromHash), 500);
+      }
+      catch(e){
+        console.warn(e);
+        toast('No pudo conectar online. Revisá Firebase o las reglas.');
+      }
+      render();
+    })();
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
