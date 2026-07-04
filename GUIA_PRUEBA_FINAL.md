@@ -152,3 +152,27 @@ Copiar exactamente:
 - mensaje visible,
 - captura si hay error,
 - salida de consola si existe.
+
+
+## Prueba automatizada
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comandos:
+npm install
+npx playwright install chromium
+npm test
+
+Resultado esperado:
+- `npm run test:static` pasa sin errores.
+- Playwright ejecuta pruebas del modo demo local en escritorio y móvil.
+- Si falla, revisar `playwright-report/`.
+
+## Criterio para pasar a rediseño visual
+
+Pasar a estética moderna solo si:
+- la validación estática pasa,
+- el modo demo local funciona,
+- las pruebas Playwright pasan en Windows o GitHub Actions,
+- no hay errores visibles en navegador.

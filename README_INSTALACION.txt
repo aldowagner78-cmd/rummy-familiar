@@ -3,7 +3,7 @@
 ## Descripción
 
 Rummy Familiar Online es una PWA estática para jugar en familia desde navegador.
-No requiere instalación de dependencias, compilación, npm ni node_modules.
+La app no requiere compilación para usarse. Para pruebas automatizadas se agregó Node.js + Playwright como dependencia de desarrollo.
 
 La app incluye:
 - juego online mediante Firebase Authentication anónimo y Firebase Realtime Database,
@@ -160,6 +160,43 @@ zip -r Rummy_Git_FINAL.zip Rummy_Git \
 Resultado esperado:
 Se crea:
 ~/Escritorio/Rummy_Git_FINAL.zip
+
+
+
+## Pruebas automatizadas
+
+Se agregó Playwright para validar la app antes de rediseñar la interfaz.
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Instalar dependencias de prueba:
+npm install
+
+Instalar navegador de Playwright:
+npx playwright install chromium
+
+Ejecutar validación estática:
+npm run test:static
+
+Ejecutar pruebas Playwright:
+npm run test:e2e
+
+Ejecutar todo:
+npm test
+
+Resultado esperado:
+- La validación estática confirma index.html, sw.js, manifest, íconos, IDs principales, modo demo y documentación.
+- Playwright abre la app, bloquea Firebase para simular modo sin conexión, carga demo local, crea una jugada válida, termina turno, avanza jugador demo, reinicia demo y prueba ayuda/idioma.
+
+Reportes si falla:
+- playwright-report/
+- test-results/
+
+No subir:
+- node_modules/
+- playwright-report/
+- test-results/
 
 ## Problemas frecuentes
 

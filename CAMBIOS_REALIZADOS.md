@@ -97,3 +97,57 @@ Para revertir manualmente:
 
 Resultado esperado:
 El proyecto vuelve al estado anterior al parche final.
+
+
+---
+
+## Ampliación: pruebas automatizadas
+
+### Archivos modificados
+
+- .gitignore
+- README_INSTALACION.txt
+- CHANGELOG.md
+- CAMBIOS_REALIZADOS.md
+- GUIA_PRUEBA_FINAL.md
+- PRUEBA_TECNICA_RESULTADO.md
+
+### Archivos agregados
+
+- package.json
+- package-lock.json
+- playwright.config.js
+- tools/servidor-estatico.mjs
+- tools/validar-estatico.mjs
+- tests/README_PRUEBAS.md
+- tests/e2e/rummy-demo.spec.js
+- .github/workflows/playwright.yml
+
+### Qué se cambió
+
+Se agregó una base de pruebas automatizadas antes de avanzar al rediseño visual.
+
+Las pruebas cubren:
+- carga de la app,
+- modo demo local sin Firebase,
+- creación de jugada válida de 30 puntos,
+- validación de mesa y cierre de turno,
+- avance del jugador demo,
+- reinicio del demo,
+- ayuda,
+- cambio de idioma,
+- estructura PWA y documentación.
+
+### Cómo probar
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comandos:
+npm install
+npx playwright install chromium
+npm test
+
+### Cómo revertir
+
+Eliminar los archivos agregados de pruebas y restaurar los documentos desde el commit anterior.

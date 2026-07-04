@@ -19,3 +19,8 @@ build/
 venv/
 __pycache__/
 *.pyc
+
+playwright-report/
+test-results/
+.npm/
+.cache/

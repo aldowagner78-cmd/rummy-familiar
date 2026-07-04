@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.2-pruebas] - 2026-07-04
+
+### Agregado
+- Configuración de Playwright para pruebas automatizadas.
+- Pruebas E2E del modo demo local.
+- Validación estática de `index.html`, `sw.js`, `manifest.webmanifest`, íconos, IDs principales y documentación.
+- Servidor estático local para pruebas.
+- Workflow de GitHub Actions para ejecutar pruebas al hacer push o pull request.
+
+### Modificado
+- `.gitignore`: se agregaron salidas de Playwright y cachés locales.
+- Documentación actualizada con comandos de prueba.
+
+### Resultado técnico
+- Validación estática ejecutada correctamente en este entorno.
+- Playwright detecta 8 pruebas E2E configuradas.
+- La ejecución real del navegador Playwright no pudo completarse en este entorno porque el navegador de Playwright no pudo descargarse desde `cdn.playwright.dev` y el Chromium del sistema falla por configuración gráfica del contenedor. Esto no es un fallo confirmado de la app.
+
+### Pendiente
+- Ejecutar las pruebas E2E completas en Windows o en GitHub Actions con navegador Playwright instalado.
+
 ## [1.0.1-final] - 2026-07-04
 
 ### Agregado
