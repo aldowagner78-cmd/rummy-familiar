@@ -1,13 +1,13 @@
 {
-  "name": "Rummikub Familiar / Family Rummikub",
-  "short_name": "Rummikub",
+  "name": "Rummy Familiar Online",
+  "short_name": "Rummy",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#eef7f5",
   "theme_color": "#0f766e",
-  "description": "Rummikub familiar online bilingüe, móvil y PWA.",
+  "description": "Rummy familiar online bilingüe, móvil, PWA y con modo demo local.",
   "icons": [
     {
       "src": "icon-192.png",
@@ -20,5 +20,6 @@
       "type": "image/png"
     }
   ],
-  "lang": "es"
+  "lang": "es",
+  "id": "/rummy-familiar/"
 }

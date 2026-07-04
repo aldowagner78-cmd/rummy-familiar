@@ -2,191 +2,197 @@
 
 ## Descripción
 
-Rummy Familiar Online es una PWA estática para jugar Rummy en familia desde navegador.
-Funciona con un archivo index.html, manifest.webmanifest, sw.js e íconos.
-Para jugar online entre varias casas usa Firebase Authentication anónimo y Firebase Realtime Database.
+Rummy Familiar Online es una PWA estática para jugar en familia desde navegador.
+No requiere instalación de dependencias, compilación, npm ni node_modules.
+
+La app incluye:
+- juego online mediante Firebase Authentication anónimo y Firebase Realtime Database,
+- modo demo local con datos ficticios,
+- interfaz bilingüe Español/Inglés,
+- diseño responsive para PC, tablet y Android,
+- manifest PWA y service worker.
 
 ## Requisitos
 
 - Navegador actualizado: Chrome, Edge o Firefox.
-- Python instalado solo para probar localmente con servidor simple.
-- Una cuenta de Google/Firebase si se quiere usar una base propia.
-- Git opcional para subir cambios a GitHub.
+- Windows con Python instalado para prueba local rápida.
+- Git solo si vas a subir cambios a GitHub.
+- Firebase ya configurado si se quiere jugar online.
 
-No requiere npm, node_modules ni compilación.
+## Carpeta recomendada en tu PC
 
-## Estructura esperada
+Windows:
+C:\Users\usuario\Desktop\Rummy_Git
 
-Ruta del proyecto en Windows:
-C:\Users\usuario\Desktop\Rummy
+Linux:
+~/Escritorio/Rummy_Git
 
-Archivos principales esperados:
+## Archivos principales
+
 - index.html
 - manifest.webmanifest
 - sw.js
 - icon-192.png
 - icon-512.png
-
-Archivos agregados por este parche:
+- firebase-rules-rummy-familiar.json
 - README_INSTALACION.txt
 - CHANGELOG.md
 - CAMBIOS_REALIZADOS.md
-- GUIA_PUBLICACION_GITHUB_PAGES.md
 - GUIA_PRUEBA_FINAL.md
-- firebase-rules-rummy-familiar.json
-- .gitignore
-- .nojekyll
+- GUIA_PUBLICACION_GITHUB_PAGES.md
+- LEEME_PRIMERO.txt
 
 ## Instalación local
 
 No hay instalación de dependencias.
 
-## Ejecución local - Windows PowerShell
+## Ejecutar en Windows PowerShell
 
 Desde:
-C:\Users\usuario\Desktop\Rummy
+C:\Users\usuario\Desktop\Rummy_Git
 
 Comando:
 py -m http.server 8000
 
-Luego abrir:
+Abrir:
 http://localhost:8000
 
 Resultado esperado:
-- Carga la pantalla principal.
-- Se ve el título "Rummy Familiar Online".
-- Aparecen la entrada de nombre, salas, mesa, mano, reglas y chat.
-- No debe abrirse como archivo local si se quiere probar PWA o Service Worker.
+- carga la pantalla principal,
+- se ve "Rummy Familiar",
+- aparecen sala/configuración, mesa y atril,
+- aparece el botón "Cargar demo local".
 
-## Ejecución local - Linux
+Para cerrar el servidor:
+Ctrl + C
+
+## Ejecutar en Linux
 
 Desde:
-~/Escritorio/Rummy
+~/Escritorio/Rummy_Git
 
 Comando:
 python3 -m http.server 8000
 
-Luego abrir:
+Abrir:
 http://localhost:8000
 
 Resultado esperado:
-- Carga la pantalla principal.
-- Se ve el título "Rummy Familiar Online".
-- La app puede registrar el service worker si se sirve por HTTP local.
+- carga la pantalla principal,
+- se ve "Rummy Familiar",
+- el modo demo local está disponible.
 
-## Configurar Firebase
+## Modo demo local
 
-1. Crear un proyecto en Firebase.
-2. Agregar una Web App.
-3. Activar Authentication con inicio anónimo.
-4. Activar Realtime Database.
-5. Pegar reglas desde:
-   firebase-rules-rummy-familiar.json
-6. Copiar el objeto firebaseConfig.
-7. Abrir la app.
-8. Entrar a "Ayuda / Firebase".
-9. Pegar la configuración y guardar.
+El modo demo local permite probar sin Firebase y sin datos reales.
+
+Pasos:
+1. Abrir la app.
+2. Presionar "Cargar demo local".
+3. La app crea una sala "DEMO LOCAL".
+4. Carga dos jugadores ficticios: el usuario actual y "Demo Ana".
+5. Carga un atril con fichas preparadas.
+6. Seleccionar las fichas 10 rojo, 10 azul y 10 amarillo.
+7. Presionar "Crear nueva jugada con selección".
+8. Presionar "Validar mesa y terminar turno".
+9. Cuando sea turno de Demo Ana, presionar "Avanzar jugador demo".
+10. Para volver a empezar, presionar "Reiniciar demo".
+
+Resultado esperado:
+- no se toca ninguna sala real,
+- no se usa Firebase para el demo,
+- los datos están identificados como DEMO,
+- se puede probar selección, jugada válida, apertura de 30 puntos, turnos y reinicio.
+
+## Juego online con Firebase
+
+La app ya trae un firebaseConfig en index.html para el proyecto usado por esta versión.
+
+Si querés usar tu propio Firebase:
+1. Crear proyecto en Firebase.
+2. Activar Authentication con inicio anónimo.
+3. Crear Realtime Database.
+4. Publicar las reglas desde firebase-rules-rummy-familiar.json.
+5. Editar el objeto firebaseConfig dentro de index.html.
+6. Guardar cambios y probar localmente.
 
 Importante:
-La configuración pública de Firebase no debe tratarse como contraseña, pero las reglas de la base sí deben estar configuradas.
-No usar esta app para apuestas, premios, torneos con conflicto ni información sensible.
+- firebaseConfig es público por diseño en apps web.
+- La seguridad real depende de Firebase Security Rules.
+- No usar esta app para datos sensibles, apuestas, premios ni torneos con conflicto.
 
-## Modo demo
-
-Modo demo operativo:
-- Crear una sala llamada DEMO, PRUEBA o FAMILIA.
-- Abrir la app en dos navegadores o dos pestañas privadas.
-- Usar nombres ficticios: Ana Demo, Luis Demo, Marta Demo.
-- Iniciar mano.
-- Robar, bajar combinación válida, descartar y usar chat.
-- Reiniciar sala al terminar.
-
-Los datos demo deben ser ficticios. No usar nombres reales si la base es pública o compartida.
-
-## Pruebas manuales
+## Prueba manual mínima
 
 Ver GUIA_PRUEBA_FINAL.md.
 
-Checklist mínimo:
+Checklist:
 - La app inicia sin errores visibles.
-- Se puede guardar nombre.
-- Se conecta a Firebase.
-- Se puede crear sala.
-- Otra sesión ve la sala en el desplegable.
-- Se puede entrar a la misma sala.
-- Se puede iniciar mano.
-- Los turnos avanzan.
-- Se puede robar, bajar y descartar.
-- El chat funciona.
-- Reiniciar sala funciona.
-- El link de invitación se copia.
-- La app carga en Chrome/Edge/Firefox.
-- En Android se ve usable y responsive.
+- El modo demo local carga.
+- Se puede crear una jugada válida en demo.
+- Se puede terminar turno en demo.
+- Se puede avanzar el jugador demo.
+- Se puede reiniciar demo.
+- En modo online, dos navegadores pueden entrar a la misma sala.
+- En modo online, se puede iniciar una mano con al menos 2 jugadores.
+- La PWA actualiza cache al recargar.
 
-## Empaquetar ZIP de entrega - Windows PowerShell
+## Empaquetar ZIP limpio en Windows
 
 Desde:
 C:\Users\usuario\Desktop
 
 Comando:
-tar -a -cf Rummy_ENTREGA.zip --exclude=Rummy/.git --exclude=Rummy/node_modules --exclude=Rummy/dist --exclude=Rummy/build -C C:\Users\usuario\Desktop Rummy
+Compress-Archive -Path .\Rummy_Git\* -DestinationPath .\Rummy_Git_FINAL.zip -Force
 
 Resultado esperado:
 Se crea:
-C:\Users\usuario\Desktop\Rummy_ENTREGA.zip
+C:\Users\usuario\Desktop\Rummy_Git_FINAL.zip
 
-## Empaquetar ZIP de entrega - Linux
+## Empaquetar ZIP limpio en Linux
 
 Desde:
 ~/Escritorio
 
 Comando:
-zip -r Rummy_ENTREGA.zip Rummy -x "*/.git/*" "*/node_modules/*" "*/dist/*" "*/build/*" "*/.venv/*" "*/venv/*" "*/__pycache__/*"
+zip -r Rummy_Git_FINAL.zip Rummy_Git \
+  -x "*/.git/*" "*/node_modules/*" "*/dist/*" "*/build/*" "*/.venv/*" "*/venv/*" "*/__pycache__/*"
 
 Resultado esperado:
 Se crea:
-~/Escritorio/Rummy_ENTREGA.zip
-
-## Publicación
-
-Ver GUIA_PUBLICACION_GITHUB_PAGES.md.
+~/Escritorio/Rummy_Git_FINAL.zip
 
 ## Problemas frecuentes
 
-### La app queda en "Sin conectar"
+### Abro el archivo con doble clic y no funciona bien
 
-Causa probable:
-Firebase no está configurado, hay reglas incorrectas o Realtime Database no está activado.
+No abrir como archivo local. Usar servidor local:
 
-Qué hacer:
-- Revisar que Authentication anónimo esté habilitado.
-- Revisar que Realtime Database exista.
-- Revisar que las reglas permitan lectura/escritura a usuarios autenticados.
-
-### El service worker no funciona
-
-Causa probable:
-La app fue abierta como archivo local.
-
-Qué hacer:
-Ejecutar servidor local con:
+Windows:
 py -m http.server 8000
 
-### Otra persona no ve la sala
+Linux:
+python3 -m http.server 8000
 
-Causa probable:
-No están usando el mismo Firebase o la misma URL/configuración.
+### Veo una versión vieja
 
-Qué hacer:
-Copiar el link de invitación desde la sala o pegar la misma configuración de Firebase.
+Puede ser cache PWA. Probar:
+1. Ctrl + F5.
+2. Cerrar y abrir navegador.
+3. En DevTools/Application, borrar Service Worker y Cache Storage si hace falta.
 
-### Los cambios no aparecen al actualizar
+### Firebase no conecta
 
-Causa probable:
-Cache del service worker.
+Revisar:
+- internet,
+- Authentication anónimo activado,
+- Realtime Database activada,
+- reglas publicadas,
+- dominio autorizado en Firebase Authentication si está publicado.
 
-Qué hacer:
-- Cerrar pestañas.
-- Abrir DevTools > Application > Service Workers > Unregister.
-- Recargar con Ctrl+F5.
-- Si se editó sw.js, cambiar el nombre de CACHE_NAME.
+### No puedo iniciar mano online
+
+Se necesitan al menos 2 jugadores online en la misma sala.
+
+### El modo demo no aparece
+
+Actualizar con Ctrl + F5. Verificar que index.html y sw.js sean los de este parche.

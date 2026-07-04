@@ -1,16 +1,33 @@
-RUMMIKUB FAMILIAR LOCAL v5
+RUMMY FAMILIAR ONLINE - VERSION FINAL INICIAL
 
-Cambios:
-- Interfaz bilingüe Español/Inglés con selector arriba.
+Qué incluye:
+- App web/PWA estática sin npm ni compilación.
+- Interfaz bilingüe Español/Inglés.
 - Diseño móvil para Android/iPhone.
-- Durante la partida se colapsa la configuración para dejar visibles mesa y atril.
-- Salas desplegables administradas por el anfitrión.
-- Reglas base Rummikub: 106 fichas, 14 por jugador, apertura de 30, sin descarte.
+- Salas online con Firebase.
+- Modo demo local con datos ficticios.
+- Service worker actualizado para evitar cache viejo.
+- Documentación de instalación, cambios y prueba final.
 
-Prueba local:
-1. Descomprimir esta carpeta.
-2. Abrir CMD dentro de la carpeta.
-3. Ejecutar: py -m http.server 8080
-4. Abrir: http://localhost:8080/?v=5
+Prueba rápida en Windows:
+1. Abrir PowerShell.
+2. Ir a:
+   C:\Users\usuario\Desktop\Rummy_Git
+3. Ejecutar:
+   py -m http.server 8000
+4. Abrir:
+   http://localhost:8000
+5. Presionar:
+   Cargar demo local
 
-No subir a GitHub hasta probar localmente.
+Prueba demo:
+- Seleccionar 10 rojo, 10 azul y 10 amarillo.
+- Presionar "Crear nueva jugada con selección".
+- Presionar "Validar mesa y terminar turno".
+- Cuando juegue Demo Ana, presionar "Avanzar jugador demo".
+- Para volver a empezar, presionar "Reiniciar demo".
+
+Importante:
+- No abrir index.html con doble clic.
+- No usar datos reales para pruebas.
+- Si ves una versión vieja, usar Ctrl + F5.

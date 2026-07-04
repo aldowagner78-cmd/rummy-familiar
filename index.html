@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Rummikub Familiar Online / Family Rummikub</title>
+  <title>Rummy Familiar Online</title>
   <meta name="theme-color" content="#0f766e" />
-  <meta name="description" content="Rummikub familiar online bilingüe, con salas desplegables, modo móvil y PWA." />
+  <meta name="description" content="Rummy familiar online bilingüe, con salas desplegables, modo demo local, modo móvil y PWA." />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon-192.png" />
   <style>
@@ -47,6 +47,8 @@
       <section class="stack">
         <h3>Partida</h3>
         <div class="row"><button class="primary" id="startGameBtn">Iniciar / reiniciar mano</button><button class="warn" id="resetBoardBtn">Reiniciar sala</button></div>
+        <div class="row"><button class="ghost" id="loadDemoBtn">Cargar demo local</button><button class="ghost" id="resetDemoBtn">Reiniciar demo</button></div>
+        <div class="small" id="demoInfo">Demo local con datos ficticios para probar sin tocar salas reales.</div>
         <div class="warnbox"><b>Regla base:</b> versión Rummikub con 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.</div>
       </section>
       <section class="stack">
@@ -71,6 +73,9 @@
           <button class="ghost" id="clearSelectionBtn">Limpiar selección</button>
           <button class="danger" id="undoTurnBtn">Deshacer mi turno</button>
         </div>
+        <div class="controls two">
+          <button class="ghost" id="advanceDemoBtn">Avanzar jugador demo</button>
+        </div>
         <div class="small" id="selectionInfo">Sin selección.</div>
       </div>
       <div class="panel">
@@ -84,9 +89,17 @@
 <button class="helpBtn" id="helpBtn">?</button>
 <div class="modalBack hide" id="helpModal"><div class="modal stack"><div class="tableHeader"><h2 id="helpTitle">Reglas implementadas</h2><button class="ghost" id="closeHelpBtn">Cerrar</button></div><ul class="rulesList" id="rulesList"></ul><div class="small" id="helpFoot">Versión local v5: interfaz bilingüe, móvil y con sala colapsable durante la partida.</div></div></div>
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-import { getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js';
+let initializeApp, getAuth, signInAnonymously, onAuthStateChanged, getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction;
+async function loadFirebaseModules(){
+  const [appModule, authModule, dbModule] = await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js')
+  ]);
+  ({initializeApp}=appModule);
+  ({getAuth, signInAnonymously, onAuthStateChanged}=authModule);
+  ({getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction}=dbModule);
+}
 
 const firebaseConfig = {
   apiKey: "AIzaSyB44y1oNQ_VMsQdKqCZNk52UivV0P62dyQ",
@@ -99,31 +112,34 @@ const firebaseConfig = {
 };
 const PATH='rummyRoomsV1';
 const VERSION=5;
+const DEMO_ROOM_ID='demo_local';
+const DEMO_USER_ID='demo_user_local';
+const DEMO_BOT_UID='demo_bot_ana';
 const COLORS=['red','blue','yellow','black'];
 const COLOR_NAME={red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'};
 const I18N={
   es:{
     connecting:'Conectando...', firebase:'Conectando Firebase...', online:'Online', offline:'Sin conexión', firebaseErr:'Error Firebase',
-    title:'Rummikub Familiar', subtitle:'v5 local · ES/EN · móvil · PWA', drawerTitle:'Sala y configuración', drawerHint:'tocar para abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
+    title:'Rummy Familiar', subtitle:'v5 final · ES/EN · móvil · PWA', drawerTitle:'Sala y configuración', drawerHint:'tocar para abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
     entry:'Entrada', nameLabel:'Tu nombre', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Nombre guardado: ${n}`,
     admin:'Administrador', createRoomLabel:'Crear sala con nombre', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar lista', adminNote:'Las salas aparecerán en el desplegable. Para uso familiar no hay clave real de administrador.',
     chooseRoom:'Elegir sala', availableRooms:'Salas disponibles', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a sala', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Partida', start:'Iniciar / reiniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: versión Rummikub con 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.', events:'Eventos',
     table:'Mesa', noGame:'Sin partida iniciada.', pool:'Pila', opening:'Apertura', alreadyOpened:'Ya abriste', draw:'Tomar 1 ficha y pasar turno', end:'Validar mesa y terminar turno', newSet:'Crear nueva jugada con selección', target:'Elegir jugada destino', add:'Agregar selección a jugada elegida', clear:'Limpiar selección', undo:'Deshacer mi turno', noSelection:'Sin selección.', rack:'Mi atril', sortNum:'Ordenar número', sortColor:'Ordenar color',
     qh1t:'1. Elegí fichas', qh1b:'Tocá fichas de tu atril.', qh2t:'2. Bajá jugada', qh2b:'Serie o escalera válida.', qh3t:'3. Terminá turno', qh3b:'Validá mesa o tomá 1 ficha.',
     helpTitle:'Reglas implementadas', close:'Cerrar', helpFoot:'Versión local v5: interfaz bilingüe, móvil y con sala colapsable durante la partida.', rules:['Juego tipo Rummikub clásico: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
-    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando',
+    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Cargar demo local', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local: datos ficticios para probar sin Firebase ni salas reales.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo local cargado. Probá bajar la serie 10-10-10 y terminar turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
     msg:{writeName:'Escribí tu nombre primero.', chooseRoom:'Elegí una sala.', roomInvalid:'Sala inválida', roomName:'Poné un nombre de sala, por ejemplo FAMILIA.', created:n=>`Sala ${n} creada.`, joined:'Entraste a la sala.', left:'Saliste de la sala.', need2:'Necesitás al menos 2 jugadores online.', max4:'Rummikub clásico es para 2 a 4 jugadores.', hostOnly:'Solo quien creó la sala puede iniciar la mano.', onlyHostReset:'Solo el anfitrión puede reiniciar la sala.', confirmReset:'¿Reiniciar la sala y borrar la mano actual?', reset:'Sala reiniciada.', noStarted:'No hay mano iniciada.', notTurn:'Todavía no es tu turno.', selectFirst:'Seleccioná fichas primero.', openNoBoard:'Para abrir no podés usar fichas de la mesa.', invalidSelection:r=>`La selección no forma jugada válida: ${r}.`, createdSet:t=>`Jugada creada: ${t}.`, chooseTarget:'Elegí una jugada destino.', addFirst:'Seleccioná fichas para agregar.', open30:'Para abrir tenés que crear jugadas nuevas desde tu atril y sumar 30.', badTarget:'Destino inválido.', added:'Ficha(s) agregada(s). Validá la mesa antes de terminar.', alreadyMoved:'Ya moviste fichas. Tenés que terminar turno o deshacer.', poolEmpty:'La pila está vacía.', boardInvalid:'La mesa todavía tiene jugadas inválidas. Corregí o deshacé tu turno.', needOpen:s=>`Para abrir necesitás 30 puntos. Llevás ${s}. Podés seguir bajando conjuntos o deshacer.`, noUndo:'No hay movimientos para deshacer en este turno.', undone:'Turno deshecho.', roomCreated:n=>`Sala ${n} creada`, entered:n=>`${n} entró a la sala`, handStarted:n=>`Mano iniciada. Juega ${n}. Cada jugador recibió 14 fichas.`, draw:n=>`${n} tomó 1 ficha de la pila.`, next:n=>`Ahora juega ${n}.`, ended:n=>`${n} terminó su turno.`, won:n=>`${n} hizo Rummikub y ganó la mano.`, firebaseError:'No pude conectar con Firebase. Revisá internet o dominio autorizado.', noValid:'no es serie ni escalera válida', min3:'mínimo 3 fichas', noJokers:'no puede ser solo comodines'}
   },
   en:{
     connecting:'Connecting...', firebase:'Connecting Firebase...', online:'Online', offline:'Offline', firebaseErr:'Firebase error',
-    title:'Family Rummikub', subtitle:'local v5 · ES/EN · mobile · PWA', drawerTitle:'Room and setup', drawerHint:'tap to open/close', drawerHintPlay:'game active: open only if needed',
+    title:'Family Rummy', subtitle:'final v5 · ES/EN · mobile · PWA', drawerTitle:'Room and setup', drawerHint:'tap to open/close', drawerHintPlay:'game active: open only if needed',
     entry:'Entry', nameLabel:'Your name', namePh:'Ex: Aldo', saveName:'Save name', noName:'No saved name.', savedName:n=>`Saved name: ${n}`,
     admin:'Administrator', createRoomLabel:'Create room by name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh list', adminNote:'Rooms appear in the dropdown. For family use there is no real admin password.',
     chooseRoom:'Choose room', availableRooms:'Available rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Join room', leave:'Leave', noRoom:'No room.', players:'Players', game:'Game', start:'Start / restart hand', reset:'Reset room', baseRule:'Base rule: Rummikub version with 106 tiles, 14 initial tiles, 30-point initial meld, no discard.', events:'Events',
     table:'Table', noGame:'No hand started.', pool:'Pool', opening:'Initial meld', alreadyOpened:'Opened', draw:'Draw 1 tile and pass turn', end:'Validate table and end turn', newSet:'Create new meld from selection', target:'Choose target meld', add:'Add selection to chosen meld', clear:'Clear selection', undo:'Undo my turn', noSelection:'No selection.', rack:'My rack', sortNum:'Sort by number', sortColor:'Sort by color',
     qh1t:'1. Pick tiles', qh1b:'Tap tiles from your rack.', qh2t:'2. Play meld', qh2b:'Valid group or run.', qh3t:'3. End turn', qh3b:'Validate table or draw 1 tile.',
     helpTitle:'Implemented rules', close:'Close', helpFoot:'Local v5: bilingual, mobile-first interface with collapsible room panel during play.', rules:['Classic Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
-    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing',
+    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Load local demo', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo: fictitious data to test without Firebase or real rooms.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Local demo loaded. Try playing the 10-10-10 group and ending the turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
     msg:{writeName:'Write your name first.', chooseRoom:'Choose a room.', roomInvalid:'Invalid room', roomName:'Enter a room name, for example FAMILY.', created:n=>`Room ${n} created.`, joined:'You joined the room.', left:'You left the room.', need2:'You need at least 2 online players.', max4:'Classic Rummikub is for 2 to 4 players.', hostOnly:'Only the room creator can start the hand.', onlyHostReset:'Only the host can reset the room.', confirmReset:'Reset the room and erase the current hand?', reset:'Room reset.', noStarted:'No hand started.', notTurn:'It is not your turn yet.', selectFirst:'Select tiles first.', openNoBoard:'For your initial meld, you cannot use table tiles.', invalidSelection:r=>`The selection is not a valid meld: ${r}.`, createdSet:t=>`Meld created: ${t}.`, chooseTarget:'Choose a target meld.', addFirst:'Select tiles to add.', open30:'For your initial meld you must create new melds from your rack totaling 30.', badTarget:'Invalid target.', added:'Tile(s) added. Validate the table before ending your turn.', alreadyMoved:'You already moved tiles. End turn or undo.', poolEmpty:'The pool is empty.', boardInvalid:'The table still has invalid melds. Fix it or undo your turn.', needOpen:s=>`Initial meld needs 30 points. You have ${s}. You can keep playing melds or undo.`, noUndo:'There are no moves to undo this turn.', undone:'Turn undone.', roomCreated:n=>`Room ${n} created`, entered:n=>`${n} joined the room`, handStarted:n=>`Hand started. ${n} plays first. Each player received 14 tiles.`, draw:n=>`${n} drew 1 tile from the pool.`, next:n=>`Now ${n} plays.`, ended:n=>`${n} ended the turn.`, won:n=>`${n} called Rummikub and won the hand.`, firebaseError:'Could not connect to Firebase. Check internet or authorized domain.', noValid:'not a valid group or run', min3:'minimum 3 tiles', noJokers:'cannot be only jokers'}
   }
 };
@@ -134,13 +150,14 @@ function typeName(type){ if(type==='Serie'||type==='Group') return I18N[lang].ty
 function colorName(c){return I18N[lang].colors[c]||c;}
 
 let app, auth, db, uid=null, userName=localStorage.getItem('rk_name')||'', roomId=localStorage.getItem('rk_room')||'', rooms={}, room=null;
+let demoMode=localStorage.getItem('rk_demo_mode')==='1';
 let selectedRack=new Set();
 let selectedBoard=new Map();
 let unsubRoom=null, unsubRooms=null;
 let busy=false;
 let lastRoomStatus='';
 const $=id=>document.getElementById(id);
-const el={app:$('app'),netStatus:$('netStatus'),langSelect:$('langSelect'),barRoom:$('barRoom'),barTurn:$('barTurn'),barPlayers:$('barPlayers'),barPool:$('barPool'),sideDrawer:$('sideDrawer'),drawerTitle:$('drawerTitle'),drawerHint:$('drawerHint'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),helpTitle:$('helpTitle'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),qh1t:$('qh1t'),qh1b:$('qh1b'),qh2t:$('qh2t'),qh2b:$('qh2b'),qh3t:$('qh3t'),qh3b:$('qh3b'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),log:$('log'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),gameNotice:$('gameNotice'),drawBtn:$('drawBtn'),endTurnBtn:$('endTurnBtn'),newSetBtn:$('newSetBtn'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),selectionInfo:$('selectionInfo'),sets:$('sets'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),closeHelpBtn:$('closeHelpBtn')};
+const el={app:$('app'),netStatus:$('netStatus'),langSelect:$('langSelect'),barRoom:$('barRoom'),barTurn:$('barTurn'),barPlayers:$('barPlayers'),barPool:$('barPool'),sideDrawer:$('sideDrawer'),drawerTitle:$('drawerTitle'),drawerHint:$('drawerHint'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),helpTitle:$('helpTitle'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),qh1t:$('qh1t'),qh1b:$('qh1b'),qh2t:$('qh2t'),qh2b:$('qh2b'),qh3t:$('qh3t'),qh3b:$('qh3b'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),log:$('log'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),gameNotice:$('gameNotice'),drawBtn:$('drawBtn'),endTurnBtn:$('endTurnBtn'),newSetBtn:$('newSetBtn'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),selectionInfo:$('selectionInfo'),sets:$('sets'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),closeHelpBtn:$('closeHelpBtn'),loadDemoBtn:$('loadDemoBtn'),resetDemoBtn:$('resetDemoBtn'),demoInfo:$('demoInfo'),advanceDemoBtn:$('advanceDemoBtn')};
 
 function toast(msg,type='ok'){el.gameNotice.className= type==='err'?'errbox':type==='warn'?'warnbox':'okbox'; el.gameNotice.textContent=msg;}
 function log(msg){const t=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}); el.log.innerHTML=`<div><b>${t}</b> ${escapeHtml(msg)}</div>`+el.log.innerHTML;}
@@ -151,6 +168,48 @@ function roomRef(id=roomId){ id=safeRoomId(id); if(!id) throw new Error(msg('roo
 function uidRef(path){return ref(db,path)}
 function now(){return Date.now()}
 function randId(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
+function isLocalDemo(){return demoMode || roomId===DEMO_ROOM_ID || room?.demo===true;}
+function setNestedValue(target,path,value){const parts=String(path).split('/').filter(Boolean); let cur=target; while(parts.length>1){const p=parts.shift(); if(!cur[p] || typeof cur[p]!=='object')cur[p]={}; cur=cur[p];} cur[parts[0]]=value;}
+function applyLocalUpdates(target,updates){for(const [path,value] of Object.entries(updates||{})){setNestedValue(target,path,value);}}
+function saveLocalDemo(){if(isLocalDemo()&&room){localStorage.setItem('rk_demo_mode','1'); localStorage.setItem('rk_demo_room',JSON.stringify({room,roomId,userName,uid}));}}
+async function saveRoomUpdate(updates){if(isLocalDemo()){applyLocalUpdates(room,updates); saveLocalDemo(); render(); return;} return update(roomRef(),updates);}
+async function saveGameUpdate(updates){if(isLocalDemo()){room.game=room.game||{}; applyLocalUpdates(room.game,updates); saveLocalDemo(); render(); return;} return update(ref(db,`${PATH}/${roomId}/game`),updates);}
+function demoTile(color,num,id){return {id:id||`${color}_${num}_${randId()}`,color,num,joker:false};}
+function demoJoker(id){return {id:id||`joker_${randId()}`,joker:true};}
+function demoRackBase(){
+  return [
+    demoTile('red',10,'demo_r10'),demoTile('blue',10,'demo_b10'),demoTile('yellow',10,'demo_y10'),
+    demoTile('red',1,'demo_r1'),demoTile('red',2,'demo_r2'),demoTile('red',3,'demo_r3'),
+    demoTile('black',5,'demo_k5'),demoTile('black',6,'demo_k6'),demoTile('black',7,'demo_k7'),
+    demoTile('blue',4,'demo_b4'),demoTile('blue',5,'demo_b5'),demoTile('yellow',8,'demo_y8'),
+    demoTile('yellow',9,'demo_y9'),demoJoker('demo_joker')
+  ];
+}
+function createDemoGame(playerId){
+  const pool=buildTiles().slice(0,44);
+  const botRack=[demoTile('black',10,'bot_k10'),demoTile('red',11,'bot_r11'),demoTile('blue',11,'bot_b11'),demoTile('yellow',11,'bot_y11'),demoTile('red',4,'bot_r4'),demoTile('red',5,'bot_r5'),demoTile('red',6,'bot_r6'),demoTile('blue',8,'bot_b8'),demoTile('blue',9,'bot_b9'),demoTile('blue',10,'bot_b10'),demoTile('yellow',2,'bot_y2'),demoTile('yellow',3,'bot_y3'),demoTile('black',12,'bot_k12'),demoJoker('bot_joker')];
+  return {startedAt:now(),order:[playerId,DEMO_BOT_UID],turnIndex:0,pool,board:[],racks:{[playerId]:demoRackBase(),[DEMO_BOT_UID]:botRack},opened:{},turn:{uid:playerId,startedAt:now(),moves:0,initialScore:0,snapshot:null},winner:null,demo:true};
+}
+function loadDemoRoom(options={}){
+  const silent=!!options.silent;
+  demoMode=true;
+  localStorage.setItem('rk_demo_mode','1');
+  uid=uid||DEMO_USER_ID;
+  userName=(userName||tr('demoPlayer')).trim();
+  localStorage.setItem('rk_name',userName);
+  roomId=DEMO_ROOM_ID;
+  localStorage.setItem('rk_room',roomId);
+  room={version:VERSION,kind:'rummikub',demo:true,name:tr('demoRoom'),slug:DEMO_ROOM_ID,createdAt:now(),createdBy:uid,host:uid,status:'playing',players:{[uid]:{name:userName,online:true,is_demo:true},[DEMO_BOT_UID]:{name:tr('demoBot'),online:true,is_demo:true}},log:[{t:now(),m:tr('demoLoaded')}],settings:{initialTiles:14,initialMeld:30},game:createDemoGame(uid)};
+  rooms={...rooms,[DEMO_ROOM_ID]:room};
+  selectedRack.clear(); selectedBoard.clear();
+  el.nameInput.value=userName;
+  renderName(); render(); saveLocalDemo();
+  el.netStatus.textContent=tr('demoBadge')||'DEMO';
+  if(!silent)toast(tr('demoLoaded'),'ok');
+}
+function resetLocalDemo(){localStorage.removeItem('rk_demo_room'); loadDemoRoom({silent:true}); toast(tr('demoResetDone'),'ok');}
+function exitDemoMode(){demoMode=false; localStorage.removeItem('rk_demo_mode'); localStorage.removeItem('rk_demo_room'); if(auth?.currentUser)uid=auth.currentUser.uid; if(roomId===DEMO_ROOM_ID){room=null; roomId=''; localStorage.removeItem('rk_room');}}
+async function advanceDemoTurn(){await withBusy(async()=>{ if(!isLocalDemo()){toast(tr('demoOnly'),'warn');return;} if(currentUid()!==DEMO_BOT_UID){toast(tr('demoTurnOnly'),'warn');return;} const pool=(room.game.pool||[]).slice(); const rack=(room.game.racks?.[DEMO_BOT_UID]||[]).slice(); if(pool.length)rack.push(pool.pop()); await saveGameUpdate({pool,[`racks/${DEMO_BOT_UID}`]:rack}); await passTurn(msg('draw',playerName(DEMO_BOT_UID))); clearSelection();});}
 
 function applyLang(){
   document.documentElement.lang=lang;
@@ -163,10 +222,10 @@ function applyLang(){
   if(h2[1])h2[1].textContent=tr('admin'); if(labels[1])labels[1].textContent=tr('createRoomLabel'); el.newRoomName.placeholder=tr('roomPh'); el.createRoomBtn.textContent=tr('createRoom'); el.refreshRoomsBtn.textContent=tr('refresh');
   const adminSmall=document.querySelector('.adminbox .small'); if(adminSmall) adminSmall.textContent=tr('adminNote');
   if(h2[2])h2[2].textContent=tr('chooseRoom'); if(labels[2])labels[2].textContent=tr('availableRooms'); el.joinRoomBtn.textContent=tr('join'); el.leaveRoomBtn.textContent=tr('leave');
-  if(h2[3])h2[3].textContent=tr('players'); if(h2[4])h2[4].textContent=tr('game'); el.startGameBtn.textContent=tr('start'); el.resetBoardBtn.textContent=tr('reset');
+  if(h2[3])h2[3].textContent=tr('players'); if(h2[4])h2[4].textContent=tr('game'); el.startGameBtn.textContent=tr('start'); el.resetBoardBtn.textContent=tr('reset'); el.loadDemoBtn.textContent=tr('demoLoad'); el.resetDemoBtn.textContent=tr('demoReset'); el.demoInfo.textContent=tr('demoInfo');
   const wb=document.querySelector('.warnbox'); if(wb) wb.innerHTML='<b>'+tr('baseRule').split(':')[0]+':</b>'+tr('baseRule').slice(tr('baseRule').indexOf(':')+1);
   if(h2[5])h2[5].textContent=tr('events'); if(h2[6])h2[6].textContent=tr('table');
-  el.drawBtn.textContent=tr('draw'); el.endTurnBtn.textContent=tr('end'); el.newSetBtn.textContent=tr('newSet'); el.addToSetBtn.textContent=tr('add'); el.clearSelectionBtn.textContent=tr('clear'); el.undoTurnBtn.textContent=tr('undo');
+  el.drawBtn.textContent=tr('draw'); el.endTurnBtn.textContent=tr('end'); el.newSetBtn.textContent=tr('newSet'); el.addToSetBtn.textContent=tr('add'); el.clearSelectionBtn.textContent=tr('clear'); el.undoTurnBtn.textContent=tr('undo'); el.advanceDemoBtn.textContent=tr('demoAdvance');
   if(h2[7])h2[7].textContent=tr('rack'); el.sortNumBtn.textContent=tr('sortNum'); el.sortColorBtn.textContent=tr('sortColor');
   el.qh1t.textContent=tr('qh1t'); el.qh1b.textContent=tr('qh1b'); el.qh2t.textContent=tr('qh2t'); el.qh2b.textContent=tr('qh2b'); el.qh3t.textContent=tr('qh3t'); el.qh3b.textContent=tr('qh3b');
   el.helpTitle.textContent=tr('helpTitle'); el.closeHelpBtn.textContent=tr('close'); el.helpFoot.textContent=tr('helpFoot'); el.rulesList.innerHTML=tr('rules').map(x=>`<li>${escapeHtml(x)}</li>`).join('');
@@ -174,37 +233,38 @@ function applyLang(){
 }
 
 async function init(){
-  try{app=initializeApp(firebaseConfig); auth=getAuth(app); db=getDatabase(app); el.netStatus.textContent=tr('firebase'); await signInAnonymously(auth); onAuthStateChanged(auth,u=>{if(u){uid=u.uid; el.netStatus.textContent=tr('online'); afterAuth();}});}catch(e){console.error(e); el.netStatus.textContent=tr('firebaseErr'); toast(msg('firebaseError'), 'err');}
-  el.nameInput.value=userName; bind(); applyLang();
+  el.nameInput.value=userName; bind(); if(demoMode) loadDemoRoom({silent:true}); applyLang();
   if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+  try{await loadFirebaseModules(); app=initializeApp(firebaseConfig); auth=getAuth(app); db=getDatabase(app); if(!demoMode)el.netStatus.textContent=tr('firebase'); await signInAnonymously(auth); onAuthStateChanged(auth,u=>{if(u && !demoMode){uid=u.uid; el.netStatus.textContent=tr('online'); afterAuth();}});}catch(e){console.error(e); if(!demoMode)el.netStatus.textContent=tr('firebaseErr'); toast(msg('firebaseError'), 'warn');}
 }
 function bind(){
   el.langSelect.onchange=()=>{lang=el.langSelect.value; localStorage.setItem('rk_lang',lang); applyLang();}; el.saveNameBtn.onclick=saveName; el.createRoomBtn.onclick=createRoom; el.refreshRoomsBtn.onclick=listenRooms; el.joinRoomBtn.onclick=()=>joinRoom(); el.leaveRoomBtn.onclick=leaveRoom;
-  el.startGameBtn.onclick=startGame; el.resetBoardBtn.onclick=resetRoom;
+  el.startGameBtn.onclick=startGame; el.resetBoardBtn.onclick=resetRoom; el.loadDemoBtn.onclick=()=>loadDemoRoom(); el.resetDemoBtn.onclick=resetLocalDemo;
   el.drawBtn.onclick=drawAndPass; el.endTurnBtn.onclick=endTurn; el.newSetBtn.onclick=createSetFromSelection; el.addToSetBtn.onclick=addSelectionToSet; el.clearSelectionBtn.onclick=clearSelection;
-  el.undoTurnBtn.onclick=undoTurn; el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color'); el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
+  el.undoTurnBtn.onclick=undoTurn; el.advanceDemoBtn.onclick=advanceDemoTurn; el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color'); el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
 }
-function afterAuth(){listenRooms(); if(roomId) subscribeRoom(roomId);}
+function afterAuth(){if(demoMode)return; listenRooms(); if(roomId) subscribeRoom(roomId);}
 function saveName(){userName=el.nameInput.value.trim().slice(0,24); if(!userName){toast(msg('writeName'),'warn');return;} localStorage.setItem('rk_name',userName); renderName(); if(roomId) updatePlayerPresence();}
 function renderName(){el.whoami.textContent=userName?tr('savedName')(userName):tr('noName');}
-function listenRooms(){ if(!db||!uid)return; if(unsubRooms)unsubRooms(); unsubRooms=onValue(ref(db,PATH),snap=>{rooms=snap.val()||{}; renderRooms();});}
+function listenRooms(){ if(demoMode){rooms={...rooms,[DEMO_ROOM_ID]:room}; renderRooms(); return;} if(!db||!uid)return; if(unsubRooms)unsubRooms(); unsubRooms=onValue(ref(db,PATH),snap=>{rooms=snap.val()||{}; renderRooms();});}
 function renderRooms(){const entries=Object.entries(rooms).filter(([id,r])=>r&&r.version===VERSION&&r.kind==='rummikub').sort((a,b)=>(a[1].name||a[0]).localeCompare(b[1].name||b[0])); el.roomSelect.innerHTML=''; if(!entries.length){el.roomSelect.innerHTML=`<option value="">${tr('noRooms')}</option>`; return;} for(const [id,r] of entries){const opt=document.createElement('option'); opt.value=id; opt.textContent=`${r.name||id}${r.status==='playing'?' · '+tr('playing'):''}`; if(id===roomId)opt.selected=true; el.roomSelect.appendChild(opt);} }
-async function createRoom(){ if(!requireName())return; const name=el.newRoomName.value.trim(); if(!name){toast(msg('roomName'),'warn');return;} const id='rk_'+slugify(name); const base={version:VERSION,kind:'rummikub',name:name.trim(),slug:id,createdAt:serverTimestamp(),createdBy:uid,host:uid,status:'lobby',players:{},log:[{t:now(),m:msg('roomCreated',name)}],settings:{initialTiles:14,initialMeld:30}}; await set(roomRef(id),base); roomId=id; localStorage.setItem('rk_room',roomId); subscribeRoom(id); await joinRoom(id); el.newRoomName.value=''; toast(msg('created',name), 'ok');}
+async function createRoom(){ if(!requireName())return; if(demoMode)exitDemoMode(); if(!db||!uid){toast(msg('firebaseError'),'err');return;} const name=el.newRoomName.value.trim(); if(!name){toast(msg('roomName'),'warn');return;} const id='rk_'+slugify(name); const base={version:VERSION,kind:'rummikub',name:name.trim(),slug:id,createdAt:serverTimestamp(),createdBy:uid,host:uid,status:'lobby',players:{},log:[{t:now(),m:msg('roomCreated',name)}],settings:{initialTiles:14,initialMeld:30}}; await set(roomRef(id),base); if(demoMode && id!==DEMO_ROOM_ID)exitDemoMode(); roomId=id; localStorage.setItem('rk_room',roomId); subscribeRoom(id); await joinRoom(id); el.newRoomName.value=''; toast(msg('created',name), 'ok');}
 async function joinRoom(idOverride){
   if(!requireName())return;
   const id=(typeof idOverride==='string' && idOverride.trim()) ? idOverride.trim() : el.roomSelect.value;
   if(!id){toast(msg('chooseRoom'),'warn');return;}
-  roomId=id; localStorage.setItem('rk_room',roomId);
+  if(demoMode && id!==DEMO_ROOM_ID)exitDemoMode(); roomId=id; localStorage.setItem('rk_room',roomId);
   subscribeRoom(id);
   await updatePlayerPresence(true);
   toast(msg('joined'),'ok');
 }
-async function updatePlayerPresence(join=false){ if(!uid||!roomId||!userName)return; const p={name:userName,online:true,joinedAt:serverTimestamp(),lastSeen:serverTimestamp()}; await update(ref(db,`${PATH}/${roomId}/players/${uid}`),p); onDisconnect(ref(db,`${PATH}/${roomId}/players/${uid}/online`)).set(false); if(join) await addLog(msg('entered',userName));}
-async function leaveRoom(){ if(!uid||!roomId)return; await update(ref(db,`${PATH}/${roomId}/players/${uid}`),{online:false,lastSeen:serverTimestamp()}); if(unsubRoom)unsubRoom(); room=null; roomId=''; localStorage.removeItem('rk_room'); render(); toast(msg('left'));}
+async function updatePlayerPresence(join=false){ if(!uid||!roomId||!userName)return; if(isLocalDemo()){room.players[uid]={...(room.players[uid]||{}),name:userName,online:true,is_demo:true}; saveLocalDemo(); render(); if(join) await addLog(msg('entered',userName)); return;} const existing=room?.players?.[uid]||{}; const p={name:userName,online:true,joinedAt:existing.joinedAt||serverTimestamp(),lastSeen:serverTimestamp()}; await update(ref(db,`${PATH}/${roomId}/players/${uid}`),p); onDisconnect(ref(db,`${PATH}/${roomId}/players/${uid}/online`)).set(false); if(join) await addLog(msg('entered',userName));}
+async function leaveRoom(){ if(!uid||!roomId)return; if(isLocalDemo()){exitDemoMode(); render(); toast(msg('left')); return;} await update(ref(db,`${PATH}/${roomId}/players/${uid}`),{online:false,lastSeen:serverTimestamp()}); if(unsubRoom)unsubRoom(); room=null; roomId=''; localStorage.removeItem('rk_room'); render(); toast(msg('left'));}
 function subscribeRoom(id){
   id=safeRoomId(id);
   if(!id){toast(msg('roomInvalid'), 'err'); return;}
   if(unsubRoom)unsubRoom();
+  if(demoMode && id===DEMO_ROOM_ID){rooms={...rooms,[DEMO_ROOM_ID]:room}; render(); return;}
   unsubRoom=onValue(roomRef(id),snap=>{room=snap.val(); if(!room){roomId='';localStorage.removeItem('rk_room')} render();});
 }
 function requireName(){ if(!userName){toast(msg('writeName'),'warn'); return false;} return true;}
@@ -219,33 +279,33 @@ function myRack(){return room?.game?.racks?.[uid]||[];}
 function board(){return room?.game?.board||[];}
 function turnData(){return room?.game?.turn||{};}
 function isHost(){return room?.host===uid || room?.createdBy===uid;}
-async function addLog(m){const logs=(room?.log||[]).slice(-40); logs.push({t:now(),m}); await update(roomRef(),{log:logs});}
+async function addLog(m){const logs=(room?.log||[]).slice(-40); logs.push({t:now(),m}); await saveRoomUpdate({log:logs});}
 
 function buildTiles(){const tiles=[]; for(let copy=1;copy<=2;copy++){for(const c of COLORS){for(let n=1;n<=13;n++){tiles.push({id:`${c[0]}${n}_${copy}_${randId()}`,color:c,num:n,joker:false});}}} tiles.push({id:`J1_${randId()}`,joker:true}); tiles.push({id:`J2_${randId()}`,joker:true}); return shuffle(tiles);}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;}
-async function startGame(){ if(!roomId||!room)return; if(!isHost()){toast(msg('hostOnly'),'warn');return;} const ps=playersArr(); if(ps.length<2){toast(msg('need2'),'warn');return;} if(ps.length>4){toast(msg('max4'),'warn');return;} const tiles=buildTiles(); const racks={}; for(const p of ps){racks[p.id]=tiles.splice(0,14);} const game={startedAt:serverTimestamp(),order:ps.map(p=>p.id),turnIndex:0,pool:tiles,board:[],racks,opened:{},turn:{uid:ps[0].id,startedAt:now(),moves:0,initialScore:0,snapshot:null},winner:null}; await update(roomRef(),{status:'playing',game}); await addLog(msg('handStarted',ps[0].name)); clearSelection();}
-async function resetRoom(){ if(!roomId||!isHost()){toast(msg('onlyHostReset'),'warn');return;} if(!confirm(msg('confirmReset')))return; await update(roomRef(),{status:'lobby',game:null}); await addLog(msg('reset'));}
+async function startGame(){ if(!roomId||!room)return; if(!isHost()){toast(msg('hostOnly'),'warn');return;} const ps=playersArr(); if(ps.length<2){toast(msg('need2'),'warn');return;} if(ps.length>4){toast(msg('max4'),'warn');return;} const tiles=buildTiles(); const racks={}; for(const p of ps){racks[p.id]=tiles.splice(0,14);} const game={startedAt:serverTimestamp(),order:ps.map(p=>p.id),turnIndex:0,pool:tiles,board:[],racks,opened:{},turn:{uid:ps[0].id,startedAt:now(),moves:0,initialScore:0,snapshot:null},winner:null}; await saveRoomUpdate({status:'playing',game}); await addLog(msg('handStarted',ps[0].name)); clearSelection();}
+async function resetRoom(){ if(!roomId||!isHost()){toast(msg('onlyHostReset'),'warn');return;} if(!confirm(msg('confirmReset')))return; await saveRoomUpdate({status:'lobby',game:null}); await addLog(msg('reset'));}
 function getTileById(id){return [...myRack(),...board().flat()].find(t=>t.id===id)}
 function tileScore(t,assignedNum=null){return t.joker? (assignedNum||30):t.num;}
 function validateSet(tiles){ if(!tiles||tiles.length<3)return {ok:false,reason:msg('min3')}; const jokers=tiles.filter(t=>t.joker); const normal=tiles.filter(t=>!t.joker); if(normal.length===0)return {ok:false,reason:msg('noJokers')}; const group=validateGroup(normal,jokers.length,tiles.length); if(group.ok)return group; const run=validateRun(normal,jokers.length,tiles.length); if(run.ok)return run; return {ok:false,reason:msg('noValid')};}
 function validateGroup(normal,jokersCount,total){ if(total<3||total>4)return {ok:false}; const n=normal[0]?.num; if(!normal.every(t=>t.num===n))return {ok:false}; const colors=new Set(normal.map(t=>t.color)); if(colors.size!==normal.length)return {ok:false}; if(normal.length+jokersCount>4)return {ok:false}; return {ok:true,type:'Group',score:n*total,assigned:normal.map(t=>t.num).concat(Array(jokersCount).fill(n))};}
 function validateRun(normal,jokersCount,total){ if(total<3)return {ok:false}; const color=normal[0]?.color; if(!normal.every(t=>t.color===color))return {ok:false}; const nums=normal.map(t=>t.num).sort((a,b)=>a-b); if(new Set(nums).size!==nums.length)return {ok:false}; for(let start=1; start<=14-total; start++){const end=start+total-1; if(nums.every(n=>n>=start&&n<=end)){const missing=[]; for(let x=start;x<=end;x++) if(!nums.includes(x)) missing.push(x); if(missing.length===jokersCount){return {ok:true,type:'Run',score:Array.from({length:total},(_,i)=>start+i).reduce((a,b)=>a+b,0),start,end,color,assigned:Array.from({length:total},(_,i)=>start+i)};}}} return {ok:false};}
 function validateBoard(b=board()){const res=[]; let all=true; b.forEach((s,i)=>{const v=validateSet(s); res.push(v); if(!v.ok)all=false;}); return {ok:all,sets:res};}
-async function ensureSnapshot(){ if(!isMyTurn())throw new Error('No es tu turno'); if(turnData().snapshot)return; const snap={rack:myRack(),board:board(),opened:room.game.opened||{},initialScore:turnData().initialScore||0,moves:turnData().moves||0}; await update(ref(db,`${PATH}/${roomId}/game/turn`),{snapshot:snap});}
+async function ensureSnapshot(){ if(!isMyTurn())throw new Error('No es tu turno'); if(turnData().snapshot)return; const snap={rack:myRack(),board:board(),opened:room.game.opened||{},initialScore:turnData().initialScore||0,moves:turnData().moves||0}; await saveGameUpdate({'turn/snapshot':snap});}
 async function createSetFromSelection(){await withBusy(async()=>{ if(!canMove())return; const rackIds=[...selectedRack]; const boardItems=[...selectedBoard.entries()].flatMap(([si,ids])=>ids.map(id=>({si,id}))); if(!rackIds.length && !boardItems.length){toast(msg('selectFirst'),'warn');return;} if(!hasOpened() && boardItems.length){toast(msg('openNoBoard'),'warn');return;} await ensureSnapshot(); let rack=myRack().slice(), b=board().map(s=>s.slice()); const moving=[]; for(const id of rackIds){const ix=rack.findIndex(t=>t.id===id); if(ix>=0)moving.push(rack.splice(ix,1)[0]);}
     boardItems.sort((a,b)=>b.si-a.si); for(const {si,id} of boardItems){const set=b[si]||[]; const ix=set.findIndex(t=>t.id===id); if(ix>=0)moving.push(set.splice(ix,1)[0]);}
-    b=b.filter(s=>s.length>0); const v=validateSet(moving); if(!v.ok){toast(msg('invalidSelection',v.reason), 'err'); return;} b.push(moving); let inc=0; if(!hasOpened()){inc=v.score;} await update(ref(db,`${PATH}/${roomId}/game`),{board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1,[`turn/initialScore`]:(turnData().initialScore||0)+inc}); clearSelection(); toast(msg('createdSet',typeName(v.type)), 'ok');});}
+    b=b.filter(s=>s.length>0); const v=validateSet(moving); if(!v.ok){toast(msg('invalidSelection',v.reason), 'err'); return;} b.push(moving); let inc=0; if(!hasOpened()){inc=v.score;} await saveGameUpdate({board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1,[`turn/initialScore`]:(turnData().initialScore||0)+inc}); clearSelection(); toast(msg('createdSet',typeName(v.type)), 'ok');});}
 async function addSelectionToSet(){await withBusy(async()=>{ if(!canMove())return; const target=Number(el.targetSetSelect.value); if(Number.isNaN(target)){toast(msg('chooseTarget'),'warn');return;} const rackIds=[...selectedRack]; const boardItems=[...selectedBoard.entries()].flatMap(([si,ids])=>ids.map(id=>({si,id}))).filter(x=>x.si!==target); if(!rackIds.length && !boardItems.length){toast(msg('addFirst'),'warn');return;} if(!hasOpened()){toast(msg('open30'),'warn');return;} await ensureSnapshot(); let rack=myRack().slice(), b=board().map(s=>s.slice()); const moving=[]; for(const id of rackIds){const ix=rack.findIndex(t=>t.id===id); if(ix>=0)moving.push(rack.splice(ix,1)[0]);}
     boardItems.sort((a,b)=>b.si-a.si); for(const {si,id} of boardItems){const set=b[si]||[]; const ix=set.findIndex(t=>t.id===id); if(ix>=0)moving.push(set.splice(ix,1)[0]);}
-    if(!b[target]){toast(msg('badTarget'),'err');return;} b[target]=b[target].concat(moving); b=b.filter(s=>s.length>0); await update(ref(db,`${PATH}/${roomId}/game`),{board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1}); clearSelection(); toast(msg('added'), 'ok');});}
+    if(!b[target]){toast(msg('badTarget'),'err');return;} b[target]=b[target].concat(moving); b=b.filter(s=>s.length>0); await saveGameUpdate({board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1}); clearSelection(); toast(msg('added'), 'ok');});}
 function canMove(){ if(!room||room.status!=='playing'){toast(msg('noStarted'),'warn');return false;} if(!isMyTurn()){toast(msg('notTurn'),'warn');return false;} return true;}
-async function drawAndPass(){await withBusy(async()=>{ if(!canMove())return; if((turnData().moves||0)>0){toast(msg('alreadyMoved'),'warn');return;} const pool=(room.game.pool||[]).slice(); if(!pool.length){toast(msg('poolEmpty'),'warn');return;} const tile=pool.pop(); const rack=myRack().concat([tile]); await update(ref(db,`${PATH}/${roomId}/game`),{pool,[`racks/${uid}`]:rack}); await passTurn(msg('draw',playerName(uid))); clearSelection();});}
+async function drawAndPass(){await withBusy(async()=>{ if(!canMove())return; if((turnData().moves||0)>0){toast(msg('alreadyMoved'),'warn');return;} const pool=(room.game.pool||[]).slice(); if(!pool.length){toast(msg('poolEmpty'),'warn');return;} const tile=pool.pop(); const rack=myRack().concat([tile]); await saveGameUpdate({pool,[`racks/${uid}`]:rack}); await passTurn(msg('draw',playerName(uid))); clearSelection();});}
 async function endTurn(){await withBusy(async()=>{ if(!canMove())return; const v=validateBoard(); if(!v.ok){toast(msg('boardInvalid'),'err'); return;} const updates={}; if(!hasOpened()){const score=turnData().initialScore||0; if(score<30){toast(msg('needOpen',score), 'warn');return;} updates[`game/opened/${uid}`]=true;}
-    if(myRack().length===0){updates.status='finished'; updates['game/winner']=uid; await update(roomRef(),updates); await addLog(msg('won',playerName(uid))); toast(tr('won')(playerName(uid)), 'ok'); return;}
-    if(Object.keys(updates).length) await update(roomRef(),updates); await passTurn(msg('ended',playerName(uid))); clearSelection();});}
-async function passTurn(message){const o=order(); const idx=(room.game.turnIndex||0); const next=(idx+1)%o.length; const nextUid=o[next]; await update(ref(db,`${PATH}/${roomId}/game`),{turnIndex:next,turn:{uid:nextUid,startedAt:now(),moves:0,initialScore:0,snapshot:null}}); await addLog(`${message} ${msg('next',playerName(nextUid))}`);}
-async function undoTurn(){await withBusy(async()=>{ if(!canMove())return; const snap=turnData().snapshot; if(!snap){toast(msg('noUndo'),'warn');return;} await update(ref(db,`${PATH}/${roomId}/game`),{board:snap.board,[`racks/${uid}`]:snap.rack,opened:snap.opened,turn:{uid,startedAt:turnData().startedAt||now(),moves:0,initialScore:0,snapshot:null}}); clearSelection(); toast(msg('undone'),'ok');});}
-async function sortRack(mode){ if(!room||!myRack().length)return; const orderColor={red:1,blue:2,yellow:3,black:4}; const rack=myRack().slice().sort((a,b)=>{if(a.joker&&!b.joker)return 1;if(!a.joker&&b.joker)return -1;if(a.joker&&b.joker)return 0; if(mode==='color')return orderColor[a.color]-orderColor[b.color]||a.num-b.num; return a.num-b.num||orderColor[a.color]-orderColor[b.color];}); await update(ref(db,`${PATH}/${roomId}/game/racks/${uid}`),rack);}
+    if(myRack().length===0){updates.status='finished'; updates['game/winner']=uid; await saveRoomUpdate(updates); await addLog(msg('won',playerName(uid))); toast(tr('won')(playerName(uid)), 'ok'); return;}
+    if(Object.keys(updates).length) await saveRoomUpdate(updates); await passTurn(msg('ended',playerName(uid))); clearSelection();});}
+async function passTurn(message){const o=order(); const idx=(room.game.turnIndex||0); const next=(idx+1)%o.length; const nextUid=o[next]; await saveGameUpdate({turnIndex:next,turn:{uid:nextUid,startedAt:now(),moves:0,initialScore:0,snapshot:null}}); await addLog(`${message} ${msg('next',playerName(nextUid))}`);}
+async function undoTurn(){await withBusy(async()=>{ if(!canMove())return; const snap=turnData().snapshot; if(!snap){toast(msg('noUndo'),'warn');return;} await saveGameUpdate({board:snap.board,[`racks/${uid}`]:snap.rack,opened:snap.opened,turn:{uid,startedAt:turnData().startedAt||now(),moves:0,initialScore:0,snapshot:null}}); clearSelection(); toast(msg('undone'),'ok');});}
+async function sortRack(mode){ if(!room||!myRack().length)return; const orderColor={red:1,blue:2,yellow:3,black:4}; const rack=myRack().slice().sort((a,b)=>{if(a.joker&&!b.joker)return 1;if(!a.joker&&b.joker)return -1;if(a.joker&&b.joker)return 0; if(mode==='color')return orderColor[a.color]-orderColor[b.color]||a.num-b.num; return a.num-b.num||orderColor[a.color]-orderColor[b.color];}); await saveGameUpdate({[`racks/${uid}`]:rack});}
 async function withBusy(fn){ if(busy)return; busy=true; try{await fn();}catch(e){console.error(e);toast(e.message||(lang==='en'?'Unexpected error':'Error inesperado'),'err')} finally{busy=false;}}
 function clearSelection(){selectedRack.clear(); selectedBoard.clear(); renderSelection(); renderRack(); renderBoard();}
 function toggleRack(id){ if(!isMyTurn())return; selectedRack.has(id)?selectedRack.delete(id):selectedRack.add(id); renderSelection(); renderRack();}
@@ -267,13 +327,13 @@ function renderGameMode(){
 
 function render(){renderRooms(); renderRoomInfo(); renderPlayers(); renderGame(); renderRack(); renderBoard(); renderLog(); renderButtons(); renderGameMode();}
 function renderRoomInfo(){ if(!roomId||!room){el.roomInfo.textContent=tr('noRoom'); return;} el.roomInfo.textContent=tr('roomInfo')(room.name||roomId,room.status||'lobby');}
-function renderPlayers(){ const ps=playersArr(); if(!ps.length){el.playersList.innerHTML=`<div class="small">${tr('players')}: 0</div>`; return;} const cur=currentUid(); el.playersList.innerHTML=ps.map(p=>`<div class="player ${p.id===uid?'me':''} ${p.id===cur?'turn':''}"><div><b>${escapeHtml(p.name||'Jugador')}</b><div class="small">${p.id===room?.host?tr('host')+' · ':''}${hasOpened(p.id)?tr('opened'):tr('notOpened')}${room?.game?.racks?.[p.id]?` · ${room.game.racks[p.id].length} fichas`:''}</div></div><span class="pill">${p.online===false?'off':'online'}</span></div>`).join('');}
+function renderPlayers(){ const ps=playersArr(); if(!ps.length){el.playersList.innerHTML=`<div class="small">${tr('players')}: 0</div>`; return;} const cur=currentUid(); el.playersList.innerHTML=ps.map(p=>{const rackCount=room?.game?.racks?.[p.id]?.length; const rackText=Number.isFinite(rackCount)?` · ${tr('tiles')(rackCount)}`:''; const demoText=p.is_demo?` · ${tr('demoBadge')||'DEMO'}`:''; return `<div class="player ${p.id===uid?'me':''} ${p.id===cur?'turn':''}"><div><b>${escapeHtml(p.name||playerName(p.id))}</b><div class="small">${p.id===room?.host?tr('host')+' · ':''}${hasOpened(p.id)?tr('opened'):tr('notOpened')}${rackText}${demoText}</div></div><span class="pill">${p.online===false?'off':'online'}</span></div>`;}).join('');}
 function renderGame(){ if(!room||room.status==='lobby'){el.turnInfo.textContent=tr('noGame'); el.poolInfo.textContent=tr('pool')+': -'; el.openedInfo.textContent=tr('opening')+': -'; return;} if(room.status==='finished'){el.turnInfo.textContent=tr('won')(playerName(room.game?.winner));} else {el.turnInfo.textContent=tr('turnInfo')(playerName(currentUid()),isMyTurn());} el.poolInfo.textContent=tr('pool')+`: ${room.game?.pool?.length??0}`; const score=turnData().initialScore||0; el.openedInfo.textContent=hasOpened()? tr('alreadyOpened') : `${tr('opening')}: ${score}/30`;}
 function renderRack(){ const rack=myRack(); el.rackInfo.textContent=tr('tiles')(rack.length); el.rackTiles.innerHTML=''; if(!rack.length){el.rackTiles.innerHTML=`<div class="small">${tr('noTiles')}</div>`; return;} for(const t of rack){const d=tileEl(t); d.classList.toggle('selected',selectedRack.has(t.id)); d.onclick=()=>toggleRack(t.id); el.rackTiles.appendChild(d);} }
 function tileEl(t){const d=document.createElement('button'); d.type='button'; d.className=`tile ${t.joker?'joker':t.color}`; d.innerHTML=t.joker?'★':`${t.num}<small>${(colorName(t.color)||'')[0]||''}</small>`; d.title=t.joker?'Joker':`${colorName(t.color)} ${t.num}`; return d;}
 function renderBoard(){ const b=board(); const vals=validateBoard(b); el.sets.innerHTML=''; el.targetSetSelect.innerHTML=`<option value="">${tr('target')}</option>`; if(!b.length){el.sets.innerHTML=`<div class="small">${tr('emptyTable')}</div>`; return;} b.forEach((s,i)=>{const v=vals.sets[i]||validateSet(s); const wrap=document.createElement('div'); wrap.className=`set ${v.ok?'':'invalid'}`; wrap.innerHTML=`<div class="setHead"><span>${tr('set')} ${i+1} · ${v.ok?`${typeName(v.type)} · ${v.score} ${tr('points')}`:tr('invalid')}</span><span>${v.ok?'✓':'⚠'}</span></div>`; const tiles=document.createElement('div'); tiles.className='tiles'; s.forEach(t=>{const d=tileEl(t); const sel=selectedBoard.get(i)?.has(t.id); d.classList.toggle('selected',!!sel); d.onclick=()=>toggleBoard(i,t.id); tiles.appendChild(d);}); wrap.appendChild(tiles); el.sets.appendChild(wrap); const opt=document.createElement('option'); opt.value=i; opt.textContent=`${tr('set')} ${i+1}`; el.targetSetSelect.appendChild(opt);});}
 function renderLog(){const logs=(room?.log||[]).slice().reverse(); if(logs.length)el.log.innerHTML=logs.map(x=>`<div><b>${new Date(x.t||Date.now()).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</b> ${escapeHtml(x.m)}</div>`).join('');}
-function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot;}
+function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost()||isLocalDemo(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot; el.advanceDemoBtn.disabled=!isLocalDemo()||currentUid()!==DEMO_BOT_UID;}
 window.addEventListener('online',()=>el.netStatus.textContent=tr('online')); window.addEventListener('offline',()=>el.netStatus.textContent=tr('offline'));
 init();
 </script>
