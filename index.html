@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Rummy Familiar Online</title>
-  <meta name="theme-color" content="#0f766e" />
-  <meta name="description" content="Rummy familiar online bilingüe, con salas desplegables, modo demo local, modo móvil y PWA." />
+  <title>Rummy Familiar de Fichas</title>
+  <meta name="theme-color" content="#1d4ed8" />
+  <meta name="description" content="Rummy familiar de fichas, online, moderno, con modo demo local, modo móvil y PWA." />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon-192.png" />
   <style>
@@ -14,28 +14,349 @@
 
     .topActions{display:flex;gap:8px;align-items:center}.topActions select{width:auto;min-width:112px;padding:8px 10px;border-radius:999px;font-size:13px;font-weight:800}.gameBar{max-width:1180px;margin:0 auto;padding:0 14px 10px;display:flex;gap:6px;overflow-x:auto;white-space:nowrap}.drawerSummary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;font-weight:950;padding:2px 0 10px}.drawerSummary::-webkit-details-marker{display:none}.drawerSummary:after{content:'▾';font-size:18px;color:var(--muted)}.sideDrawer:not([open]) .drawerSummary{padding-bottom:2px}.sideDrawer:not([open]) .drawerSummary:after{content:'▸'}.drawerSummary span:last-child{font-size:12px;color:var(--muted);font-weight:800}.app.playing .sideDrawer{box-shadow:none;background:rgba(255,255,255,.72)}.app.playing .sideDrawer:not([open]){padding:10px 12px}.app.playing .sideDrawer[open]{position:relative}.app.playing .board{min-height:55vh}.board .panel:first-child{position:sticky;top:92px;z-index:8}.sets{min-height:220px}.set{overflow-x:auto}.set .tiles{flex-wrap:nowrap;min-width:max-content}.rackCard{border:2px solid #99f6e4}.rack .tiles{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;padding:7px 4px 12px;scroll-snap-type:x proximity}.rack .tile{flex:0 0 auto;scroll-snap-align:center}.tile{width:50px;height:66px;font-size:24px}.tile:active{transform:translateY(-3px) scale(.98)}.tile.selected{box-shadow:0 0 0 4px #f59e0b,0 6px 0 rgba(0,0,0,.12)}#gameNotice{font-weight:800}.playHint{font-size:12px;color:var(--muted);font-weight:700}.quickHow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quickHow div{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:10px;font-size:12px;color:#475569}.quickHow b{display:block;color:#0f766e;font-size:13px}@media(max-width:900px){.top{position:sticky}.topin{padding-bottom:6px}.gameBar{padding-bottom:8px}.grid{display:block}.sideDrawer{margin-bottom:10px}.app.playing .sideDrawer:not([open]){position:sticky;top:86px;z-index:7;margin-bottom:8px}.board .panel:first-child{top:128px}.quickHow{grid-template-columns:1fr}.tile{width:46px;height:62px;font-size:23px}.rack{position:sticky;bottom:0}.rackCard{padding:10px 8px}.sets{min-height:260px}.controls button,.controls select{min-height:46px}.helpBtn{bottom:calc(10px + env(safe-area-inset-bottom));right:10px}}@media(max-width:430px){.tile{width:42px;height:58px;font-size:21px}.logo .mark{width:34px;height:34px}.topActions select{min-width:92px}.status{display:none}.board .panel:first-child{top:120px}.rackCard h3{font-size:16px}}
 
+  
+/* UI v6: mesa azul moderna para juego de fichas */
+:root{
+  --bg:#07162f;
+  --card:rgba(255,255,255,.95);
+  --ink:#0f172a;
+  --muted:#64748b;
+  --line:rgba(148,163,184,.32);
+  --brand:#2563eb;
+  --brand2:#06b6d4;
+  --brand3:#7c3aed;
+  --danger:#dc2626;
+  --warn:#d97706;
+  --ok:#16a34a;
+  --shadow:0 20px 55px rgba(2,6,23,.28);
+  --radius:22px;
+  --table:#0d3b78;
+  --table2:#123f88;
+  --felt:#0ea5e9;
+}
+html{background:#07162f}
+body{
+  background:
+    radial-gradient(circle at 18% 0%,rgba(56,189,248,.32),transparent 34%),
+    radial-gradient(circle at 82% 8%,rgba(124,58,237,.25),transparent 31%),
+    linear-gradient(160deg,#061225 0%,#0b2550 46%,#06152f 100%);
+  color:#e5f3ff;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 78%);
+}
+.top{
+  background:rgba(5,16,38,.84);
+  border-bottom:1px solid rgba(147,197,253,.22);
+  box-shadow:0 18px 45px rgba(2,6,23,.25);
+}
+.topin{padding-top:12px}
+.logo{color:#f8fbff}
+.logo .mark{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#38bdf8,#2563eb 55%,#7c3aed);
+  box-shadow:0 12px 30px rgba(37,99,235,.42), inset 0 1px 0 rgba(255,255,255,.35);
+  transform:rotate(-2deg);
+}
+.logo .mark:after{
+  content:"";
+  width:24px;
+  height:30px;
+  border-radius:8px;
+  background:linear-gradient(180deg,#fff7df,#e7d49c);
+  box-shadow:9px 5px 0 -2px #fff7df;
+}
+.logo .mark{font-size:0}
+.logo .small{color:#bfdbfe;font-weight:700}
+.status,.pill{
+  color:#dbeafe;
+  background:rgba(15,23,42,.58);
+  border-color:rgba(147,197,253,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.gameBar{scrollbar-width:thin}
+.app{position:relative}
+.grid{grid-template-columns:330px minmax(0,1fr);align-items:start}
+.panel{
+  background:var(--card);
+  color:var(--ink);
+  border:1px solid rgba(219,234,254,.7);
+  box-shadow:var(--shadow);
+}
+.panel h2,.panel h3{letter-spacing:-.025em;color:#0f172a}
+.small,label{color:#64748b}
+.startStrip{
+  display:grid;
+  gap:6px;
+  padding:14px;
+  margin-bottom:2px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,rgba(37,99,235,.95),rgba(14,165,233,.95)),
+    linear-gradient(180deg,#1d4ed8,#0284c7);
+  color:white;
+  box-shadow:0 16px 40px rgba(37,99,235,.34);
+}
+.startBadge{
+  width:max-content;
+  font-size:12px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;
+  padding:5px 9px;
+}
+.startTitle{font-size:20px;font-weight:950;letter-spacing:-.04em}
+.startText{font-size:13px;color:#e0f2fe;font-weight:650;line-height:1.35}
+.drawerSummary{
+  color:#e0f2fe;
+  background:linear-gradient(135deg,rgba(15,23,42,.92),rgba(30,64,175,.84));
+  border-radius:18px;
+  padding:12px 14px!important;
+  margin:-4px -4px 10px;
+  border:1px solid rgba(147,197,253,.22);
+}
+.sideDrawer.panel{
+  background:rgba(15,23,42,.72);
+  border-color:rgba(147,197,253,.25);
+}
+.sideDrawer[open] section{
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(219,234,254,.8);
+  border-radius:20px;
+  padding:12px;
+}
+.adminbox{
+  border-style:solid;
+  border-color:rgba(14,165,233,.3);
+  background:linear-gradient(180deg,#f0f9ff,#ffffff);
+}
+.warnbox{
+  background:#fff7ed;
+  border-color:#fed7aa;
+  color:#7c2d12;
+}
+.okbox{
+  background:#ecfeff;
+  border-color:#a5f3fc;
+  color:#164e63;
+}
+.errbox{
+  background:#fef2f2;
+  border-color:#fecaca;
+  color:#7f1d1d;
+}
+button{
+  min-height:44px;
+  border-radius:16px;
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+button:hover:not(:disabled){transform:translateY(-1px);filter:saturate(1.05)}
+button:active:not(:disabled){transform:translateY(0) scale(.99)}
+button.primary{
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  color:white;
+  box-shadow:0 10px 24px rgba(37,99,235,.28);
+}
+button.warn{
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+  color:white;
+}
+button.danger{background:#fee2e2;color:#991b1b}
+button.ghost{
+  background:rgba(241,245,249,.9);
+  border:1px solid rgba(148,163,184,.35);
+  color:#1e293b;
+}
+#loadDemoBtn{
+  background:linear-gradient(135deg,#22c55e,#06b6d4);
+  color:white;
+  box-shadow:0 14px 34px rgba(14,165,233,.28);
+}
+#loadDemoBtn:before{content:"▶ ";font-weight:950}
+#joinRoomBtn:before{content:"🎮 "}
+#createRoomBtn:before{content:"＋ "}
+input,select{
+  border-color:rgba(148,163,184,.38);
+  box-shadow:inset 0 1px 2px rgba(15,23,42,.04);
+}
+input:focus,select:focus,button:focus-visible,.tile:focus-visible{
+  outline:4px solid rgba(14,165,233,.28);
+  outline-offset:2px;
+}
+.board .panel:first-child{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.98),rgba(240,249,255,.96));
+}
+.board .panel:nth-child(2){
+  min-height:290px;
+  background:
+    radial-gradient(circle at center,rgba(56,189,248,.22),transparent 58%),
+    linear-gradient(145deg,var(--table),var(--table2));
+  border-color:rgba(125,211,252,.28);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.04), 0 24px 65px rgba(2,6,23,.35);
+  position:relative;
+  overflow:hidden;
+}
+.board .panel:nth-child(2):before{
+  content:"Mesa de fichas";
+  position:absolute;
+  top:16px;
+  left:18px;
+  color:rgba(219,234,254,.18);
+  font-size:42px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.06em;
+  pointer-events:none;
+}
+.sets{position:relative;z-index:1}
+.set{
+  background:rgba(241,245,249,.94);
+  border-color:rgba(219,234,254,.82);
+  box-shadow:0 12px 28px rgba(2,6,23,.18);
+}
+.setHead{color:#334155}
+.quickHow div{
+  background:linear-gradient(180deg,#f8fbff,#eff6ff);
+  border-color:#dbeafe;
+}
+.quickHow b{color:#1d4ed8}
+.controls{gap:10px}
+.tableHeader{gap:10px}
+.rack{
+  background:linear-gradient(180deg,rgba(7,22,47,0),rgba(7,22,47,.96) 20%,rgba(7,22,47,.98));
+  border-top:1px solid rgba(147,197,253,.22);
+}
+.rackCard{
+  border:1px solid rgba(147,197,253,.45);
+  background:rgba(248,250,252,.97);
+  box-shadow:0 -14px 46px rgba(2,6,23,.32);
+}
+.rackCard h3{color:#0f172a}
+.tiles{gap:9px}
+.tile{
+  width:54px;
+  height:70px;
+  border-radius:15px;
+  border:1px solid #d9cda7;
+  background:
+    linear-gradient(180deg,#fffaf0 0%,#fff7df 55%,#ead9a9 100%);
+  color:#111827;
+  box-shadow:
+    0 8px 0 #b9a976,
+    0 13px 20px rgba(2,6,23,.22),
+    inset 0 2px 0 rgba(255,255,255,.9);
+  font-size:25px;
+  text-shadow:0 1px 0 rgba(255,255,255,.6);
+}
+.tile:before{
+  content:"";
+  position:absolute;
+  top:7px;
+  left:50%;
+  transform:translateX(-50%);
+  width:26px;
+  height:4px;
+  border-radius:999px;
+  background:currentColor;
+  opacity:.18;
+}
+.tile small{
+  right:6px;
+  bottom:5px;
+  font-size:9px;
+  color:#94a3b8;
+}
+.tile.red{color:#dc2626;border-color:#f2b4a8}
+.tile.blue{color:#2563eb;border-color:#a7c5ff}
+.tile.yellow{color:#d97706;border-color:#f1d084}
+.tile.black{color:#111827;border-color:#babfc8}
+.tile.joker{
+  color:#7c3aed;
+  border-color:#c4b5fd;
+  background:linear-gradient(180deg,#fff7ff,#eee7ff);
+}
+.tile.selected{
+  transform:translateY(-8px);
+  outline:0;
+  box-shadow:
+    0 0 0 4px #facc15,
+    0 11px 0 #b9a976,
+    0 18px 24px rgba(250,204,21,.22);
+}
+.tile.locked{filter:saturate(.75);opacity:.62}
+.miniLog{
+  background:#0f172a;
+  color:#dbeafe;
+  border-color:rgba(147,197,253,.22);
+}
+.helpBtn{
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow:0 18px 40px rgba(37,99,235,.34);
+}
+.modal{
+  background:rgba(255,255,255,.98);
+}
+#gameNotice{font-weight:850}
+@media(max-width:900px){
+  .topin{align-items:center}
+  .grid{display:block}
+  .sideDrawer.panel{margin-bottom:12px}
+  .startStrip{grid-template-columns:1fr}
+  .board .panel:nth-child(2):before{font-size:30px}
+  .tile{width:48px;height:64px;font-size:23px}
+  .controls{grid-template-columns:1fr}
+  .controls.two{grid-template-columns:1fr}
+  #loadDemoBtn,#joinRoomBtn,#createRoomBtn{min-height:50px;font-size:16px}
+}
+@media(max-width:430px){
+  .app{padding:8px}
+  .panel{border-radius:18px}
+  .tile{width:44px;height:60px;font-size:21px}
+  .tiles{gap:7px}
+  .logo div:last-child{max-width:220px}
+}
+
   </style>
 </head>
 <body>
-<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummikub Familiar</div><div class="small" id="appSubtitle">v5 local · ES/EN · móvil · PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
+<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa azul · fácil · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
 <main class="app" id="app">
   <div class="grid">
     <details class="panel stack sideDrawer" id="sideDrawer" open><summary class="drawerSummary"><span id="drawerTitle">Sala y configuración</span><span id="drawerHint">tocar para abrir/cerrar</span></summary>
+      <div class="startStrip" aria-label="Inicio rápido">
+        <div class="startBadge">Juego de fichas</div>
+        <div class="startTitle">Empezá en 3 pasos</div>
+        <div class="startText">Poné tu nombre, elegí demo o sala familiar, y jugá desde el atril.</div>
+      </div>
       <section class="stack">
-        <h2>Entrada</h2>
+        <h2>1. Tu nombre</h2>
         <div><label>Tu nombre</label><input id="nameInput" placeholder="Ej: Aldo" maxlength="24" /></div>
         <button class="primary" id="saveNameBtn">Guardar nombre</button>
         <div class="small" id="whoami">Sin nombre guardado.</div>
       </section>
       <section class="stack adminbox">
-        <h3>Administrador</h3>
+        <h3>2. Crear partida familiar</h3>
         <div><label>Crear sala con nombre</label><input id="newRoomName" placeholder="Ej: FAMILIA" maxlength="32" /></div>
         <button class="primary" id="createRoomBtn">Crear sala</button>
         <button class="ghost" id="refreshRoomsBtn">Actualizar lista</button>
         <div class="small">Las salas aparecerán en el desplegable. Para uso familiar no hay clave real de administrador.</div>
       </section>
       <section class="stack">
-        <h3>Elegir sala</h3>
+        <h3>3. Entrar a una sala</h3>
         <div><label>Salas disponibles</label><select id="roomSelect"><option value="">Cargando salas...</option></select></div>
         <div class="row"><button class="primary" id="joinRoomBtn">Entrar a sala</button><button class="danger" id="leaveRoomBtn">Salir</button></div>
         <div id="roomInfo" class="small">Sin sala.</div>
@@ -47,8 +368,8 @@
       <section class="stack">
         <h3>Partida</h3>
         <div class="row"><button class="primary" id="startGameBtn">Iniciar / reiniciar mano</button><button class="warn" id="resetBoardBtn">Reiniciar sala</button></div>
-        <div class="row"><button class="ghost" id="loadDemoBtn">Cargar demo local</button><button class="ghost" id="resetDemoBtn">Reiniciar demo</button></div>
-        <div class="small" id="demoInfo">Demo local con datos ficticios para probar sin tocar salas reales.</div>
+        <div class="row"><button class="ghost" id="loadDemoBtn">Jugar demo ahora</button><button class="ghost" id="resetDemoBtn">Reiniciar demo</button></div>
+        <div class="small" id="demoInfo">Demo local con fichas ficticias para aprender sin crear sala ni tocar datos reales.</div>
         <div class="warnbox"><b>Regla base:</b> versión Rummikub con 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.</div>
       </section>
       <section class="stack">
@@ -58,19 +379,19 @@
     </details>
     <section class="board">
       <div class="panel stack">
-        <div class="tableHeader"><div><h2>Mesa</h2><div class="small" id="turnInfo">Sin partida iniciada.</div></div><div class="row" style="flex:0 0 auto"><span class="pill" id="poolInfo">Pila: -</span><span class="pill" id="openedInfo">Apertura: -</span></div></div>
+        <div class="tableHeader"><div><h2>Mesa de juego</h2><div class="small" id="turnInfo">Sin partida iniciada.</div></div><div class="row" style="flex:0 0 auto"><span class="pill" id="poolInfo">Pila: -</span><span class="pill" id="openedInfo">Apertura: -</span></div></div>
         <div id="gameNotice" class="okbox">Entrá a una sala para comenzar.</div><div class="quickHow" id="quickHow"><div><b id="qh1t">1. Elegí fichas</b><span id="qh1b">Tocá fichas de tu atril.</span></div><div><b id="qh2t">2. Bajá jugada</b><span id="qh2b">Serie o escalera válida.</span></div><div><b id="qh3t">3. Terminá turno</b><span id="qh3b">Validá mesa o tomá 1 ficha.</span></div></div>
         <div class="controls two" id="turnControlsTop">
-          <button class="primary" id="drawBtn">Tomar 1 ficha y pasar turno</button>
-          <button class="warn" id="endTurnBtn">Validar mesa y terminar turno</button>
+          <button class="primary" id="drawBtn">Tomar 1 ficha y pasar</button>
+          <button class="warn" id="endTurnBtn">Terminar turno</button>
         </div>
         <div class="controls" id="moveControls">
-          <button id="newSetBtn">Crear nueva jugada con selección</button>
+          <button id="newSetBtn">Bajar fichas seleccionadas</button>
           <select id="targetSetSelect"><option value="">Elegir jugada destino</option></select>
-          <button id="addToSetBtn">Agregar selección a jugada elegida</button>
+          <button id="addToSetBtn">Agregar a jugada</button>
         </div>
         <div class="controls two">
-          <button class="ghost" id="clearSelectionBtn">Limpiar selección</button>
+          <button class="ghost" id="clearSelectionBtn">Quitar selección</button>
           <button class="danger" id="undoTurnBtn">Deshacer mi turno</button>
         </div>
         <div class="controls two">
@@ -120,26 +441,26 @@ const COLOR_NAME={red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'};
 const I18N={
   es:{
     connecting:'Conectando...', firebase:'Conectando Firebase...', online:'Online', offline:'Sin conexión', firebaseErr:'Error Firebase',
-    title:'Rummy Familiar', subtitle:'v5 final · ES/EN · móvil · PWA', drawerTitle:'Sala y configuración', drawerHint:'tocar para abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
-    entry:'Entrada', nameLabel:'Tu nombre', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Nombre guardado: ${n}`,
-    admin:'Administrador', createRoomLabel:'Crear sala con nombre', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar lista', adminNote:'Las salas aparecerán en el desplegable. Para uso familiar no hay clave real de administrador.',
-    chooseRoom:'Elegir sala', availableRooms:'Salas disponibles', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a sala', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Partida', start:'Iniciar / reiniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: versión Rummikub con 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.', events:'Eventos',
-    table:'Mesa', noGame:'Sin partida iniciada.', pool:'Pila', opening:'Apertura', alreadyOpened:'Ya abriste', draw:'Tomar 1 ficha y pasar turno', end:'Validar mesa y terminar turno', newSet:'Crear nueva jugada con selección', target:'Elegir jugada destino', add:'Agregar selección a jugada elegida', clear:'Limpiar selección', undo:'Deshacer mi turno', noSelection:'Sin selección.', rack:'Mi atril', sortNum:'Ordenar número', sortColor:'Ordenar color',
-    qh1t:'1. Elegí fichas', qh1b:'Tocá fichas de tu atril.', qh2t:'2. Bajá jugada', qh2b:'Serie o escalera válida.', qh3t:'3. Terminá turno', qh3b:'Validá mesa o tomá 1 ficha.',
-    helpTitle:'Reglas implementadas', close:'Cerrar', helpFoot:'Versión local v5: interfaz bilingüe, móvil y con sala colapsable durante la partida.', rules:['Juego tipo Rummikub clásico: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
-    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Cargar demo local', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local: datos ficticios para probar sin Firebase ni salas reales.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo local cargado. Probá bajar la serie 10-10-10 y terminar turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
+    title:'Rummy Familiar de Fichas', subtitle:'Mesa azul · fácil · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
+    entry:'1. Tu nombre', nameLabel:'Tu nombre para jugar', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Listo: ${n}`,
+    admin:'2. Crear partida familiar', createRoomLabel:'Nombre de la sala', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar salas', adminNote:'Creá una sala y compartí el nombre con tu familia. No hace falta configurar nada técnico.',
+    chooseRoom:'3. Entrar a una sala', availableRooms:'Salas familiares', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a jugar', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Demo y partida', start:'Iniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: juego de fichas tipo Rummy/Rummikub, 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.', events:'Actividad',
+    table:'Mesa de juego', noGame:'Sin partida iniciada.', pool:'Pila', opening:'Apertura', alreadyOpened:'Ya abriste', draw:'Tomar 1 ficha y pasar', end:'Terminar turno', newSet:'Bajar fichas seleccionadas', target:'Elegir jugada de la mesa', add:'Agregar a jugada', clear:'Quitar selección', undo:'Deshacer turno', noSelection:'Tocá fichas de tu atril para jugar.', rack:'Mi atril', sortNum:'Ordenar por número', sortColor:'Ordenar por color',
+    qh1t:'1. Tocá fichas', qh1b:'Seleccioná desde tu atril.', qh2t:'2. Bajalas a la mesa', qh2b:'Formá serie o escalera.', qh3t:'3. Terminá turno', qh3b:'La app valida la mesa.',
+    helpTitle:'Ayuda rápida', close:'Cerrar', helpFoot:'Interfaz moderna v6: juego de fichas familiar, demo local, móvil y PWA.', rules:['Juego de fichas tipo Rummy/Rummikub: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
+    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Jugar demo ahora', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local con fichas ficticias. Sirve para aprender sin crear sala ni usar Firebase.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo cargado. Tocá las fichas 10-10-10, bajalas a la mesa y terminá turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
     msg:{writeName:'Escribí tu nombre primero.', chooseRoom:'Elegí una sala.', roomInvalid:'Sala inválida', roomName:'Poné un nombre de sala, por ejemplo FAMILIA.', created:n=>`Sala ${n} creada.`, joined:'Entraste a la sala.', left:'Saliste de la sala.', need2:'Necesitás al menos 2 jugadores online.', max4:'Rummikub clásico es para 2 a 4 jugadores.', hostOnly:'Solo quien creó la sala puede iniciar la mano.', onlyHostReset:'Solo el anfitrión puede reiniciar la sala.', confirmReset:'¿Reiniciar la sala y borrar la mano actual?', reset:'Sala reiniciada.', noStarted:'No hay mano iniciada.', notTurn:'Todavía no es tu turno.', selectFirst:'Seleccioná fichas primero.', openNoBoard:'Para abrir no podés usar fichas de la mesa.', invalidSelection:r=>`La selección no forma jugada válida: ${r}.`, createdSet:t=>`Jugada creada: ${t}.`, chooseTarget:'Elegí una jugada destino.', addFirst:'Seleccioná fichas para agregar.', open30:'Para abrir tenés que crear jugadas nuevas desde tu atril y sumar 30.', badTarget:'Destino inválido.', added:'Ficha(s) agregada(s). Validá la mesa antes de terminar.', alreadyMoved:'Ya moviste fichas. Tenés que terminar turno o deshacer.', poolEmpty:'La pila está vacía.', boardInvalid:'La mesa todavía tiene jugadas inválidas. Corregí o deshacé tu turno.', needOpen:s=>`Para abrir necesitás 30 puntos. Llevás ${s}. Podés seguir bajando conjuntos o deshacer.`, noUndo:'No hay movimientos para deshacer en este turno.', undone:'Turno deshecho.', roomCreated:n=>`Sala ${n} creada`, entered:n=>`${n} entró a la sala`, handStarted:n=>`Mano iniciada. Juega ${n}. Cada jugador recibió 14 fichas.`, draw:n=>`${n} tomó 1 ficha de la pila.`, next:n=>`Ahora juega ${n}.`, ended:n=>`${n} terminó su turno.`, won:n=>`${n} hizo Rummikub y ganó la mano.`, firebaseError:'No pude conectar con Firebase. Revisá internet o dominio autorizado.', noValid:'no es serie ni escalera válida', min3:'mínimo 3 fichas', noJokers:'no puede ser solo comodines'}
   },
   en:{
     connecting:'Connecting...', firebase:'Connecting Firebase...', online:'Online', offline:'Offline', firebaseErr:'Firebase error',
-    title:'Family Rummy', subtitle:'final v5 · ES/EN · mobile · PWA', drawerTitle:'Room and setup', drawerHint:'tap to open/close', drawerHintPlay:'game active: open only if needed',
-    entry:'Entry', nameLabel:'Your name', namePh:'Ex: Aldo', saveName:'Save name', noName:'No saved name.', savedName:n=>`Saved name: ${n}`,
-    admin:'Administrator', createRoomLabel:'Create room by name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh list', adminNote:'Rooms appear in the dropdown. For family use there is no real admin password.',
-    chooseRoom:'Choose room', availableRooms:'Available rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Join room', leave:'Leave', noRoom:'No room.', players:'Players', game:'Game', start:'Start / restart hand', reset:'Reset room', baseRule:'Base rule: Rummikub version with 106 tiles, 14 initial tiles, 30-point initial meld, no discard.', events:'Events',
-    table:'Table', noGame:'No hand started.', pool:'Pool', opening:'Initial meld', alreadyOpened:'Opened', draw:'Draw 1 tile and pass turn', end:'Validate table and end turn', newSet:'Create new meld from selection', target:'Choose target meld', add:'Add selection to chosen meld', clear:'Clear selection', undo:'Undo my turn', noSelection:'No selection.', rack:'My rack', sortNum:'Sort by number', sortColor:'Sort by color',
-    qh1t:'1. Pick tiles', qh1b:'Tap tiles from your rack.', qh2t:'2. Play meld', qh2b:'Valid group or run.', qh3t:'3. End turn', qh3b:'Validate table or draw 1 tile.',
-    helpTitle:'Implemented rules', close:'Close', helpFoot:'Local v5: bilingual, mobile-first interface with collapsible room panel during play.', rules:['Classic Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
-    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Load local demo', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo: fictitious data to test without Firebase or real rooms.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Local demo loaded. Try playing the 10-10-10 group and ending the turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
+    title:'Family Tile Rummy', subtitle:'Blue table · simple · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
+    entry:'1. Your name', nameLabel:'Your player name', namePh:'Ex: Alex', saveName:'Save name', noName:'No saved name.', savedName:n=>`Ready: ${n}`,
+    admin:'2. Create family game', createRoomLabel:'Room name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh rooms', adminNote:'Create a room and share its name with your family. No technical setup needed.',
+    chooseRoom:'3. Join a room', availableRooms:'Family rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Start playing', leave:'Leave', noRoom:'No room.', players:'Players', game:'Demo and game', start:'Start hand', reset:'Reset room', baseRule:'Base rule: tile Rummy/Rummikub style, 106 tiles, 14 initial tiles, 30-point opening, no discard.', events:'Activity',
+    table:'Game table', noGame:'No hand started.', pool:'Pool', opening:'Opening', alreadyOpened:'Opened', draw:'Draw 1 tile and pass', end:'End turn', newSet:'Play selected tiles', target:'Choose table meld', add:'Add to meld', clear:'Clear selection', undo:'Undo turn', noSelection:'Tap tiles from your rack to play.', rack:'My rack', sortNum:'Sort by number', sortColor:'Sort by color',
+    qh1t:'1. Tap tiles', qh1b:'Select from your rack.', qh2t:'2. Move to table', qh2b:'Make a group or run.', qh3t:'3. End turn', qh3b:'The app validates the table.',
+    helpTitle:'Quick help', close:'Close', helpFoot:'Modern v6: family tile game, local demo, mobile and PWA.', rules:['Tile Rummy/Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
+    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Play demo now', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo with fictitious tiles. Learn without creating a room or using Firebase.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Demo loaded. Tap the 10-10-10 tiles, play them to the table and end your turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
     msg:{writeName:'Write your name first.', chooseRoom:'Choose a room.', roomInvalid:'Invalid room', roomName:'Enter a room name, for example FAMILY.', created:n=>`Room ${n} created.`, joined:'You joined the room.', left:'You left the room.', need2:'You need at least 2 online players.', max4:'Classic Rummikub is for 2 to 4 players.', hostOnly:'Only the room creator can start the hand.', onlyHostReset:'Only the host can reset the room.', confirmReset:'Reset the room and erase the current hand?', reset:'Room reset.', noStarted:'No hand started.', notTurn:'It is not your turn yet.', selectFirst:'Select tiles first.', openNoBoard:'For your initial meld, you cannot use table tiles.', invalidSelection:r=>`The selection is not a valid meld: ${r}.`, createdSet:t=>`Meld created: ${t}.`, chooseTarget:'Choose a target meld.', addFirst:'Select tiles to add.', open30:'For your initial meld you must create new melds from your rack totaling 30.', badTarget:'Invalid target.', added:'Tile(s) added. Validate the table before ending your turn.', alreadyMoved:'You already moved tiles. End turn or undo.', poolEmpty:'The pool is empty.', boardInvalid:'The table still has invalid melds. Fix it or undo your turn.', needOpen:s=>`Initial meld needs 30 points. You have ${s}. You can keep playing melds or undo.`, noUndo:'There are no moves to undo this turn.', undone:'Turn undone.', roomCreated:n=>`Room ${n} created`, entered:n=>`${n} joined the room`, handStarted:n=>`Hand started. ${n} plays first. Each player received 14 tiles.`, draw:n=>`${n} drew 1 tile from the pool.`, next:n=>`Now ${n} plays.`, ended:n=>`${n} ended the turn.`, won:n=>`${n} called Rummikub and won the hand.`, firebaseError:'Could not connect to Firebase. Check internet or authorized domain.', noValid:'not a valid group or run', min3:'minimum 3 tiles', noJokers:'cannot be only jokers'}
   }
 };

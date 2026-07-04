@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Validar que Rummy Familiar Online está listo para uso familiar básico.
+Validar que Rummy Familiar de Fichas está listo para uso familiar básico.
 
 ## Prueba 1 - Carga básica
 
@@ -16,7 +16,7 @@ Abrir:
 http://localhost:8000
 
 Resultado esperado:
-- Se ve "Rummy Familiar".
+- Se ve "Rummy Familiar de Fichas".
 - No aparecen errores visibles.
 - La interfaz se adapta al ancho de pantalla.
 - Aparecen botones de demo local.
@@ -34,7 +34,7 @@ Resultado esperado:
 ## Prueba 3 - Modo demo local
 
 Pasos:
-1. Presionar "Cargar demo local".
+1. Presionar "Jugar demo ahora".
 
 Resultado esperado:
 - Se crea sala "DEMO LOCAL".
@@ -50,7 +50,7 @@ Pasos:
    - 10 rojo,
    - 10 azul,
    - 10 amarillo.
-2. Presionar "Crear nueva jugada con selección".
+2. Presionar "Bajar fichas seleccionadas".
 
 Resultado esperado:
 - Aparece una jugada válida en la mesa.
@@ -60,7 +60,7 @@ Resultado esperado:
 ## Prueba 5 - Terminar turno demo
 
 Pasos:
-1. Presionar "Validar mesa y terminar turno".
+1. Presionar "Terminar turno".
 
 Resultado esperado:
 - La mesa se valida.
@@ -229,3 +229,13 @@ npx playwright show-report
 ```
 2. Revisar el primer error.
 3. No avanzar a rediseño visual hasta que Playwright quede en verde.
+
+## Prueba visual - Interfaz de fichas
+
+Resultado esperado:
+- La app se ve como juego de fichas, no como juego de cartas.
+- El fondo principal es azul moderno.
+- Las fichas son rectangulares, claras y legibles.
+- El atril queda visible abajo durante la partida.
+- Los botones principales se entienden sin explicación técnica.
+- En móvil, las fichas se pueden tocar sin precisión excesiva.

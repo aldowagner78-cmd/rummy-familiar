@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.1.0-ui-fichas-azul] - 2026-07-04
+
+### Agregado
+- Rediseño visual gratuito y sin dependencias: mesa azul moderna, fichas más legibles y apariencia de juego de fichas.
+- Bloque de inicio rápido para orientar al usuario no técnico.
+- Botones principales más grandes y claros para demo, sala y turno.
+- Tema PWA azul actualizado en `manifest.webmanifest` y cache nueva en `sw.js`.
+
+### Modificado
+- Textos de interfaz orientados a juego de fichas, no cartas.
+- `Jugar demo ahora` reemplaza el texto técnico de demo local.
+- La mesa, el atril y las fichas tienen mayor jerarquía visual.
+- Se mantuvieron IDs, lógica del juego, Firebase y modo demo.
+
+### Pruebas esperadas
+- `npm test` debe seguir dando `8 passed`.
+- Validar escritorio y móvil antes de publicar.
+
+
 ## [1.0.3-fix-e2e-windows] - 2026-07-04
 
 ### Corregido

@@ -2,8 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
 const launchOptions = chromiumExecutablePath
-  ? { executablePath: chromiumExecutablePath, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-software-rasterizer'] }
-  : { args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-software-rasterizer'] };
+  ? { executablePath: chromiumExecutablePath, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--use-gl=swiftshader', '--in-process-gpu'] }
+  : { args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--use-gl=swiftshader', '--in-process-gpu'] };
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -23,7 +23,7 @@ export default defineConfig({
     serviceWorkers: 'block',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
+    video: 'off',
     launchOptions
   },
   webServer: {

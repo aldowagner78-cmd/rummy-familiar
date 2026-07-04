@@ -233,3 +233,51 @@ Resultado: validación estática correcta.
 ## Cómo revertir
 Restaurar el archivo anterior:
 tests/e2e/rummy-demo.spec.js
+
+
+## Actualización UI v1.1.0 - 2026-07-04
+
+### Archivos modificados
+- `index.html`
+- `manifest.webmanifest`
+- `sw.js`
+- `tools/validar-estatico.mjs`
+- `tests/e2e/rummy-demo.spec.js`
+- `README_INSTALACION.txt`
+- `CHANGELOG.md`
+- `GUIA_PRUEBA_FINAL.md`
+- `PRUEBA_TECNICA_RESULTADO.md`
+
+### Qué se cambió
+- Se rediseñó la app como juego de fichas con mesa azul moderna.
+- Se agregaron estilos visuales para fichas tipo Rummy/Rummikub, atril y mesa.
+- Se simplificaron textos de botones para usuarios reales.
+- Se agregó bloque de inicio rápido sin cambiar la lógica.
+- Se actualizó el tema PWA y la versión de cache.
+- Se ajustaron pruebas y validación estática a los nuevos textos.
+
+### Por qué se cambió
+- La app necesitaba verse como juego de fichas, no como pantalla técnica.
+- El usuario real debe entender rápido cómo iniciar, jugar demo, crear sala y terminar turno.
+- Se mantuvo la app gratuita, estática, PWA y sin nuevas dependencias.
+
+### Cómo probar
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
+
+```powershell
+npm test
+```
+
+Resultado esperado:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+### Cómo revertir
+Restaurar el backup previo o usar Git:
+
+```powershell
+git restore index.html manifest.webmanifest sw.js tools/validar-estatico.mjs tests/e2e/rummy-demo.spec.js README_INSTALACION.txt CHANGELOG.md GUIA_PRUEBA_FINAL.md PRUEBA_TECNICA_RESULTADO.md
+```

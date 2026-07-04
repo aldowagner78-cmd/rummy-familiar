@@ -92,9 +92,9 @@ test('ayuda y cambio de idioma no rompen la pantalla principal', async ({ page }
   await expect(page.locator('#helpModal')).toHaveClass(/hide/);
 
   await page.locator('#langSelect').selectOption('en');
-  await expect(page.locator('#loadDemoBtn')).toHaveText(/Load local demo/i);
+  await expect(page.locator('#loadDemoBtn')).toHaveText(/Play demo now|Load local demo/i);
   await expect(page.locator('#rackInfo')).toContainText(/tiles/i);
 
   await page.locator('#langSelect').selectOption('es');
-  await expect(page.locator('#loadDemoBtn')).toHaveText(/Cargar demo local/i);
+  await expect(page.locator('#loadDemoBtn')).toHaveText(/Jugar demo ahora|Cargar demo local/i);
 });

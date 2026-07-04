@@ -1,4 +1,4 @@
-const CACHE = 'rummy-familiar-final-v6-20260704';
+const CACHE = 'rummy-familiar-ui-v7-20260704';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {

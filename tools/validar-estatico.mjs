@@ -85,11 +85,11 @@ for (const id of requiredIds) {
 ok('IDs principales de UI presentes');
 
 const requiredTexts = [
-  'Cargar demo local',
+  'Jugar demo ahora',
   'Reiniciar demo',
   'Avanzar jugador demo',
-  'Crear nueva jugada con selección',
-  'Validar mesa y terminar turno'
+  'Bajar fichas seleccionadas',
+  'Terminar turno'
 ];
 
 for (const text of requiredTexts) {

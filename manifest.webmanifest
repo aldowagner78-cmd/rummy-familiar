@@ -1,13 +1,13 @@
 {
-  "name": "Rummy Familiar Online",
-  "short_name": "Rummy",
+  "name": "Rummy Familiar de Fichas",
+  "short_name": "Rummy Fichas",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef7f5",
-  "theme_color": "#0f766e",
-  "description": "Rummy familiar online bilingüe, móvil, PWA y con modo demo local.",
+  "background_color": "#07162f",
+  "theme_color": "#1d4ed8",
+  "description": "Rummy familiar de fichas, online, móvil, PWA y con modo demo local.",
   "icons": [
     {
       "src": "icon-192.png",

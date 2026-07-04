@@ -1,15 +1,15 @@
-# Rummy Familiar Online - Instalación y uso
+# Rummy Familiar de Fichas - Instalación y uso
 
 ## Descripción
 
-Rummy Familiar Online es una PWA estática para jugar en familia desde navegador.
+Rummy Familiar de Fichas es una PWA estática para jugar en familia desde navegador con una interfaz azul moderna orientada a fichas.
 La app no requiere compilación para usarse. Para pruebas automatizadas se agregó Node.js + Playwright como dependencia de desarrollo.
 
 La app incluye:
 - juego online mediante Firebase Authentication anónimo y Firebase Realtime Database,
-- modo demo local con datos ficticios,
+- modo demo local con fichas y datos ficticios,
 - interfaz bilingüe Español/Inglés,
-- diseño responsive para PC, tablet y Android,
+- diseño responsive para PC, tablet y Android con apariencia de juego de fichas,
 - manifest PWA y service worker.
 
 ## Requisitos
@@ -42,6 +42,18 @@ Linux:
 - GUIA_PUBLICACION_GITHUB_PAGES.md
 - LEEME_PRIMERO.txt
 
+
+## Interfaz final
+
+La interfaz final usa una mesa azul moderna, fichas grandes y legibles, botones principales claros y un bloque de inicio rápido para usuarios no técnicos.
+
+Flujo recomendado:
+1. Escribir nombre.
+2. Presionar `Jugar demo ahora` para aprender o crear/entrar a una sala familiar.
+3. Tocar fichas del atril.
+4. Presionar `Bajar fichas seleccionadas`.
+5. Presionar `Terminar turno`.
+
 ## Instalación local
 
 No hay instalación de dependencias.
@@ -59,9 +71,9 @@ http://localhost:8000
 
 Resultado esperado:
 - carga la pantalla principal,
-- se ve "Rummy Familiar",
+- se ve "Rummy Familiar de Fichas",
 - aparecen sala/configuración, mesa y atril,
-- aparece el botón "Cargar demo local".
+- aparece el botón "Jugar demo ahora".
 
 Para cerrar el servidor:
 Ctrl + C
@@ -79,7 +91,7 @@ http://localhost:8000
 
 Resultado esperado:
 - carga la pantalla principal,
-- se ve "Rummy Familiar",
+- se ve "Rummy Familiar de Fichas",
 - el modo demo local está disponible.
 
 ## Modo demo local
@@ -88,13 +100,13 @@ El modo demo local permite probar sin Firebase y sin datos reales.
 
 Pasos:
 1. Abrir la app.
-2. Presionar "Cargar demo local".
+2. Presionar "Jugar demo ahora".
 3. La app crea una sala "DEMO LOCAL".
 4. Carga dos jugadores ficticios: el usuario actual y "Demo Ana".
 5. Carga un atril con fichas preparadas.
 6. Seleccionar las fichas 10 rojo, 10 azul y 10 amarillo.
-7. Presionar "Crear nueva jugada con selección".
-8. Presionar "Validar mesa y terminar turno".
+7. Presionar "Bajar fichas seleccionadas".
+8. Presionar "Terminar turno".
 9. Cuando sea turno de Demo Ana, presionar "Avanzar jugador demo".
 10. Para volver a empezar, presionar "Reiniciar demo".
 

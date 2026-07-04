@@ -192,3 +192,33 @@ Resultado: validación estática correcta.
 ### Nota técnica
 
 No se cambió la lógica del juego. Se corrigieron pruebas automatizadas para que coincidan con el comportamiento real de la interfaz.
+
+
+## Actualización UI v1.1.0 - 2026-07-04
+
+### Objetivo
+Validar que el rediseño visual mantiene la estructura testeable de la app.
+
+### Cambios cubiertos
+- Mesa azul moderna.
+- Apariencia de juego de fichas.
+- Botones principales simplificados.
+- Manifest y service worker actualizados.
+- Validación estática actualizada para los nuevos textos.
+
+### Comandos esperados en Windows
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
+
+```powershell
+npm test
+```
+
+Resultado esperado:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+### Nota
+El rediseño no agrega dependencias y no cambia las reglas del juego ni Firebase.

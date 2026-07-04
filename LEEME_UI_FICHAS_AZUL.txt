@@ -1,0 +1,18 @@
+# Parche UI v1.1.0 - Rummy Familiar de Fichas
+
+Este parche rediseña la app como juego de fichas con mesa azul moderna.
+
+Aplicar desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comando:
+Expand-Archive -Path ..\rummy-familiar-parche-ui-fichas-azul.zip -DestinationPath . -Force
+
+Probar:
+npm test
+
+Resultado esperado:
+Resultado: validación estática correcta.
+8 passed
+
+No incluye node_modules, reportes de Playwright ni archivos pesados.
