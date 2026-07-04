@@ -74,7 +74,10 @@ const requiredIds = [
   'addToSetBtn',
   'endTurnBtn',
   'rackTiles',
-  'sets'
+  'sets',
+  'opponentsStrip',
+  'poolDock',
+  'poolDockInfo'
 ];
 
 for (const id of requiredIds) {
@@ -89,7 +92,10 @@ const requiredTexts = [
   'Reiniciar demo',
   'Avanzar jugador demo',
   'Bajar fichas seleccionadas',
-  'Terminar turno'
+  'Terminar turno',
+  'Jugadas en la mesa',
+  'Pozo de fichas',
+  'Mesa real móvil'
 ];
 
 for (const text of requiredTexts) {

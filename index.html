@@ -330,10 +330,396 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
   .logo div:last-child{max-width:220px}
 }
 
+/* === Mesa real móvil v8: juego de fichas === */
+.realGameBoard{
+  display:grid;
+  gap:12px;
+}
+.realPlayersStrip{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
+  gap:8px;
+  position:sticky;
+  top:104px;
+  z-index:7;
+}
+.opponentCard{
+  min-height:58px;
+  border:1px solid rgba(147,197,253,.28);
+  border-radius:18px;
+  padding:9px 10px;
+  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(30,58,138,.86));
+  color:#e0f2fe;
+  box-shadow:0 12px 32px rgba(2,6,23,.24);
+}
+.opponentCard.me{
+  display:none;
+}
+.opponentCard.turn{
+  outline:3px solid rgba(250,204,21,.88);
+  box-shadow:0 0 0 6px rgba(250,204,21,.14),0 12px 32px rgba(2,6,23,.24);
+}
+.opponentName{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  font-weight:950;
+  letter-spacing:-.02em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.opponentMeta{
+  margin-top:3px;
+  font-size:12px;
+  color:#bfdbfe;
+}
+.turnDot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:#38bdf8;
+  flex:0 0 auto;
+}
+.opponentCard.turn .turnDot{
+  background:#facc15;
+  box-shadow:0 0 0 5px rgba(250,204,21,.18);
+}
+.gameHudPanel{
+  order:2;
+}
+.realTablePanel{
+  order:1;
+  padding:0;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 15%,rgba(125,211,252,.22),transparent 35%),
+    linear-gradient(145deg,#082f72,#0f4f99 50%,#0a2f67);
+  border-color:rgba(147,197,253,.24);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.05), 0 28px 70px rgba(2,6,23,.34);
+}
+.realTableHeader{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 14px 0;
+  color:#e0f2fe;
+}
+.realTableHeader h2{
+  color:white;
+  margin:0;
+}
+.realTableHeader .small{
+  color:#bfdbfe;
+}
+.realTableSurface{
+  position:relative;
+  display:grid;
+  gap:12px;
+  min-height:330px;
+  padding:14px;
+}
+.tableFelt{
+  position:relative;
+  min-height:220px;
+  border:1px solid rgba(191,219,254,.22);
+  border-radius:24px;
+  padding:12px;
+  background:
+    radial-gradient(circle at center,rgba(56,189,248,.17),transparent 58%),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 42px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 42px),
+    rgba(8,47,73,.34);
+  box-shadow:inset 0 0 36px rgba(2,6,23,.28);
+}
+.tableFelt:before{
+  content:"JUGADAS VISIBLES";
+  position:absolute;
+  inset:auto 14px 12px auto;
+  color:rgba(219,234,254,.13);
+  font-size:20px;
+  font-weight:950;
+  letter-spacing:.06em;
+  pointer-events:none;
+}
+.tableFelt .sets{
+  position:relative;
+  z-index:1;
+  max-height:min(46vh,420px);
+  overflow:auto;
+  padding-right:2px;
+}
+.tableFelt .sets::-webkit-scrollbar,
+.rackTilesRail::-webkit-scrollbar{
+  height:8px;
+  width:8px;
+}
+.tableFelt .sets::-webkit-scrollbar-thumb,
+.rackTilesRail::-webkit-scrollbar-thumb{
+  background:rgba(191,219,254,.42);
+  border-radius:999px;
+}
+.tableEmptyHint{
+  color:#dbeafe;
+  border:1px dashed rgba(191,219,254,.36);
+  border-radius:18px;
+  padding:16px;
+  background:rgba(15,23,42,.22);
+}
+.poolDock{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  gap:12px;
+  border:1px solid rgba(191,219,254,.24);
+  border-radius:22px;
+  padding:12px;
+  background:rgba(15,23,42,.34);
+  color:#e0f2fe;
+}
+.poolStack{
+  position:relative;
+  width:78px;
+  height:70px;
+}
+.poolStack:before,
+.poolStack:after{
+  content:"";
+  position:absolute;
+  inset:8px 8px 0 0;
+  border-radius:14px;
+  background:#dbeafe;
+  box-shadow:0 5px 0 rgba(2,6,23,.22);
+  transform:rotate(-8deg);
+}
+.poolStack:after{
+  inset:2px 0 6px 9px;
+  background:#bfdbfe;
+  transform:rotate(7deg);
+}
+.tileBack{
+  position:absolute;
+  z-index:2;
+  left:18px;
+  top:6px;
+  width:46px;
+  height:60px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle,#38bdf8 0 18%,transparent 19%),
+    linear-gradient(135deg,#1d4ed8,#0f172a);
+  color:white;
+  border:2px solid rgba(255,255,255,.75);
+  font-weight:950;
+  box-shadow:0 8px 0 rgba(2,6,23,.28);
+}
+.poolText b{
+  display:block;
+  color:white;
+  font-size:15px;
+}
+.poolText .small{
+  color:#bfdbfe;
+}
+.set{
+  background:rgba(248,250,252,.96);
+}
+.setHead span:first-child:after{
+  content:" · visible para todos";
+  color:#64748b;
+  font-weight:750;
+}
+.rack{
+  position:sticky;
+  bottom:0;
+  z-index:20;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  margin:10px -8px -8px;
+  background:linear-gradient(180deg,rgba(7,22,47,.08),rgba(7,22,47,.94) 24%,rgba(7,22,47,.98));
+  border-top:1px solid rgba(147,197,253,.24);
+}
+.rackCard{
+  border-radius:22px;
+  background:linear-gradient(180deg,#eff6ff,#ffffff);
+  border:1px solid rgba(147,197,253,.45);
+  box-shadow:0 -18px 50px rgba(2,6,23,.28);
+}
+.rack .tableHeader h3:before{
+  content:"▰ ";
+  color:#2563eb;
+}
+.rackTilesRail{
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:4px 2px 10px;
+  scroll-snap-type:x proximity;
+}
+#rackTiles{
+  flex-wrap:nowrap;
+  min-width:max-content;
+}
+#rackTiles .tile{
+  scroll-snap-align:center;
+}
+.turnActionsDock{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.primaryActionRow{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+@media(max-width:900px){
+  .realPlayersStrip{
+    top:92px;
+    grid-template-columns:repeat(3,minmax(98px,1fr));
+    gap:6px;
+  }
+  .opponentCard{
+    border-radius:14px;
+    padding:8px;
+    min-height:52px;
+  }
+  .opponentName{
+    font-size:13px;
+  }
+  .opponentMeta{
+    font-size:11px;
+  }
+  .gameHudPanel{
+    order:3;
+  }
+  .realTablePanel{
+    order:2;
+  }
+  .realTableHeader{
+    padding:12px 12px 0;
+  }
+  .realTableSurface{
+    min-height:300px;
+    padding:12px;
+  }
+  .tableFelt{
+    min-height:190px;
+    padding:10px;
+  }
+  .tableFelt .sets{
+    max-height:38vh;
+  }
+  .poolDock{
+    grid-template-columns:auto 1fr;
+    padding:10px;
+  }
+  .primaryActionRow,
+  .turnActionsDock{
+    grid-template-columns:1fr;
+  }
+  .rackCard{
+    padding:10px;
+  }
+  .rack .tableHeader{
+    align-items:flex-start;
+  }
+  .rack .tableHeader .row{
+    width:100%;
+  }
+}
+@media(max-width:480px){
+  body{
+    background:#07162f;
+  }
+  .app{
+    padding:7px;
+  }
+  .top{
+    position:sticky;
+    top:0;
+    z-index:30;
+  }
+  .gameBar{
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    padding-bottom:2px;
+  }
+  .gameBar .pill{
+    white-space:nowrap;
+  }
+  .realPlayersStrip{
+    position:sticky;
+    top:96px;
+    grid-template-columns:repeat(3,minmax(88px,1fr));
+  }
+  .opponentCard{
+    padding:7px;
+  }
+  .opponentName{
+    font-size:12px;
+  }
+  .realTableHeader{
+    display:block;
+  }
+  .realTableSurface{
+    gap:9px;
+    min-height:270px;
+  }
+  .tableFelt{
+    min-height:172px;
+    border-radius:20px;
+  }
+  .tableFelt .sets{
+    max-height:34vh;
+  }
+  .set{
+    padding:8px;
+    border-radius:14px;
+  }
+  .setHead{
+    font-size:12px;
+  }
+  .setHead span:first-child:after{
+    display:none;
+  }
+  .poolDock{
+    border-radius:18px;
+  }
+  .poolStack{
+    width:62px;
+    height:60px;
+  }
+  .tileBack{
+    width:40px;
+    height:52px;
+    left:12px;
+    top:4px;
+  }
+  .tile{
+    width:42px;
+    height:58px;
+    font-size:20px;
+  }
+  #rackTiles .tile{
+    width:46px;
+    height:62px;
+    font-size:22px;
+  }
+  .rackInfoLine{
+    display:none;
+  }
+  .footerSpace{
+    height:150px;
+  }
+}
+
   </style>
 </head>
 <body>
-<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa azul · fácil · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
+<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa real móvil · fichas · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
 <main class="app" id="app">
   <div class="grid">
     <details class="panel stack sideDrawer" id="sideDrawer" open><summary class="drawerSummary"><span id="drawerTitle">Sala y configuración</span><span id="drawerHint">tocar para abrir/cerrar</span></summary>
@@ -377,15 +763,16 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
         <div id="log" class="miniLog"></div>
       </section>
     </details>
-    <section class="board">
-      <div class="panel stack">
-        <div class="tableHeader"><div><h2>Mesa de juego</h2><div class="small" id="turnInfo">Sin partida iniciada.</div></div><div class="row" style="flex:0 0 auto"><span class="pill" id="poolInfo">Pila: -</span><span class="pill" id="openedInfo">Apertura: -</span></div></div>
+    <section class="board realGameBoard">
+      <div class="realPlayersStrip" id="opponentsStrip" aria-label="Jugadores rivales y turno"></div>
+      <div class="panel stack gameHudPanel">
+        <div class="tableHeader"><div><h2>Control de turno</h2><div class="small" id="turnInfo">Sin partida iniciada.</div></div><div class="row" style="flex:0 0 auto"><span class="pill" id="poolInfo">Pila: -</span><span class="pill" id="openedInfo">Apertura: -</span></div></div>
         <div id="gameNotice" class="okbox">Entrá a una sala para comenzar.</div><div class="quickHow" id="quickHow"><div><b id="qh1t">1. Elegí fichas</b><span id="qh1b">Tocá fichas de tu atril.</span></div><div><b id="qh2t">2. Bajá jugada</b><span id="qh2b">Serie o escalera válida.</span></div><div><b id="qh3t">3. Terminá turno</b><span id="qh3b">Validá mesa o tomá 1 ficha.</span></div></div>
-        <div class="controls two" id="turnControlsTop">
+        <div class="controls two turnActionsDock" id="turnControlsTop">
           <button class="primary" id="drawBtn">Tomar 1 ficha y pasar</button>
           <button class="warn" id="endTurnBtn">Terminar turno</button>
         </div>
-        <div class="controls" id="moveControls">
+        <div class="controls primaryActionRow" id="moveControls">
           <button id="newSetBtn">Bajar fichas seleccionadas</button>
           <select id="targetSetSelect"><option value="">Elegir jugada destino</option></select>
           <button id="addToSetBtn">Agregar a jugada</button>
@@ -399,16 +786,34 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
         </div>
         <div class="small" id="selectionInfo">Sin selección.</div>
       </div>
-      <div class="panel">
-        <div class="sets" id="sets"></div>
+      <div class="panel realTablePanel">
+        <div class="realTableHeader">
+          <div>
+            <h2>Jugadas en la mesa</h2>
+            <div class="small">Acá se ven todas las jugadas bajadas por todos los jugadores.</div>
+          </div>
+          <span class="pill" id="tableVisibilityPill">Mesa común</span>
+        </div>
+        <div class="realTableSurface">
+          <div class="tableFelt" aria-label="Mesa central con jugadas visibles">
+            <div class="sets" id="sets"></div>
+          </div>
+          <div class="poolDock" id="poolDock" aria-label="Pozo de fichas">
+            <div class="poolStack" aria-hidden="true"><div class="tileBack">▦</div></div>
+            <div class="poolText">
+              <b id="poolDockTitle">Pozo de fichas</b>
+              <div class="small" id="poolDockInfo">Las fichas restantes quedan en la mesa. Tocá “Tomar 1 ficha y pasar” cuando no bajes jugada.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
-  <div class="rack"><div class="rackCard stack"><div class="tableHeader"><div><h3>Mi atril</h3><div class="small" id="rackInfo">0 fichas</div></div><div class="row" style="flex:0 0 auto"><button class="ghost" id="sortNumBtn">Ordenar número</button><button class="ghost" id="sortColorBtn">Ordenar color</button></div></div><div id="rackTiles" class="tiles"></div></div></div>
+  <div class="rack"><div class="rackCard stack"><div class="tableHeader"><div><h3>Mi atril</h3><div class="small" id="rackInfo">0 fichas</div></div><div class="row" style="flex:0 0 auto"><button class="ghost" id="sortNumBtn">Ordenar número</button><button class="ghost" id="sortColorBtn">Ordenar color</button></div></div><div class="rackTilesRail"><div id="rackTiles" class="tiles"></div></div></div></div>
   <div class="footerSpace"></div>
 </main>
 <button class="helpBtn" id="helpBtn">?</button>
-<div class="modalBack hide" id="helpModal"><div class="modal stack"><div class="tableHeader"><h2 id="helpTitle">Reglas implementadas</h2><button class="ghost" id="closeHelpBtn">Cerrar</button></div><ul class="rulesList" id="rulesList"></ul><div class="small" id="helpFoot">Versión local v5: interfaz bilingüe, móvil y con sala colapsable durante la partida.</div></div></div>
+<div class="modalBack hide" id="helpModal"><div class="modal stack"><div class="tableHeader"><h2 id="helpTitle">Reglas implementadas</h2><button class="ghost" id="closeHelpBtn">Cerrar</button></div><ul class="rulesList" id="rulesList"></ul><div class="small" id="helpFoot">Versión mesa real: atril móvil, pozo central y jugadas visibles para todos.</div></div></div>
 <script type="module">
 let initializeApp, getAuth, signInAnonymously, onAuthStateChanged, getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction;
 async function loadFirebaseModules(){
@@ -441,26 +846,26 @@ const COLOR_NAME={red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'};
 const I18N={
   es:{
     connecting:'Conectando...', firebase:'Conectando Firebase...', online:'Online', offline:'Sin conexión', firebaseErr:'Error Firebase',
-    title:'Rummy Familiar de Fichas', subtitle:'Mesa azul · fácil · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
+    title:'Rummy Familiar de Fichas', subtitle:'Mesa real móvil · fichas · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
     entry:'1. Tu nombre', nameLabel:'Tu nombre para jugar', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Listo: ${n}`,
     admin:'2. Crear partida familiar', createRoomLabel:'Nombre de la sala', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar salas', adminNote:'Creá una sala y compartí el nombre con tu familia. No hace falta configurar nada técnico.',
-    chooseRoom:'3. Entrar a una sala', availableRooms:'Salas familiares', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a jugar', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Demo y partida', start:'Iniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: juego de fichas tipo Rummy/Rummikub, 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.', events:'Actividad',
+    chooseRoom:'3. Entrar a una sala', availableRooms:'Salas familiares', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a jugar', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Demo y partida', start:'Iniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: juego de fichas tipo Rummy/Rummikub, 106 fichas, 14 iniciales, apertura de 30 puntos, pozo central y sin descarte.', events:'Actividad',
     table:'Mesa de juego', noGame:'Sin partida iniciada.', pool:'Pila', opening:'Apertura', alreadyOpened:'Ya abriste', draw:'Tomar 1 ficha y pasar', end:'Terminar turno', newSet:'Bajar fichas seleccionadas', target:'Elegir jugada de la mesa', add:'Agregar a jugada', clear:'Quitar selección', undo:'Deshacer turno', noSelection:'Tocá fichas de tu atril para jugar.', rack:'Mi atril', sortNum:'Ordenar por número', sortColor:'Ordenar por color',
     qh1t:'1. Tocá fichas', qh1b:'Seleccioná desde tu atril.', qh2t:'2. Bajalas a la mesa', qh2b:'Formá serie o escalera.', qh3t:'3. Terminá turno', qh3b:'La app valida la mesa.',
-    helpTitle:'Ayuda rápida', close:'Cerrar', helpFoot:'Interfaz moderna v6: juego de fichas familiar, demo local, móvil y PWA.', rules:['Juego de fichas tipo Rummy/Rummikub: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
-    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Jugar demo ahora', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local con fichas ficticias. Sirve para aprender sin crear sala ni usar Firebase.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo cargado. Tocá las fichas 10-10-10, bajalas a la mesa y terminá turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
+    helpTitle:'Ayuda rápida', close:'Cerrar', helpFoot:'Interfaz mesa real v8: atril móvil, pozo central y jugadas visibles para todos.', rules:['Juego de fichas tipo Rummy/Rummikub: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
+    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía. Las jugadas que bajen los jugadores aparecerán acá.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Jugar demo ahora', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local con fichas ficticias. Sirve para aprender sin crear sala ni usar Firebase.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo cargado. Tocá las fichas 10-10-10, bajalas a la mesa y terminá turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
     msg:{writeName:'Escribí tu nombre primero.', chooseRoom:'Elegí una sala.', roomInvalid:'Sala inválida', roomName:'Poné un nombre de sala, por ejemplo FAMILIA.', created:n=>`Sala ${n} creada.`, joined:'Entraste a la sala.', left:'Saliste de la sala.', need2:'Necesitás al menos 2 jugadores online.', max4:'Rummikub clásico es para 2 a 4 jugadores.', hostOnly:'Solo quien creó la sala puede iniciar la mano.', onlyHostReset:'Solo el anfitrión puede reiniciar la sala.', confirmReset:'¿Reiniciar la sala y borrar la mano actual?', reset:'Sala reiniciada.', noStarted:'No hay mano iniciada.', notTurn:'Todavía no es tu turno.', selectFirst:'Seleccioná fichas primero.', openNoBoard:'Para abrir no podés usar fichas de la mesa.', invalidSelection:r=>`La selección no forma jugada válida: ${r}.`, createdSet:t=>`Jugada creada: ${t}.`, chooseTarget:'Elegí una jugada destino.', addFirst:'Seleccioná fichas para agregar.', open30:'Para abrir tenés que crear jugadas nuevas desde tu atril y sumar 30.', badTarget:'Destino inválido.', added:'Ficha(s) agregada(s). Validá la mesa antes de terminar.', alreadyMoved:'Ya moviste fichas. Tenés que terminar turno o deshacer.', poolEmpty:'La pila está vacía.', boardInvalid:'La mesa todavía tiene jugadas inválidas. Corregí o deshacé tu turno.', needOpen:s=>`Para abrir necesitás 30 puntos. Llevás ${s}. Podés seguir bajando conjuntos o deshacer.`, noUndo:'No hay movimientos para deshacer en este turno.', undone:'Turno deshecho.', roomCreated:n=>`Sala ${n} creada`, entered:n=>`${n} entró a la sala`, handStarted:n=>`Mano iniciada. Juega ${n}. Cada jugador recibió 14 fichas.`, draw:n=>`${n} tomó 1 ficha de la pila.`, next:n=>`Ahora juega ${n}.`, ended:n=>`${n} terminó su turno.`, won:n=>`${n} hizo Rummikub y ganó la mano.`, firebaseError:'No pude conectar con Firebase. Revisá internet o dominio autorizado.', noValid:'no es serie ni escalera válida', min3:'mínimo 3 fichas', noJokers:'no puede ser solo comodines'}
   },
   en:{
     connecting:'Connecting...', firebase:'Connecting Firebase...', online:'Online', offline:'Offline', firebaseErr:'Firebase error',
-    title:'Family Tile Rummy', subtitle:'Blue table · simple · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
+    title:'Family Tile Rummy', subtitle:'Real mobile table · tiles · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
     entry:'1. Your name', nameLabel:'Your player name', namePh:'Ex: Alex', saveName:'Save name', noName:'No saved name.', savedName:n=>`Ready: ${n}`,
     admin:'2. Create family game', createRoomLabel:'Room name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh rooms', adminNote:'Create a room and share its name with your family. No technical setup needed.',
-    chooseRoom:'3. Join a room', availableRooms:'Family rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Start playing', leave:'Leave', noRoom:'No room.', players:'Players', game:'Demo and game', start:'Start hand', reset:'Reset room', baseRule:'Base rule: tile Rummy/Rummikub style, 106 tiles, 14 initial tiles, 30-point opening, no discard.', events:'Activity',
+    chooseRoom:'3. Join a room', availableRooms:'Family rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Start playing', leave:'Leave', noRoom:'No room.', players:'Players', game:'Demo and game', start:'Start hand', reset:'Reset room', baseRule:'Base rule: tile Rummy/Rummikub style, 106 tiles, 14 initial tiles, 30-point opening, central pool and no discard.', events:'Activity',
     table:'Game table', noGame:'No hand started.', pool:'Pool', opening:'Opening', alreadyOpened:'Opened', draw:'Draw 1 tile and pass', end:'End turn', newSet:'Play selected tiles', target:'Choose table meld', add:'Add to meld', clear:'Clear selection', undo:'Undo turn', noSelection:'Tap tiles from your rack to play.', rack:'My rack', sortNum:'Sort by number', sortColor:'Sort by color',
     qh1t:'1. Tap tiles', qh1b:'Select from your rack.', qh2t:'2. Move to table', qh2b:'Make a group or run.', qh3t:'3. End turn', qh3b:'The app validates the table.',
-    helpTitle:'Quick help', close:'Close', helpFoot:'Modern v6: family tile game, local demo, mobile and PWA.', rules:['Tile Rummy/Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
-    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Play demo now', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo with fictitious tiles. Learn without creating a room or using Firebase.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Demo loaded. Tap the 10-10-10 tiles, play them to the table and end your turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
+    helpTitle:'Quick help', close:'Close', helpFoot:'Real-table v8: mobile rack, central pool and shared melds visible to everyone.', rules:['Tile Rummy/Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
+    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table. Melds played by any player will appear here.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Play demo now', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo with fictitious tiles. Learn without creating a room or using Firebase.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Demo loaded. Tap the 10-10-10 tiles, play them to the table and end your turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
     msg:{writeName:'Write your name first.', chooseRoom:'Choose a room.', roomInvalid:'Invalid room', roomName:'Enter a room name, for example FAMILY.', created:n=>`Room ${n} created.`, joined:'You joined the room.', left:'You left the room.', need2:'You need at least 2 online players.', max4:'Classic Rummikub is for 2 to 4 players.', hostOnly:'Only the room creator can start the hand.', onlyHostReset:'Only the host can reset the room.', confirmReset:'Reset the room and erase the current hand?', reset:'Room reset.', noStarted:'No hand started.', notTurn:'It is not your turn yet.', selectFirst:'Select tiles first.', openNoBoard:'For your initial meld, you cannot use table tiles.', invalidSelection:r=>`The selection is not a valid meld: ${r}.`, createdSet:t=>`Meld created: ${t}.`, chooseTarget:'Choose a target meld.', addFirst:'Select tiles to add.', open30:'For your initial meld you must create new melds from your rack totaling 30.', badTarget:'Invalid target.', added:'Tile(s) added. Validate the table before ending your turn.', alreadyMoved:'You already moved tiles. End turn or undo.', poolEmpty:'The pool is empty.', boardInvalid:'The table still has invalid melds. Fix it or undo your turn.', needOpen:s=>`Initial meld needs 30 points. You have ${s}. You can keep playing melds or undo.`, noUndo:'There are no moves to undo this turn.', undone:'Turn undone.', roomCreated:n=>`Room ${n} created`, entered:n=>`${n} joined the room`, handStarted:n=>`Hand started. ${n} plays first. Each player received 14 tiles.`, draw:n=>`${n} drew 1 tile from the pool.`, next:n=>`Now ${n} plays.`, ended:n=>`${n} ended the turn.`, won:n=>`${n} called Rummikub and won the hand.`, firebaseError:'Could not connect to Firebase. Check internet or authorized domain.', noValid:'not a valid group or run', min3:'minimum 3 tiles', noJokers:'cannot be only jokers'}
   }
 };
@@ -633,6 +1038,36 @@ function toggleRack(id){ if(!isMyTurn())return; selectedRack.has(id)?selectedRac
 function toggleBoard(si,id){ if(!isMyTurn()||!hasOpened())return; const set=selectedBoard.get(si)||new Set(); set.has(id)?set.delete(id):set.add(id); if(set.size)selectedBoard.set(si,set); else selectedBoard.delete(si); renderSelection(); renderBoard();}
 function renderSelection(){const br=[...selectedBoard.values()].reduce((a,s)=>a+s.size,0); el.selectionInfo.textContent=tr('selection')(selectedRack.size,br);}
 
+function renderTableContext(){
+  const strip=$('opponentsStrip');
+  if(strip){
+    const ps=playersArr();
+    const cur=currentUid();
+    const rivals=ps.filter(p=>p.id!==uid);
+    if(!room||!ps.length){
+      strip.innerHTML=`<div class="opponentCard"><div class="opponentName">Rivales<span class="turnDot"></span></div><div class="opponentMeta">Los jugadores aparecerán acá.</div></div>`;
+    } else if(!rivals.length){
+      strip.innerHTML=`<div class="opponentCard"><div class="opponentName">Esperando jugadores<span class="turnDot"></span></div><div class="opponentMeta">Compartí la sala para jugar en familia.</div></div>`;
+    } else {
+      strip.innerHTML=rivals.map(p=>{
+        const rackCount=room?.game?.racks?.[p.id]?.length;
+        const rackText=Number.isFinite(rackCount)?tr('tiles')(rackCount):(lang==='en'?'waiting':'esperando');
+        const turn=p.id===cur;
+        const status=turn?(lang==='en'?'turn':'turno'):(hasOpened(p.id)?tr('opened'):tr('notOpened'));
+        return `<div class="opponentCard ${turn?'turn':''}" data-player="${escapeHtml(p.id)}"><div class="opponentName"><span>${escapeHtml(p.name||playerName(p.id))}</span><span class="turnDot" aria-hidden="true"></span></div><div class="opponentMeta">${rackText} · ${status}</div></div>`;
+      }).join('');
+    }
+  }
+  const poolInfo=$('poolDockInfo');
+  if(poolInfo){
+    const n=room?.game?.pool?.length;
+    poolInfo.textContent=room?.status==='playing'
+      ? `${lang==='en'?'Tiles left in the central pool':'Fichas restantes en el pozo central'}: ${n??0}. ${lang==='en'?'All played melds stay visible on the table.':'Todas las jugadas bajadas quedan visibles en la mesa.'}`
+      : (lang==='en'?'Start a hand or load demo to see the pool.':'Iniciá una mano o cargá demo para ver el pozo.');
+  }
+}
+
+
 function renderGameMode(){
   const playing=room?.status==='playing';
   el.app.classList.toggle('playing',!!playing);
@@ -646,13 +1081,13 @@ function renderGameMode(){
   el.barPool.textContent=tr('poolBar')(room?.game?.pool?.length);
 }
 
-function render(){renderRooms(); renderRoomInfo(); renderPlayers(); renderGame(); renderRack(); renderBoard(); renderLog(); renderButtons(); renderGameMode();}
+function render(){renderRooms(); renderRoomInfo(); renderPlayers(); renderGame(); renderRack(); renderBoard(); renderTableContext(); renderLog(); renderButtons(); renderGameMode();}
 function renderRoomInfo(){ if(!roomId||!room){el.roomInfo.textContent=tr('noRoom'); return;} el.roomInfo.textContent=tr('roomInfo')(room.name||roomId,room.status||'lobby');}
 function renderPlayers(){ const ps=playersArr(); if(!ps.length){el.playersList.innerHTML=`<div class="small">${tr('players')}: 0</div>`; return;} const cur=currentUid(); el.playersList.innerHTML=ps.map(p=>{const rackCount=room?.game?.racks?.[p.id]?.length; const rackText=Number.isFinite(rackCount)?` · ${tr('tiles')(rackCount)}`:''; const demoText=p.is_demo?` · ${tr('demoBadge')||'DEMO'}`:''; return `<div class="player ${p.id===uid?'me':''} ${p.id===cur?'turn':''}"><div><b>${escapeHtml(p.name||playerName(p.id))}</b><div class="small">${p.id===room?.host?tr('host')+' · ':''}${hasOpened(p.id)?tr('opened'):tr('notOpened')}${rackText}${demoText}</div></div><span class="pill">${p.online===false?'off':'online'}</span></div>`;}).join('');}
 function renderGame(){ if(!room||room.status==='lobby'){el.turnInfo.textContent=tr('noGame'); el.poolInfo.textContent=tr('pool')+': -'; el.openedInfo.textContent=tr('opening')+': -'; return;} if(room.status==='finished'){el.turnInfo.textContent=tr('won')(playerName(room.game?.winner));} else {el.turnInfo.textContent=tr('turnInfo')(playerName(currentUid()),isMyTurn());} el.poolInfo.textContent=tr('pool')+`: ${room.game?.pool?.length??0}`; const score=turnData().initialScore||0; el.openedInfo.textContent=hasOpened()? tr('alreadyOpened') : `${tr('opening')}: ${score}/30`;}
 function renderRack(){ const rack=myRack(); el.rackInfo.textContent=tr('tiles')(rack.length); el.rackTiles.innerHTML=''; if(!rack.length){el.rackTiles.innerHTML=`<div class="small">${tr('noTiles')}</div>`; return;} for(const t of rack){const d=tileEl(t); d.classList.toggle('selected',selectedRack.has(t.id)); d.onclick=()=>toggleRack(t.id); el.rackTiles.appendChild(d);} }
 function tileEl(t){const d=document.createElement('button'); d.type='button'; d.className=`tile ${t.joker?'joker':t.color}`; d.innerHTML=t.joker?'★':`${t.num}<small>${(colorName(t.color)||'')[0]||''}</small>`; d.title=t.joker?'Joker':`${colorName(t.color)} ${t.num}`; return d;}
-function renderBoard(){ const b=board(); const vals=validateBoard(b); el.sets.innerHTML=''; el.targetSetSelect.innerHTML=`<option value="">${tr('target')}</option>`; if(!b.length){el.sets.innerHTML=`<div class="small">${tr('emptyTable')}</div>`; return;} b.forEach((s,i)=>{const v=vals.sets[i]||validateSet(s); const wrap=document.createElement('div'); wrap.className=`set ${v.ok?'':'invalid'}`; wrap.innerHTML=`<div class="setHead"><span>${tr('set')} ${i+1} · ${v.ok?`${typeName(v.type)} · ${v.score} ${tr('points')}`:tr('invalid')}</span><span>${v.ok?'✓':'⚠'}</span></div>`; const tiles=document.createElement('div'); tiles.className='tiles'; s.forEach(t=>{const d=tileEl(t); const sel=selectedBoard.get(i)?.has(t.id); d.classList.toggle('selected',!!sel); d.onclick=()=>toggleBoard(i,t.id); tiles.appendChild(d);}); wrap.appendChild(tiles); el.sets.appendChild(wrap); const opt=document.createElement('option'); opt.value=i; opt.textContent=`${tr('set')} ${i+1}`; el.targetSetSelect.appendChild(opt);});}
+function renderBoard(){ const b=board(); const vals=validateBoard(b); el.sets.innerHTML=''; el.targetSetSelect.innerHTML=`<option value="">${tr('target')}</option>`; if(!b.length){el.sets.innerHTML=`<div class="tableEmptyHint">${tr('emptyTable')}</div>`; return;} b.forEach((s,i)=>{const v=vals.sets[i]||validateSet(s); const wrap=document.createElement('div'); wrap.className=`set ${v.ok?'':'invalid'}`; wrap.innerHTML=`<div class="setHead"><span>${tr('set')} ${i+1} · ${v.ok?`${typeName(v.type)} · ${v.score} ${tr('points')}`:tr('invalid')}</span><span>${v.ok?'✓':'⚠'}</span></div>`; const tiles=document.createElement('div'); tiles.className='tiles'; s.forEach(t=>{const d=tileEl(t); const sel=selectedBoard.get(i)?.has(t.id); d.classList.toggle('selected',!!sel); d.onclick=()=>toggleBoard(i,t.id); tiles.appendChild(d);}); wrap.appendChild(tiles); el.sets.appendChild(wrap); const opt=document.createElement('option'); opt.value=i; opt.textContent=`${tr('set')} ${i+1}`; el.targetSetSelect.appendChild(opt);});}
 function renderLog(){const logs=(room?.log||[]).slice().reverse(); if(logs.length)el.log.innerHTML=logs.map(x=>`<div><b>${new Date(x.t||Date.now()).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</b> ${escapeHtml(x.m)}</div>`).join('');}
 function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost()||isLocalDemo(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot; el.advanceDemoBtn.disabled=!isLocalDemo()||currentUid()!==DEMO_BOT_UID;}
 window.addEventListener('online',()=>el.netStatus.textContent=tr('online')); window.addEventListener('offline',()=>el.netStatus.textContent=tr('offline'));

@@ -290,3 +290,42 @@ npm test
 Resultado esperado:
 Resultado: validación estática correcta.
 8 passed
+
+
+## Interfaz mesa real móvil
+
+La versión `1.2.0-mesa-real-movil` está pensada primero para celular.
+
+Distribución de pantalla:
+- arriba: rivales compactos con nombre, cantidad de fichas y turno activo;
+- centro: mesa común con todas las jugadas visibles;
+- centro inferior: pozo de fichas con ficha boca abajo visual;
+- abajo: tu atril fijo con scroll horizontal para las 14 fichas;
+- acciones principales: tomar ficha, bajar fichas seleccionadas y terminar turno.
+
+Importante:
+- Las jugadas bajadas por cualquier jugador quedan visibles en la mesa común.
+- Los rivales no muestran sus fichas reales; solo nombre, turno y cantidad de fichas.
+- La ficha boca abajo del pozo es visual y acompaña la regla existente: tomar 1 ficha y pasar, sin descarte.
+- La app mantiene modo demo local, Firebase online y pruebas automatizadas.
+
+## Actualizar GitHub Pages después de cambios
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comandos:
+```powershell
+npm test
+git status
+git add .
+git commit -m "Rediseñar mesa real móvil con jugadas visibles"
+git push
+```
+
+Después abrir:
+https://aldowagner78-cmd.github.io/rummy-familiar/
+
+Si se ve una versión vieja por cache PWA:
+- presionar `Ctrl + F5`,
+- o borrar datos del sitio desde DevTools > Application > Storage > Clear site data.

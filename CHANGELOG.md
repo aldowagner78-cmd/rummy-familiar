@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.2.0-mesa-real-movil] - 2026-07-04
+
+### Agregado
+- Layout de mesa real móvil para juego de fichas.
+- Rivales compactos arriba con nombre, cantidad de fichas y turno activo.
+- Mesa central con jugadas visibles para todos los jugadores.
+- Pozo de fichas visual con ficha boca abajo en la mesa.
+- Atril propio fijo abajo, optimizado para móvil con scroll horizontal.
+- Pruebas E2E actualizadas para verificar rivales y pozo central.
+
+### Modificado
+- Interfaz orientada a uso real en celular.
+- Textos de ayuda y manifest actualizados para explicar mesa común, pozo y atril.
+- Cache PWA actualizada para forzar renovación de la interfaz publicada.
+- Validación estática actualizada para exigir los nuevos elementos de mesa real.
+
+### Compatibilidad
+- Mantiene modo demo local.
+- Mantiene Firebase online.
+- Mantiene PWA.
+- Mantiene la lógica de juego existente: apertura 30 puntos, tomar 1 ficha y pasar, sin descarte.
+
+### Pruebas esperadas
+- `npm test` debe devolver validación estática correcta y `8 passed`.
+
+
 ## [1.1.0-ui-fichas-azul] - 2026-07-04
 
 ### Agregado

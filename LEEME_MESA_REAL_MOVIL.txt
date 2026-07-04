@@ -1,0 +1,36 @@
+# LEEME - Mesa real móvil
+
+## Objetivo
+
+Esta versión hace que Rummy Familiar de Fichas se parezca más a una partida real de fichas, especialmente en celulares.
+
+## Qué vas a ver
+
+- Rivales arriba: nombre, cantidad de fichas y turno.
+- Mesa central: todas las jugadas bajadas por todos los jugadores.
+- Pozo de fichas: representación visual de las fichas restantes.
+- Atril propio abajo: fichas grandes, táctiles y con scroll horizontal.
+- Botones principales: tomar ficha, bajar fichas y terminar turno.
+
+## Importante
+
+- No es un juego de cartas.
+- Es un juego de fichas.
+- Las jugadas de otros jugadores deben verse en la mesa; esta versión prioriza eso.
+- La app mantiene la regla existente sin descarte.
+- La ficha boca abajo del pozo es una ayuda visual para parecerse a la mesa real.
+
+## Prueba rápida
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Ejecutar:
+```powershell
+npm test
+```
+
+Resultado esperado:
+```text
+8 passed
+```

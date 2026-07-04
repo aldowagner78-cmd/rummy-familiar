@@ -7,7 +7,7 @@
   "orientation": "portrait",
   "background_color": "#07162f",
   "theme_color": "#1d4ed8",
-  "description": "Rummy familiar de fichas, online, móvil, PWA y con modo demo local.",
+  "description": "Rummy familiar de fichas con mesa real móvil, pozo central, atril propio y jugadas visibles para todos.",
   "icons": [
     {
       "src": "icon-192.png",

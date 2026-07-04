@@ -17,6 +17,8 @@ async function cargarDemoLocal(page) {
   await page.locator('#loadDemoBtn').click();
   await expect(page.locator('#roomInfo')).toContainText(/DEMO/i);
   await expect(page.locator('#playersList')).toContainText(/Demo Ana/i);
+  await expect(page.locator('#opponentsStrip')).toContainText(/Demo Ana|Esperando|Rivales/i);
+  await expect(page.locator('#poolDock')).toContainText(/Pozo|Pool|Fichas restantes|Tiles left/i);
   await expect(page.locator('#rackInfo')).toContainText(/14/);
 }
 
@@ -42,6 +44,7 @@ async function crearJugadaDemo30(page) {
 
   await expect(page.locator('#sets .set')).toHaveCount(1);
   await expect(page.locator('#sets')).toContainText(/Serie|Group/i);
+  await expect(page.locator('#sets')).toContainText(/visible para todos|Serie|Group/i);
   await expect(page.locator('#rackInfo')).toContainText(/11/);
   await expect(page.locator('#openedInfo')).toContainText(/Ya abriste|Opened|Apertura/i);
 }

@@ -239,3 +239,53 @@ Resultado esperado:
 - El atril queda visible abajo durante la partida.
 - Los botones principales se entienden sin explicación técnica.
 - En móvil, las fichas se pueden tocar sin precisión excesiva.
+
+
+## Prueba 9 - Mesa real móvil
+
+Objetivo:
+Validar que la interfaz se parezca a una partida real de fichas y sea usable en celular.
+
+Pasos:
+1. Abrir la app.
+2. Presionar `Jugar demo ahora`.
+3. Revisar la parte superior.
+4. Revisar el centro de la pantalla.
+5. Revisar el atril inferior.
+
+Resultado esperado:
+- Arriba aparecen los rivales compactos.
+- Cada rival muestra nombre, cantidad de fichas y turno si corresponde.
+- En el centro aparece la mesa común.
+- Las jugadas bajadas se ven en la mesa central.
+- Aparece el pozo de fichas con ficha boca abajo visual.
+- Abajo aparece tu atril con scroll horizontal.
+- Los botones principales siguen accesibles en móvil.
+
+## Prueba 10 - Jugadas visibles para jugar
+
+Pasos:
+1. En demo, seleccionar 10 rojo, 10 azul y 10 amarillo.
+2. Presionar `Bajar fichas seleccionadas`.
+
+Resultado esperado:
+- La jugada aparece en la mesa central.
+- La jugada queda visible para poder seguir jugando.
+- El atril baja de 14 a 11 fichas.
+- No desaparece la mesa al usar móvil.
+
+## Prueba automatizada
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comando:
+```powershell
+npm test
+```
+
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```

@@ -6,6 +6,60 @@
 
 ## Objetivo
 
+Verificar el parche `1.2.0-mesa-real-movil`, que transforma la interfaz en una mesa real de fichas optimizada para móviles.
+
+## Cambios verificados
+
+- `index.html`: agrega rivales arriba, mesa central, pozo de fichas y atril inferior móvil.
+- `sw.js`: actualiza cache PWA a `rummy-familiar-mesa-real-v8-20260704`.
+- `manifest.webmanifest`: actualiza descripción de la PWA.
+- `tests/e2e/rummy-demo.spec.js`: agrega validaciones de rivales y pozo.
+- `tools/validar-estatico.mjs`: exige los nuevos IDs y textos de interfaz.
+
+## Validación ejecutada en este entorno
+
+Comando:
+```bash
+node tools/validar-estatico.mjs
+```
+
+Resultado:
+```text
+Resultado: validación estática correcta.
+```
+
+## Prueba E2E esperada en Windows
+
+Desde:
+```powershell
+C:\Users\usuario\Desktop\Rummy_Git
+```
+
+Comando:
+```powershell
+npm test
+```
+
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+## Nota
+
+El parche no agrega dependencias nuevas y no modifica la lógica central de juego.
+La ficha boca abajo del pozo es visual y mantiene la regla actual: tomar 1 ficha y pasar, sin descarte.
+
+---
+
+
+## Fecha
+
+2026-07-04
+
+## Objetivo
+
 Agregar y verificar una primera base de pruebas automatizadas antes del rediseño visual.
 
 ## Archivos verificados
