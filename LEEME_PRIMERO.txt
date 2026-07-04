@@ -1,0 +1,16 @@
+RUMMIKUB FAMILIAR LOCAL v5
+
+Cambios:
+- Interfaz bilingüe Español/Inglés con selector arriba.
+- Diseño móvil para Android/iPhone.
+- Durante la partida se colapsa la configuración para dejar visibles mesa y atril.
+- Salas desplegables administradas por el anfitrión.
+- Reglas base Rummikub: 106 fichas, 14 por jugador, apertura de 30, sin descarte.
+
+Prueba local:
+1. Descomprimir esta carpeta.
+2. Abrir CMD dentro de la carpeta.
+3. Ejecutar: py -m http.server 8080
+4. Abrir: http://localhost:8080/?v=5
+
+No subir a GitHub hasta probar localmente.

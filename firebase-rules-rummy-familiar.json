@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "rummyRoomsV1": {
+      ".read": "auth != null",
+      "$room": {
+        ".write": "auth != null"
+      }
+    }
+  }
+}

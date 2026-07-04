@@ -1,0 +1,21 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Variables locales
+.env
+.env.local
+
+# Dependencias/builds si se agregan en el futuro
+node_modules/
+dist/
+build/
+
+# Python local si se usa servidor/herramientas
+.venv/
+venv/
+__pycache__/
+*.pyc
