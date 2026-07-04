@@ -20,18 +20,28 @@ const types = {
   '.txt': 'text/plain; charset=utf-8'
 };
 
-function safePath(urlPath) {
-  const decoded = decodeURIComponent(urlPath.split('?')[0]);
-  const normalized = path.normalize(decoded).replace(/^(\.\.[/\\])+/, '');
-  const target = path.join(root, normalized === '/' ? 'index.html' : normalized);
-  if (!target.startsWith(root)) return null;
+function safePath(reqUrl) {
+  const requestUrl = new URL(reqUrl || '/', `http://${host}:${port}`);
+  const pathname = decodeURIComponent(requestUrl.pathname);
+
+  if (pathname === '/' || pathname === '') {
+    return path.join(root, 'index.html');
+  }
+
+  const relativePath = pathname.replace(/^[/\\]+/, '');
+  const target = path.resolve(root, relativePath);
+
+  if (target !== root && !target.startsWith(root + path.sep)) {
+    return null;
+  }
+
   return target;
 }
 
 const server = http.createServer((req, res) => {
   const target = safePath(req.url || '/');
   if (!target) {
-    res.writeHead(403);
+    res.writeHead(403, { 'content-type': 'text/plain; charset=utf-8' });
     res.end('Acceso denegado');
     return;
   }

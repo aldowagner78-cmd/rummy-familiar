@@ -8,7 +8,7 @@
     "serve": "node tools/servidor-estatico.mjs",
     "test:static": "node tools/validar-estatico.mjs",
     "test:e2e": "playwright test",
-    "test": "npm run test:static && npm run test:e2e",
+    "test": "node tools/ejecutar-pruebas.mjs",
     "test:headed": "playwright test --headed",
     "test:report": "playwright show-report"
   },

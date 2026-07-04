@@ -151,3 +151,85 @@ npm test
 ### Cómo revertir
 
 Eliminar los archivos agregados de pruebas y restaurar los documentos desde el commit anterior.
+
+## Corrección pruebas automatizadas Windows
+
+### Archivos modificados
+- `tools/servidor-estatico.mjs`
+- `tests/e2e/rummy-demo.spec.js`
+- `playwright.config.js`
+- `package.json`
+
+### Archivos agregados
+- `tools/ejecutar-pruebas.mjs`
+
+### Qué se cambió
+- Se corrigió el servidor estático de pruebas para que `http://127.0.0.1:8000/` sirva `index.html` también en Windows.
+- Se reemplazó el script `npm test` que usaba `&&` por un runner Node multiplataforma.
+- Se flexibilizó la validación inicial del título para aceptar `Rummy` o `Rummikub`.
+- Se agregó espera explícita de `domcontentloaded` al abrir la app.
+
+### Por qué se cambió
+- En Windows, la ruta `/` se estaba resolviendo como carpeta raíz del proyecto y el servidor respondía `Archivo no encontrado`; por eso Playwright no encontraba `#appTitle`.
+- PowerShell antiguo no acepta `&&` como separador, por eso `npm test` fallaba antes de correr todo.
+
+### Cómo probar
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
+
+```powershell
+npm test
+```
+
+Resultado esperado:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+### Cómo revertir
+- Restaurar backup de la carpeta antes del parche, o usar:
+```powershell
+git restore tools/servidor-estatico.mjs tests/e2e/rummy-demo.spec.js playwright.config.js package.json CAMBIOS_REALIZADOS.md CHANGELOG.md README_INSTALACION.txt PRUEBA_TECNICA_RESULTADO.md
+git clean -f tools/ejecutar-pruebas.mjs
+```
+
+
+
+---
+
+## Corrección pruebas Playwright Windows - 2026-07-04
+
+## Archivos modificados
+- tests/e2e/rummy-demo.spec.js
+- CHANGELOG.md
+- CAMBIOS_REALIZADOS.md
+- GUIA_PRUEBA_FINAL.md
+- PRUEBA_TECNICA_RESULTADO.md
+- README_INSTALACION.txt
+
+## Qué se cambió
+- Se corrigió la expectativa incorrecta `Grupo|Group`.
+- La app en español muestra `Serie` para una jugada de mismo número y colores distintos.
+- Se agregó helper de prueba para abrir el panel lateral antes de usar `Reiniciar demo`, ya que la app lo colapsa automáticamente durante la partida.
+- Se mantuvieron las pruebas en escritorio y móvil.
+
+## Por qué se cambió
+El log real de Windows mostró 4 pruebas pasadas y 4 fallidas. Las fallas no eran de carga de app, sino de selectores/expectativas de prueba:
+- `#sets` mostraba `Jugada 1 · Serie · 30 pts`, pero el test esperaba `Grupo`.
+- `#resetDemoBtn` existía, pero no era visible porque el panel lateral estaba colapsado.
+
+## Cómo probar
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comando:
+npm test
+
+Resultado esperado:
+Resultado: validación estática correcta.
+8 passed
+
+## Cómo revertir
+Restaurar el archivo anterior:
+tests/e2e/rummy-demo.spec.js

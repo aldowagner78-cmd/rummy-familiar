@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3-fix-e2e-windows] - 2026-07-04
+
+### Corregido
+- Ajustadas las pruebas E2E para validar el texto real de la app en español: la combinación 10-10-10 aparece como `Serie`, no como `Grupo`.
+- Ajustada la prueba de reinicio de demo para abrir el panel lateral antes de presionar `Reiniciar demo`, porque la app lo colapsa al entrar en partida.
+- Se mantuvo la validación del flujo funcional: cargar demo, crear jugada de 30 puntos, terminar turno, avanzar jugador demo, reiniciar demo, ayuda e idioma.
+
+### Resultado esperado
+- `npm test` debe ejecutar validación estática y 8 pruebas Playwright.
+- Resultado esperado en Windows: `8 passed`.
+
+
 ## [1.0.2-pruebas] - 2026-07-04
 
 ### Agregado
@@ -70,3 +82,15 @@
 
 ### Pendiente
 - Probar partida completa con al menos dos usuarios reales.
+
+## 2026-07-04 - Corrección pruebas Playwright en Windows
+
+### Corregido
+- Servidor estático de pruebas ahora sirve `index.html` correctamente al abrir `/` en Windows.
+- `npm test` ya no depende de `&&`, evitando fallos en PowerShell antiguo.
+- Prueba E2E inicial ya no falla por diferencia de nombre `Rummy/Rummikub`.
+
+### Verificación
+- `npm run test:static` debe pasar.
+- `npm test` debe ejecutar validación estática y Playwright.
+

@@ -1,5 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
+const launchOptions = chromiumExecutablePath
+  ? { executablePath: chromiumExecutablePath, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-software-rasterizer'] }
+  : { args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--disable-software-rasterizer'] };
+
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
@@ -18,7 +23,8 @@ export default defineConfig({
     serviceWorkers: 'block',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    video: 'retain-on-failure',
+    launchOptions
   },
   webServer: {
     command: 'node tools/servidor-estatico.mjs',

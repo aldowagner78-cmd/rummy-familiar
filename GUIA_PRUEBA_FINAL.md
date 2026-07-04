@@ -176,3 +176,56 @@ Pasar a estética moderna solo si:
 - el modo demo local funciona,
 - las pruebas Playwright pasan en Windows o GitHub Actions,
 - no hay errores visibles en navegador.
+
+## Prueba automatizada corregida para Windows
+
+Desde:
+
+```powershell
+C:\Users\usuario\Desktop\Rummy_Git
+```
+
+Ejecutar:
+
+```powershell
+npm test
+```
+
+Resultado esperado:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+Si falla, abrir reporte:
+
+```powershell
+npm run test:report
+```
+
+
+
+---
+
+## Prueba automatizada corregida - 2026-07-04
+
+Desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comando:
+npm test
+
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+Si falla una prueba:
+1. Ejecutar:
+```powershell
+npx playwright show-report
+```
+2. Revisar el primer error.
+3. No avanzar a rediseño visual hasta que Playwright quede en verde.

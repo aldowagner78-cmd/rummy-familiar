@@ -119,3 +119,76 @@ npm test
 ```
 
 Si GitHub Actions pasa, recién ahí conviene avanzar al rediseño visual.
+
+## Corrección de pruebas automatizadas
+
+### Resultado del diagnóstico
+- La validación estática sí pasaba.
+- Las 8 pruebas E2E fallaban porque Playwright abría `/`, pero el servidor estático en Windows no devolvía `index.html`.
+- Al no cargar la app, el selector `#appTitle` no existía en pantalla.
+
+### Corrección aplicada
+- `tools/servidor-estatico.mjs` ahora resuelve `/` explícitamente como `index.html`.
+- `package.json` ahora usa `tools/ejecutar-pruebas.mjs` para evitar incompatibilidad con `&&`.
+- `tests/e2e/rummy-demo.spec.js` espera `domcontentloaded` y valida título de forma compatible.
+
+### Comando de verificación
+```powershell
+cd C:\Users\usuario\Desktop\Rummy_Git
+npm test
+```
+
+### Resultado esperado
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+
+
+---
+
+## Corrección posterior de E2E en Windows - 2026-07-04
+
+### Log analizado
+
+Después de corregir la carga inicial, Windows ejecutó Playwright y obtuvo:
+
+```text
+4 passed
+4 failed
+```
+
+Las fallas fueron:
+- expectativa incorrecta: el test esperaba `Grupo`, pero la UI mostraba `Serie`;
+- botón `Reiniciar demo` no visible porque el panel lateral se colapsa cuando la partida está activa.
+
+### Corrección aplicada
+
+Archivo:
+```text
+tests/e2e/rummy-demo.spec.js
+```
+
+Cambios:
+- se acepta `Serie|Group` para la jugada demo;
+- se agregó función `abrirPanelSala(page)`;
+- antes de reiniciar demo, la prueba abre el panel lateral;
+- se reutilizó helper `crearJugadaDemo30(page)` para evitar duplicación.
+
+### Resultado esperado al ejecutar en Windows
+
+```text
+npm test
+```
+
+Debe finalizar con:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+### Nota técnica
+
+No se cambió la lógica del juego. Se corrigieron pruebas automatizadas para que coincidan con el comportamiento real de la interfaz.

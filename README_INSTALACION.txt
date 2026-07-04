@@ -233,3 +233,48 @@ Se necesitan al menos 2 jugadores online en la misma sala.
 ### El modo demo no aparece
 
 Actualizar con Ctrl + F5. Verificar que index.html y sw.js sean los de este parche.
+
+## Corrección si Playwright no encuentra #appTitle
+
+Si las pruebas fallan con:
+
+```text
+Error: element(s) not found
+Locator: locator('#appTitle')
+```
+
+aplicar el parche de pruebas corregido y ejecutar:
+
+```powershell
+cd C:\Users\usuario\Desktop\Rummy_Git
+npm test
+```
+
+Causa corregida:
+- En Windows el servidor de pruebas resolvía `/` como carpeta en vez de `index.html`.
+- PowerShell antiguo no aceptaba `&&` en el script `npm test`.
+
+Resultado esperado:
+
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+
+
+---
+
+## Nota de pruebas automatizadas - corrección Windows 2026-07-04
+
+Si `npm test` muestra que la app carga pero fallan pruebas por textos como `Grupo`/`Serie` o por botón `Reiniciar demo` no visible, aplicar el parche `rummy-familiar-parche-fix-e2e-final.zip`.
+
+Luego ejecutar desde:
+C:\Users\usuario\Desktop\Rummy_Git
+
+Comando:
+npm test
+
+Resultado esperado:
+Resultado: validación estática correcta.
+8 passed
