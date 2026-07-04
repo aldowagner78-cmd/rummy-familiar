@@ -716,6 +716,420 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
   }
 }
 
+
+/* === FIX v9: mesa 80% + atril 20% mobile-first === */
+@media(max-width:600px){
+  :root{
+    --mobile-top-h:76px;
+    --mobile-rack-h:20dvh;
+  }
+  html,body{
+    height:100%;
+    overflow:hidden;
+    overscroll-behavior:none;
+  }
+  body{
+    min-height:100dvh;
+  }
+
+  /* Encabezado compacto para liberar pantalla de juego */
+  .top{
+    height:var(--mobile-top-h);
+    overflow:hidden;
+  }
+  .topin{
+    height:50px;
+    padding:6px 8px 3px;
+    align-items:center;
+  }
+  .logo{
+    gap:7px;
+    min-width:0;
+  }
+  .logo .mark{
+    width:30px!important;
+    height:30px!important;
+    border-radius:10px;
+    flex:0 0 auto;
+  }
+  .logo div:last-child{
+    min-width:0;
+  }
+  #appTitle{
+    max-width:178px;
+    font-size:13px;
+    line-height:1.05;
+    white-space:normal;
+  }
+  #appSubtitle{
+    display:none;
+  }
+  .topActions select{
+    height:32px;
+    min-width:82px;
+    padding:4px 8px;
+    font-size:12px;
+  }
+  #netStatus{
+    display:none!important;
+  }
+  .gameBar{
+    height:26px;
+    padding:0 6px 4px;
+    gap:4px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:none;
+  }
+  .gameBar::-webkit-scrollbar{
+    display:none;
+  }
+  .gameBar .pill{
+    padding:3px 6px;
+    font-size:10px;
+    border-radius:999px;
+    flex:0 0 auto;
+  }
+
+  /* Cuando hay partida, la pantalla se divide en mesa 80% y atril 20% */
+  .app.playing{
+    height:calc(100dvh - var(--mobile-top-h));
+    max-height:calc(100dvh - var(--mobile-top-h));
+    padding:4px;
+    display:grid;
+    grid-template-rows:minmax(0,1fr) var(--mobile-rack-h);
+    gap:4px;
+    overflow:hidden;
+  }
+  .app.playing .grid{
+    height:100%;
+    min-height:0;
+    display:block;
+    margin:0;
+    overflow:hidden;
+  }
+  .app.playing .sideDrawer{
+    display:none!important;
+  }
+  .app.playing .realGameBoard{
+    height:100%;
+    min-height:0;
+    display:grid;
+    grid-template-rows:36px 96px minmax(0,1fr);
+    gap:4px;
+    overflow:hidden;
+  }
+
+  /* Rivales: compactos, siempre visibles arriba */
+  .app.playing .realPlayersStrip{
+    position:static;
+    top:auto;
+    height:36px;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:4px;
+    overflow:hidden;
+  }
+  .app.playing .opponentCard{
+    min-height:0;
+    height:36px;
+    border-radius:10px;
+    padding:4px 6px;
+  }
+  .app.playing .opponentName{
+    font-size:11px;
+    line-height:1.05;
+  }
+  .app.playing .opponentMeta{
+    margin-top:0;
+    font-size:9.5px;
+    line-height:1.05;
+  }
+  .app.playing .turnDot{
+    width:7px;
+    height:7px;
+  }
+
+  /* Controles de turno: compactos para no tapar la mesa */
+  .app.playing .gameHudPanel{
+    order:2;
+    height:96px;
+    min-height:96px;
+    overflow:hidden;
+    padding:5px;
+    border-radius:12px;
+    display:grid;
+    grid-template-rows:28px 28px 28px;
+    gap:3px;
+  }
+  .app.playing .gameHudPanel>.tableHeader,
+  .app.playing #gameNotice,
+  .app.playing #quickHow,
+  .app.playing #selectionInfo{
+    display:none!important;
+  }
+  .app.playing .gameHudPanel .controls{
+    display:grid;
+    gap:3px;
+  }
+  .app.playing #turnControlsTop{
+    grid-template-columns:1fr 1fr;
+  }
+  .app.playing #moveControls{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  .app.playing .gameHudPanel .controls.two{
+    grid-template-columns:1fr 1fr;
+  }
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    min-height:28px;
+    height:28px;
+    padding:2px 4px;
+    border-radius:9px;
+    font-size:10px;
+    line-height:1.05;
+  }
+
+  /* Mesa: la zona principal usa el resto de la pantalla */
+  .app.playing .realTablePanel{
+    order:3;
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+    border-radius:14px;
+  }
+  .app.playing .realTableHeader{
+    padding:6px 8px 0;
+  }
+  .app.playing .realTableHeader h2{
+    font-size:14px;
+    line-height:1.05;
+  }
+  .app.playing .realTableHeader .small,
+  .app.playing #tableVisibilityPill{
+    display:none;
+  }
+  .app.playing .realTableSurface{
+    height:calc(100% - 26px);
+    min-height:0;
+    display:grid;
+    grid-template-rows:minmax(0,1fr) 52px;
+    gap:5px;
+    padding:6px;
+  }
+  .app.playing .tableFelt{
+    height:100%;
+    min-height:0;
+    padding:6px;
+    border-radius:14px;
+  }
+  .app.playing .tableFelt:before{
+    right:8px;
+    bottom:6px;
+    font-size:12px;
+  }
+  .app.playing .tableFelt .sets{
+    height:100%;
+    max-height:100%;
+    overflow:auto;
+    display:grid;
+    align-content:start;
+    gap:5px;
+    padding-right:1px;
+  }
+  .app.playing .set{
+    padding:5px;
+    border-radius:10px;
+  }
+  .app.playing .setHead{
+    margin-bottom:4px;
+    font-size:10px;
+    line-height:1.1;
+  }
+  .app.playing .set .tiles{
+    gap:4px;
+  }
+  .app.playing .set .tile{
+    width:29px!important;
+    height:39px!important;
+    font-size:14px!important;
+    border-radius:8px;
+    box-shadow:0 3px 0 #b9a976,0 5px 10px rgba(2,6,23,.18);
+  }
+  .app.playing .set .tile:before{
+    top:4px;
+    width:16px;
+    height:2px;
+  }
+  .app.playing .set .tile small{
+    right:2px;
+    bottom:2px;
+    font-size:6px;
+  }
+
+  /* Pozo visible, pero bajo y compacto */
+  .app.playing .poolDock{
+    height:52px;
+    padding:5px 7px;
+    border-radius:14px;
+    grid-template-columns:42px 1fr;
+    gap:6px;
+  }
+  .app.playing .poolStack{
+    width:42px;
+    height:42px;
+  }
+  .app.playing .tileBack{
+    width:28px;
+    height:36px;
+    left:7px;
+    top:2px;
+    font-size:12px;
+    border-radius:8px;
+  }
+  .app.playing .poolStack:before,
+  .app.playing .poolStack:after{
+    border-radius:8px;
+  }
+  .app.playing .poolText b{
+    font-size:12px;
+    line-height:1.1;
+  }
+  .app.playing .poolText .small{
+    font-size:10px;
+    line-height:1.15;
+  }
+
+  /* Atril: 20% fijo abajo, dos hileras de 7 fichas */
+  .app.playing .rack{
+    position:relative;
+    bottom:auto;
+    z-index:5;
+    height:100%;
+    min-height:0;
+    margin:0;
+    padding:0;
+    background:transparent;
+    border-top:0;
+    overflow:hidden;
+  }
+  .app.playing .rackCard{
+    height:100%;
+    min-height:0;
+    padding:5px;
+    border-radius:14px;
+    display:grid;
+    grid-template-rows:20px minmax(0,1fr);
+    gap:3px;
+    overflow:hidden;
+    box-shadow:0 -8px 26px rgba(2,6,23,.24);
+  }
+  .app.playing .rack .tableHeader{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    min-height:0;
+  }
+  .app.playing .rack .tableHeader h3{
+    margin:0;
+    font-size:12px;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .app.playing #rackInfo{
+    font-size:10px;
+    line-height:1;
+  }
+  .app.playing .rack .tableHeader .row{
+    display:none;
+  }
+  .app.playing .rackTilesRail{
+    height:100%;
+    min-height:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:0 1px 2px;
+    scrollbar-width:thin;
+  }
+  .app.playing #rackTiles{
+    height:100%;
+    min-width:100%;
+    display:grid!important;
+    grid-template-columns:none!important;
+    grid-template-rows:repeat(2,minmax(0,1fr));
+    grid-auto-flow:column;
+    grid-auto-columns:calc((100% - 24px)/7);
+    gap:4px;
+    align-items:stretch;
+  }
+  .app.playing #rackTiles .tile{
+    width:100%!important;
+    height:100%!important;
+    min-height:0;
+    border-radius:8px;
+    font-size:16px!important;
+    box-shadow:0 3px 0 #b9a976,0 5px 9px rgba(2,6,23,.18);
+  }
+  .app.playing #rackTiles .tile:before{
+    top:4px;
+    width:16px;
+    height:2px;
+  }
+  .app.playing #rackTiles .tile small{
+    right:3px;
+    bottom:2px;
+    font-size:6px;
+  }
+  .app.playing #rackTiles .tile.selected{
+    transform:translateY(-2px);
+    box-shadow:0 0 0 2px #facc15,0 5px 0 #b9a976;
+  }
+
+  .app.playing .helpBtn,
+  .helpBtn{
+    width:34px;
+    height:34px;
+    font-size:18px;
+    right:6px;
+    bottom:calc(var(--mobile-rack-h) + 6px);
+  }
+  .app.playing .footerSpace{
+    display:none;
+  }
+}
+
+@media(max-width:360px){
+  .app.playing .gameHudPanel{
+    height:90px;
+    min-height:90px;
+    grid-template-rows:27px 27px 27px;
+  }
+  .app.playing .realGameBoard{
+    grid-template-rows:34px 90px minmax(0,1fr);
+  }
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    height:27px;
+    min-height:27px;
+    font-size:9px;
+  }
+  .app.playing #rackTiles{
+    grid-auto-columns:calc((100% - 18px)/7);
+    gap:3px;
+  }
+  .app.playing #rackTiles .tile{
+    font-size:14px!important;
+  }
+}
+
+/* FIX v10: botón de reinicio demo accesible en móvil sin abrir panel oculto */
+@media(max-width:600px){
+  .app.playing #resetDemoMobileBtn{
+    display:block;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -783,6 +1197,7 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
         </div>
         <div class="controls two">
           <button class="ghost" id="advanceDemoBtn">Avanzar jugador demo</button>
+          <button class="ghost" id="resetDemoMobileBtn">Reiniciar demo</button>
         </div>
         <div class="small" id="selectionInfo">Sin selección.</div>
       </div>
@@ -883,7 +1298,7 @@ let unsubRoom=null, unsubRooms=null;
 let busy=false;
 let lastRoomStatus='';
 const $=id=>document.getElementById(id);
-const el={app:$('app'),netStatus:$('netStatus'),langSelect:$('langSelect'),barRoom:$('barRoom'),barTurn:$('barTurn'),barPlayers:$('barPlayers'),barPool:$('barPool'),sideDrawer:$('sideDrawer'),drawerTitle:$('drawerTitle'),drawerHint:$('drawerHint'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),helpTitle:$('helpTitle'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),qh1t:$('qh1t'),qh1b:$('qh1b'),qh2t:$('qh2t'),qh2b:$('qh2b'),qh3t:$('qh3t'),qh3b:$('qh3b'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),log:$('log'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),gameNotice:$('gameNotice'),drawBtn:$('drawBtn'),endTurnBtn:$('endTurnBtn'),newSetBtn:$('newSetBtn'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),selectionInfo:$('selectionInfo'),sets:$('sets'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),closeHelpBtn:$('closeHelpBtn'),loadDemoBtn:$('loadDemoBtn'),resetDemoBtn:$('resetDemoBtn'),demoInfo:$('demoInfo'),advanceDemoBtn:$('advanceDemoBtn')};
+const el={app:$('app'),netStatus:$('netStatus'),langSelect:$('langSelect'),barRoom:$('barRoom'),barTurn:$('barTurn'),barPlayers:$('barPlayers'),barPool:$('barPool'),sideDrawer:$('sideDrawer'),drawerTitle:$('drawerTitle'),drawerHint:$('drawerHint'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),helpTitle:$('helpTitle'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),qh1t:$('qh1t'),qh1b:$('qh1b'),qh2t:$('qh2t'),qh2b:$('qh2b'),qh3t:$('qh3t'),qh3b:$('qh3b'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),log:$('log'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),gameNotice:$('gameNotice'),drawBtn:$('drawBtn'),endTurnBtn:$('endTurnBtn'),newSetBtn:$('newSetBtn'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),selectionInfo:$('selectionInfo'),sets:$('sets'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),closeHelpBtn:$('closeHelpBtn'),loadDemoBtn:$('loadDemoBtn'),resetDemoBtn:$('resetDemoBtn'),demoInfo:$('demoInfo'),advanceDemoBtn:$('advanceDemoBtn'),resetDemoMobileBtn:$('resetDemoMobileBtn')};
 
 function toast(msg,type='ok'){el.gameNotice.className= type==='err'?'errbox':type==='warn'?'warnbox':'okbox'; el.gameNotice.textContent=msg;}
 function log(msg){const t=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}); el.log.innerHTML=`<div><b>${t}</b> ${escapeHtml(msg)}</div>`+el.log.innerHTML;}
@@ -951,7 +1366,7 @@ function applyLang(){
   if(h2[3])h2[3].textContent=tr('players'); if(h2[4])h2[4].textContent=tr('game'); el.startGameBtn.textContent=tr('start'); el.resetBoardBtn.textContent=tr('reset'); el.loadDemoBtn.textContent=tr('demoLoad'); el.resetDemoBtn.textContent=tr('demoReset'); el.demoInfo.textContent=tr('demoInfo');
   const wb=document.querySelector('.warnbox'); if(wb) wb.innerHTML='<b>'+tr('baseRule').split(':')[0]+':</b>'+tr('baseRule').slice(tr('baseRule').indexOf(':')+1);
   if(h2[5])h2[5].textContent=tr('events'); if(h2[6])h2[6].textContent=tr('table');
-  el.drawBtn.textContent=tr('draw'); el.endTurnBtn.textContent=tr('end'); el.newSetBtn.textContent=tr('newSet'); el.addToSetBtn.textContent=tr('add'); el.clearSelectionBtn.textContent=tr('clear'); el.undoTurnBtn.textContent=tr('undo'); el.advanceDemoBtn.textContent=tr('demoAdvance');
+  el.drawBtn.textContent=tr('draw'); el.endTurnBtn.textContent=tr('end'); el.newSetBtn.textContent=tr('newSet'); el.addToSetBtn.textContent=tr('add'); el.clearSelectionBtn.textContent=tr('clear'); el.undoTurnBtn.textContent=tr('undo'); el.advanceDemoBtn.textContent=tr('demoAdvance'); if(el.resetDemoMobileBtn) el.resetDemoMobileBtn.textContent=tr('demoReset');
   if(h2[7])h2[7].textContent=tr('rack'); el.sortNumBtn.textContent=tr('sortNum'); el.sortColorBtn.textContent=tr('sortColor');
   el.qh1t.textContent=tr('qh1t'); el.qh1b.textContent=tr('qh1b'); el.qh2t.textContent=tr('qh2t'); el.qh2b.textContent=tr('qh2b'); el.qh3t.textContent=tr('qh3t'); el.qh3b.textContent=tr('qh3b');
   el.helpTitle.textContent=tr('helpTitle'); el.closeHelpBtn.textContent=tr('close'); el.helpFoot.textContent=tr('helpFoot'); el.rulesList.innerHTML=tr('rules').map(x=>`<li>${escapeHtml(x)}</li>`).join('');
@@ -967,7 +1382,7 @@ function bind(){
   el.langSelect.onchange=()=>{lang=el.langSelect.value; localStorage.setItem('rk_lang',lang); applyLang();}; el.saveNameBtn.onclick=saveName; el.createRoomBtn.onclick=createRoom; el.refreshRoomsBtn.onclick=listenRooms; el.joinRoomBtn.onclick=()=>joinRoom(); el.leaveRoomBtn.onclick=leaveRoom;
   el.startGameBtn.onclick=startGame; el.resetBoardBtn.onclick=resetRoom; el.loadDemoBtn.onclick=()=>loadDemoRoom(); el.resetDemoBtn.onclick=resetLocalDemo;
   el.drawBtn.onclick=drawAndPass; el.endTurnBtn.onclick=endTurn; el.newSetBtn.onclick=createSetFromSelection; el.addToSetBtn.onclick=addSelectionToSet; el.clearSelectionBtn.onclick=clearSelection;
-  el.undoTurnBtn.onclick=undoTurn; el.advanceDemoBtn.onclick=advanceDemoTurn; el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color'); el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
+  el.undoTurnBtn.onclick=undoTurn; el.advanceDemoBtn.onclick=advanceDemoTurn; if(el.resetDemoMobileBtn) el.resetDemoMobileBtn.onclick=resetLocalDemo; el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color'); el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
 }
 function afterAuth(){if(demoMode)return; listenRooms(); if(roomId) subscribeRoom(roomId);}
 function saveName(){userName=el.nameInput.value.trim().slice(0,24); if(!userName){toast(msg('writeName'),'warn');return;} localStorage.setItem('rk_name',userName); renderName(); if(roomId) updatePlayerPresence();}
@@ -1089,7 +1504,7 @@ function renderRack(){ const rack=myRack(); el.rackInfo.textContent=tr('tiles')(
 function tileEl(t){const d=document.createElement('button'); d.type='button'; d.className=`tile ${t.joker?'joker':t.color}`; d.innerHTML=t.joker?'★':`${t.num}<small>${(colorName(t.color)||'')[0]||''}</small>`; d.title=t.joker?'Joker':`${colorName(t.color)} ${t.num}`; return d;}
 function renderBoard(){ const b=board(); const vals=validateBoard(b); el.sets.innerHTML=''; el.targetSetSelect.innerHTML=`<option value="">${tr('target')}</option>`; if(!b.length){el.sets.innerHTML=`<div class="tableEmptyHint">${tr('emptyTable')}</div>`; return;} b.forEach((s,i)=>{const v=vals.sets[i]||validateSet(s); const wrap=document.createElement('div'); wrap.className=`set ${v.ok?'':'invalid'}`; wrap.innerHTML=`<div class="setHead"><span>${tr('set')} ${i+1} · ${v.ok?`${typeName(v.type)} · ${v.score} ${tr('points')}`:tr('invalid')}</span><span>${v.ok?'✓':'⚠'}</span></div>`; const tiles=document.createElement('div'); tiles.className='tiles'; s.forEach(t=>{const d=tileEl(t); const sel=selectedBoard.get(i)?.has(t.id); d.classList.toggle('selected',!!sel); d.onclick=()=>toggleBoard(i,t.id); tiles.appendChild(d);}); wrap.appendChild(tiles); el.sets.appendChild(wrap); const opt=document.createElement('option'); opt.value=i; opt.textContent=`${tr('set')} ${i+1}`; el.targetSetSelect.appendChild(opt);});}
 function renderLog(){const logs=(room?.log||[]).slice().reverse(); if(logs.length)el.log.innerHTML=logs.map(x=>`<div><b>${new Date(x.t||Date.now()).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</b> ${escapeHtml(x.m)}</div>`).join('');}
-function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost()||isLocalDemo(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot; el.advanceDemoBtn.disabled=!isLocalDemo()||currentUid()!==DEMO_BOT_UID;}
+function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost()||isLocalDemo(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot; el.advanceDemoBtn.disabled=!isLocalDemo()||currentUid()!==DEMO_BOT_UID; if(el.resetDemoMobileBtn){el.resetDemoMobileBtn.disabled=!isLocalDemo(); el.resetDemoMobileBtn.classList.toggle('hide',!isLocalDemo());}}
 window.addEventListener('online',()=>el.netStatus.textContent=tr('online')); window.addEventListener('offline',()=>el.netStatus.textContent=tr('offline'));
 init();
 </script>

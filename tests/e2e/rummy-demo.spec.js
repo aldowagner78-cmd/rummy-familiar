@@ -22,15 +22,22 @@ async function cargarDemoLocal(page) {
   await expect(page.locator('#rackInfo')).toContainText(/14/);
 }
 
-async function abrirPanelSala(page) {
+async function botonReiniciarDemo(page) {
+  const resetMobile = page.locator('#resetDemoMobileBtn');
+  if (await resetMobile.isVisible()) {
+    return resetMobile;
+  }
+
   const panel = page.locator('#sideDrawer');
   const reset = page.locator('#resetDemoBtn');
   if (!(await reset.isVisible())) {
     await panel.evaluate(element => {
       element.open = true;
+      element.style.display = 'block';
     });
   }
   await expect(reset).toBeVisible();
+  return reset;
 }
 
 async function crearJugadaDemo30(page) {
@@ -77,8 +84,8 @@ test('reinicia el demo y restaura los datos ficticios', async ({ page }) => {
   await cargarDemoLocal(page);
   await crearJugadaDemo30(page);
 
-  await abrirPanelSala(page);
-  await page.locator('#resetDemoBtn').click();
+  const resetDemo = await botonReiniciarDemo(page);
+  await resetDemo.click();
 
   await expect(page.locator('#sets .set')).toHaveCount(0);
   await expect(page.locator('#rackInfo')).toContainText(/14/);
