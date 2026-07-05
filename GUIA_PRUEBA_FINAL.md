@@ -1,97 +1,63 @@
-# Guía de prueba final - UI profesional móvil
+# Hotfix v17 - Demo y pruebas Playwright
 
-## 1. Prueba automatizada
+Fecha: 2026-07-05
 
-Desde:
+## Cambio aplicado
+- Corregido error de inicialización JavaScript en el rebuild móvil v16.
+- Se agregó referencia faltante a `poolDockTitle`.
+- Se actualizó caché PWA a `rummy-familiar-professional-rebuild-v17-hotfix`.
+- Motivo: Playwright hacía click en `Jugar demo ahora`, pero `roomInfo` seguía mostrando `Sin sala.` porque `render()` fallaba al acceder a un elemento no registrado.
 
-```powershell
-C:\Users\usuario\Desktop\Rummy_Git
-```
-
-Ejecutar:
-
+## Cómo probar
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
 ```powershell
 npm test
 ```
 
 Resultado esperado:
-
 ```text
 Resultado: validación estática correcta.
 8 passed
 ```
 
-## 2. Prueba visual local
+---
 
-Desde:
+# Guía de prueba final
 
+## Objetivo
+Verificar que la app sea jugable en móvil con mesa visible y atril compacto.
+
+## Ruta
+`C:\Users\usuario\Desktop\Rummy_Git`
+
+## Prueba automatizada
 ```powershell
-C:\Users\usuario\Desktop\Rummy_Git
+npm test
 ```
 
-Ejecutar:
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```
 
+## Prueba manual local
 ```powershell
 npm run serve
 ```
 
 Abrir:
+`http://127.0.0.1:8000/?v=rebuild-pro-v16`
 
-```text
-http://127.0.0.1:8000
-```
-
-## 3. Checklist móvil profesional
-
-En Firefox/Chrome responsive o celular:
-
-- El encabezado ocupa muy poco espacio.
-- Los rivales aparecen arriba en una franja fina.
-- La mesa ocupa la mayor parte de la pantalla.
-- Las jugadas bajadas por todos los jugadores se ven en el centro.
-- El pozo queda visible pero compacto.
-- La barra de acciones no tapa la mesa.
-- El atril queda abajo y no supera aproximadamente el 20%.
-- Las 14 fichas iniciales entran en 2 hileras de 7.
-- Se puede seleccionar fichas con el dedo.
-- Se puede bajar una jugada.
+## Checklist manual
+- La pantalla no muestra panel lateral gigante.
+- La mesa ocupa la zona central.
+- El atril ocupa la parte inferior y no tapa botones.
+- Las fichas del atril se ven en dos hileras.
+- El botón “Bajar fichas” se puede tocar en móvil.
+- Se puede cargar demo.
+- Se pueden seleccionar 10 rojo, 10 azul y 10 amarillo.
+- Se puede bajar la jugada.
+- Se ve la jugada en la mesa.
 - Se puede terminar turno.
-- Se puede tomar ficha.
 - Se puede reiniciar demo.
-
-## 4. Actualizar GitHub Pages
-
-Después de aprobar pruebas:
-
-```powershell
-git status
-git add .
-git commit -m "Aplicar UI profesional movil tipo Rummikub"
-git push
-```
-
-Abrir:
-
-```text
-https://aldowagner78-cmd.github.io/rummy-familiar/?v=ui-pro-v12
-```
-
-## 5. Si Firefox muestra versión vieja
-
-Abrir:
-
-```text
-about:serviceworkers
-```
-
-Buscar `aldowagner78-cmd.github.io` o `rummy-familiar` y tocar:
-
-```text
-Unregister
-```
-
-Luego abrir:
-
-```text
-https://aldowagner78-cmd.github.io/rummy-familiar/?v=ui-pro-v12
-```

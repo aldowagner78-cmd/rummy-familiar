@@ -1,0 +1,19 @@
+Rummy Familiar - UI PRO móvil v13
+
+Objetivo:
+- Corregir el layout móvil para que sea jugable de verdad.
+- Mesa como área principal.
+- Atril inferior compacto de aprox. 20%.
+- 14 fichas en 2 filas de 7.
+- Acciones compactas en una sola barra.
+- Rivales en franja mínima arriba.
+- Sin paneles grandes durante la partida.
+
+Uso:
+1. Aplicar el parche sobre la raíz del proyecto.
+2. Ejecutar npm test.
+3. Probar en móvil o Firefox responsive.
+4. Subir con git si está correcto.
+
+URL recomendada tras publicar:
+https://aldowagner78-cmd.github.io/rummy-familiar/?v=ui-pro-v13

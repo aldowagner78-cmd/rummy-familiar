@@ -1,0 +1,11 @@
+# Rebuild profesional móvil
+
+Esta versión cambia la estrategia: reemplaza la UI anterior por una pantalla móvil de juego real.
+
+Principios:
+- Mesa primero.
+- Atril abajo y compacto.
+- Acciones separadas del atril.
+- Nada de panel lateral gigante durante la partida.
+- 14 fichas en dos hileras.
+- Demo local listo para probar.

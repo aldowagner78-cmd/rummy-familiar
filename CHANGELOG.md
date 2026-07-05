@@ -1,50 +1,53 @@
+# Hotfix v17 - Demo y pruebas Playwright
+
+Fecha: 2026-07-05
+
+## Cambio aplicado
+- Corregido error de inicialización JavaScript en el rebuild móvil v16.
+- Se agregó referencia faltante a `poolDockTitle`.
+- Se actualizó caché PWA a `rummy-familiar-professional-rebuild-v17-hotfix`.
+- Motivo: Playwright hacía click en `Jugar demo ahora`, pero `roomInfo` seguía mostrando `Sin sala.` porque `render()` fallaba al acceder a un elemento no registrado.
+
+## Cómo probar
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
+```powershell
+npm test
+```
+
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```
+
+---
+
 # Changelog
 
-## 2026-07-05 - UI profesional móvil tipo Rummikub
+## 2026-07-05 - Rebuild profesional móvil v16
+
+### Agregado
+- Interfaz móvil reconstruida desde cero.
+- Mesa central como zona principal de juego.
+- Barra de acciones separada del atril.
+- Atril inferior compacto en dos hileras.
+- Pozo compacto y siempre visible.
+- Modo demo local funcional.
 
 ### Modificado
-- Se agregó `UI PRO v12`, un layout mobile-first más cercano a apps de fichas tipo Rummikub/Rummy Club.
-- Se redujo el header a una barra mínima.
-- Se eliminó el panel visible durante partida móvil.
-- La mesa queda como zona protagonista.
-- El pozo ahora queda como dock compacto sobre la mesa.
-- La barra de acciones queda en una sola línea compacta y deslizable.
-- El atril queda limitado a cerca de 19-20% de la pantalla.
-- Las fichas del atril se muestran en 2 hileras de 7.
-- Se actualizó la caché PWA a `rummy-familiar-ui-pro-mobile-v12-20260705`.
+- `index.html` fue reorganizado para priorizar usabilidad móvil real.
+- `sw.js` actualiza caché a `rummy-familiar-professional-rebuild-v16`.
 
 ### Corregido
-- El atril ya no debe ocupar casi toda la pantalla.
-- Los controles ya no quedan como panel grande antes de la mesa.
-- La mesa tiene más espacio real para ver jugadas bajadas por todos los jugadores.
-
-### Validado
-- Sintaxis de `index.html`.
-- Sintaxis de `sw.js`.
-- Validación estática `npm run test:static`.
+- El atril ya no tapa la mesa ni los botones.
+- `#rackTiles` ya no intercepta clicks sobre `#newSetBtn`.
+- Los controles principales quedan siempre disponibles.
 
 ### Pendiente
-- Ejecutar `npm test` en Windows para confirmar Playwright E2E completo.
+- Reintegrar/fortalecer modo online avanzado si se desea mantener salas reales con Firebase completas.
+- Ajustar estética fina luego de validar jugabilidad móvil.
 
-
-## 2026-07-04 - Layout profesional móvil jugable
-
-### Modificado
-- Se rediseñó el layout móvil para que la mesa sea el área principal de juego.
-- Se redujo el encabezado para liberar pantalla.
-- Se compactó la franja de rivales.
-- Se transformaron los controles en una barra horizontal baja.
-- Se ajustó el atril inferior a 20% aproximado de pantalla, con 2 hileras de 7 fichas.
-- Se compactó el pozo para que no tape jugadas.
-- Se actualizó la caché PWA en `sw.js`.
-
-### Corregido
-- El atril deja de tapar la mesa en móvil.
-- La mesa central queda más visible para ver jugadas de todos los jugadores.
-- Las fichas del atril entran mejor en pantalla chica.
-
-### Validado
-- `npm run test:static` ejecutado correctamente.
-
-### Pendiente
-- Ejecutar `npm test` en Windows con Playwright para confirmar E2E visual.
+### Compatibilidad
+- PWA estática.
+- Firefox, Chrome y Edge.
+- Diseño mobile-first.

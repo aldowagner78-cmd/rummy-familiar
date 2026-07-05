@@ -1,2249 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Rummy Familiar de Fichas</title>
-  <meta name="theme-color" content="#1d4ed8" />
-  <meta name="description" content="Rummy familiar de fichas, online, moderno, con modo demo local, modo móvil y PWA." />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icon-192.png" />
+  <meta name="theme-color" content="#07162f">
+  <meta name="description" content="Rummy familiar de fichas, online/PWA, con mesa móvil profesional y modo demo local.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
   <style>
-    :root{--bg:#eef7f5;--card:#ffffff;--ink:#172126;--muted:#687076;--line:#d9e7e3;--brand:#0f766e;--brand2:#0ea5a4;--danger:#b91c1c;--warn:#b45309;--ok:#15803d;--shadow:0 12px 35px rgba(15,76,72,.14);--radius:18px}
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#dff6f2,#f7fbfa 40%,#eef7f5);color:var(--ink);min-height:100vh} button,input,select,textarea{font:inherit} button{border:0;border-radius:14px;padding:12px 14px;font-weight:800;background:#e7f3f1;color:#0c4a45;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.04)} button.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white} button.danger{background:#fee2e2;color:#991b1b} button.warn{background:#ffedd5;color:#9a3412} button.ghost{background:transparent;border:1px solid var(--line);box-shadow:none} button:disabled{opacity:.5;cursor:not-allowed} input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:white;color:var(--ink)} label{display:block;font-size:13px;color:var(--muted);font-weight:800;margin-bottom:6px}.app{max-width:1180px;margin:0 auto;padding:14px}.top{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(238,247,245,.88);border-bottom:1px solid rgba(217,231,227,.9)}.topin{max-width:1180px;margin:auto;padding:10px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between}.logo{display:flex;gap:10px;align-items:center;font-weight:950;letter-spacing:-.03em}.logo .mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#0f766e,#38bdf8);display:grid;place-items:center;color:white;font-size:22px}.status{font-size:12px;font-weight:800;color:#075985;background:#e0f2fe;border:1px solid #bae6fd;border-radius:999px;padding:6px 10px}.grid{display:grid;grid-template-columns:340px 1fr;gap:14px;margin-top:14px}.panel{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}.panel h2,.panel h3{margin:0 0 10px}.small{font-size:13px;color:var(--muted)}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.stack{display:grid;gap:10px}.hide{display:none!important}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:#fff;font-size:12px;font-weight:800}.players{display:grid;gap:8px}.player{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:14px;padding:9px;background:#fbfefd}.player.me{border-color:#5eead4;background:#ecfdf5}.player.turn{outline:3px solid #fbbf24}.adminbox{border:1px dashed #99f6e4;background:#f0fdfa;border-radius:16px;padding:12px}.warnbox{background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;border-radius:14px;padding:10px;font-size:13px}.okbox{background:#ecfdf5;border:1px solid #bbf7d0;color:#14532d;border-radius:14px;padding:10px;font-size:13px}.errbox{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d;border-radius:14px;padding:10px;font-size:13px}.board{display:grid;gap:12px}.tableHeader{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.sets{display:grid;gap:10px}.set{background:#f8fffd;border:1px solid var(--line);border-radius:16px;padding:10px}.set.invalid{border-color:#fca5a5;background:#fff7f7}.setHead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;font-size:13px;color:var(--muted);font-weight:800}.tiles{display:flex;gap:7px;flex-wrap:wrap;min-height:48px}.rack{position:sticky;bottom:0;z-index:9;background:rgba(238,247,245,.94);border-top:1px solid var(--line);padding:10px 0 4px;margin-top:14px}.rackCard{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:12px}.tile{width:44px;height:58px;border-radius:10px;border:2px solid #e5e7eb;background:#fff;display:grid;place-items:center;font-weight:950;font-size:22px;line-height:1;box-shadow:0 3px 0 rgba(0,0,0,.12);position:relative;user-select:none;touch-action:manipulation}.tile small{position:absolute;right:4px;bottom:3px;font-size:8px;color:#94a3b8}.tile.red{color:#dc2626;border-color:#fecaca}.tile.blue{color:#2563eb;border-color:#bfdbfe}.tile.yellow{color:#ca8a04;border-color:#fde68a}.tile.black{color:#111827;border-color:#d1d5db}.tile.joker{color:#7c3aed;border-color:#ddd6fe;background:linear-gradient(180deg,#fff,#faf5ff)}.tile.selected{outline:4px solid #f59e0b;transform:translateY(-4px)}.tile.locked{opacity:.55}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.controls.two{grid-template-columns:repeat(2,1fr)}.miniLog{max-height:140px;overflow:auto;font-size:12px;color:#455156;background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:8px}.rulesList{margin:0;padding-left:18px}.rulesList li{margin:5px 0}.modalBack{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:40;padding:16px}.modal{width:min(720px,100%);max-height:90vh;overflow:auto;background:white;border-radius:22px;padding:18px;border:1px solid var(--line);box-shadow:0 20px 80px rgba(0,0,0,.32)}.footerSpace{height:6px}.helpBtn{position:fixed;right:14px;bottom:14px;z-index:20;border-radius:999px;width:48px;height:48px;padding:0;background:#0f766e;color:white;font-size:22px}@media(max-width:900px){.grid{grid-template-columns:1fr}.topin{align-items:flex-start}.logo{font-size:15px}.controls{grid-template-columns:1fr}.controls.two{grid-template-columns:1fr}.tile{width:40px;height:54px;font-size:20px}.panel{padding:12px}.app{padding:10px}.rack{padding-bottom:env(safe-area-inset-bottom)}}
-
-    .topActions{display:flex;gap:8px;align-items:center}.topActions select{width:auto;min-width:112px;padding:8px 10px;border-radius:999px;font-size:13px;font-weight:800}.gameBar{max-width:1180px;margin:0 auto;padding:0 14px 10px;display:flex;gap:6px;overflow-x:auto;white-space:nowrap}.drawerSummary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;font-weight:950;padding:2px 0 10px}.drawerSummary::-webkit-details-marker{display:none}.drawerSummary:after{content:'▾';font-size:18px;color:var(--muted)}.sideDrawer:not([open]) .drawerSummary{padding-bottom:2px}.sideDrawer:not([open]) .drawerSummary:after{content:'▸'}.drawerSummary span:last-child{font-size:12px;color:var(--muted);font-weight:800}.app.playing .sideDrawer{box-shadow:none;background:rgba(255,255,255,.72)}.app.playing .sideDrawer:not([open]){padding:10px 12px}.app.playing .sideDrawer[open]{position:relative}.app.playing .board{min-height:55vh}.board .panel:first-child{position:sticky;top:92px;z-index:8}.sets{min-height:220px}.set{overflow-x:auto}.set .tiles{flex-wrap:nowrap;min-width:max-content}.rackCard{border:2px solid #99f6e4}.rack .tiles{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;padding:7px 4px 12px;scroll-snap-type:x proximity}.rack .tile{flex:0 0 auto;scroll-snap-align:center}.tile{width:50px;height:66px;font-size:24px}.tile:active{transform:translateY(-3px) scale(.98)}.tile.selected{box-shadow:0 0 0 4px #f59e0b,0 6px 0 rgba(0,0,0,.12)}#gameNotice{font-weight:800}.playHint{font-size:12px;color:var(--muted);font-weight:700}.quickHow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quickHow div{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:10px;font-size:12px;color:#475569}.quickHow b{display:block;color:#0f766e;font-size:13px}@media(max-width:900px){.top{position:sticky}.topin{padding-bottom:6px}.gameBar{padding-bottom:8px}.grid{display:block}.sideDrawer{margin-bottom:10px}.app.playing .sideDrawer:not([open]){position:sticky;top:86px;z-index:7;margin-bottom:8px}.board .panel:first-child{top:128px}.quickHow{grid-template-columns:1fr}.tile{width:46px;height:62px;font-size:23px}.rack{position:sticky;bottom:0}.rackCard{padding:10px 8px}.sets{min-height:260px}.controls button,.controls select{min-height:46px}.helpBtn{bottom:calc(10px + env(safe-area-inset-bottom));right:10px}}@media(max-width:430px){.tile{width:42px;height:58px;font-size:21px}.logo .mark{width:34px;height:34px}.topActions select{min-width:92px}.status{display:none}.board .panel:first-child{top:120px}.rackCard h3{font-size:16px}}
-
-  
-/* UI v6: mesa azul moderna para juego de fichas */
-:root{
-  --bg:#07162f;
-  --card:rgba(255,255,255,.95);
-  --ink:#0f172a;
-  --muted:#64748b;
-  --line:rgba(148,163,184,.32);
-  --brand:#2563eb;
-  --brand2:#06b6d4;
-  --brand3:#7c3aed;
-  --danger:#dc2626;
-  --warn:#d97706;
-  --ok:#16a34a;
-  --shadow:0 20px 55px rgba(2,6,23,.28);
-  --radius:22px;
-  --table:#0d3b78;
-  --table2:#123f88;
-  --felt:#0ea5e9;
-}
-html{background:#07162f}
-body{
-  background:
-    radial-gradient(circle at 18% 0%,rgba(56,189,248,.32),transparent 34%),
-    radial-gradient(circle at 82% 8%,rgba(124,58,237,.25),transparent 31%),
-    linear-gradient(160deg,#061225 0%,#0b2550 46%,#06152f 100%);
-  color:#e5f3ff;
-}
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size:42px 42px;
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 78%);
-}
-.top{
-  background:rgba(5,16,38,.84);
-  border-bottom:1px solid rgba(147,197,253,.22);
-  box-shadow:0 18px 45px rgba(2,6,23,.25);
-}
-.topin{padding-top:12px}
-.logo{color:#f8fbff}
-.logo .mark{
-  width:44px;
-  height:44px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#38bdf8,#2563eb 55%,#7c3aed);
-  box-shadow:0 12px 30px rgba(37,99,235,.42), inset 0 1px 0 rgba(255,255,255,.35);
-  transform:rotate(-2deg);
-}
-.logo .mark:after{
-  content:"";
-  width:24px;
-  height:30px;
-  border-radius:8px;
-  background:linear-gradient(180deg,#fff7df,#e7d49c);
-  box-shadow:9px 5px 0 -2px #fff7df;
-}
-.logo .mark{font-size:0}
-.logo .small{color:#bfdbfe;font-weight:700}
-.status,.pill{
-  color:#dbeafe;
-  background:rgba(15,23,42,.58);
-  border-color:rgba(147,197,253,.28);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
-}
-.gameBar{scrollbar-width:thin}
-.app{position:relative}
-.grid{grid-template-columns:330px minmax(0,1fr);align-items:start}
-.panel{
-  background:var(--card);
-  color:var(--ink);
-  border:1px solid rgba(219,234,254,.7);
-  box-shadow:var(--shadow);
-}
-.panel h2,.panel h3{letter-spacing:-.025em;color:#0f172a}
-.small,label{color:#64748b}
-.startStrip{
-  display:grid;
-  gap:6px;
-  padding:14px;
-  margin-bottom:2px;
-  border-radius:20px;
-  background:
-    linear-gradient(135deg,rgba(37,99,235,.95),rgba(14,165,233,.95)),
-    linear-gradient(180deg,#1d4ed8,#0284c7);
-  color:white;
-  box-shadow:0 16px 40px rgba(37,99,235,.34);
-}
-.startBadge{
-  width:max-content;
-  font-size:12px;
-  font-weight:950;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  background:rgba(255,255,255,.16);
-  border:1px solid rgba(255,255,255,.28);
-  border-radius:999px;
-  padding:5px 9px;
-}
-.startTitle{font-size:20px;font-weight:950;letter-spacing:-.04em}
-.startText{font-size:13px;color:#e0f2fe;font-weight:650;line-height:1.35}
-.drawerSummary{
-  color:#e0f2fe;
-  background:linear-gradient(135deg,rgba(15,23,42,.92),rgba(30,64,175,.84));
-  border-radius:18px;
-  padding:12px 14px!important;
-  margin:-4px -4px 10px;
-  border:1px solid rgba(147,197,253,.22);
-}
-.sideDrawer.panel{
-  background:rgba(15,23,42,.72);
-  border-color:rgba(147,197,253,.25);
-}
-.sideDrawer[open] section{
-  background:rgba(255,255,255,.96);
-  border:1px solid rgba(219,234,254,.8);
-  border-radius:20px;
-  padding:12px;
-}
-.adminbox{
-  border-style:solid;
-  border-color:rgba(14,165,233,.3);
-  background:linear-gradient(180deg,#f0f9ff,#ffffff);
-}
-.warnbox{
-  background:#fff7ed;
-  border-color:#fed7aa;
-  color:#7c2d12;
-}
-.okbox{
-  background:#ecfeff;
-  border-color:#a5f3fc;
-  color:#164e63;
-}
-.errbox{
-  background:#fef2f2;
-  border-color:#fecaca;
-  color:#7f1d1d;
-}
-button{
-  min-height:44px;
-  border-radius:16px;
-  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
-}
-button:hover:not(:disabled){transform:translateY(-1px);filter:saturate(1.05)}
-button:active:not(:disabled){transform:translateY(0) scale(.99)}
-button.primary{
-  background:linear-gradient(135deg,#2563eb,#06b6d4);
-  color:white;
-  box-shadow:0 10px 24px rgba(37,99,235,.28);
-}
-button.warn{
-  background:linear-gradient(135deg,#f59e0b,#f97316);
-  color:white;
-}
-button.danger{background:#fee2e2;color:#991b1b}
-button.ghost{
-  background:rgba(241,245,249,.9);
-  border:1px solid rgba(148,163,184,.35);
-  color:#1e293b;
-}
-#loadDemoBtn{
-  background:linear-gradient(135deg,#22c55e,#06b6d4);
-  color:white;
-  box-shadow:0 14px 34px rgba(14,165,233,.28);
-}
-#loadDemoBtn:before{content:"▶ ";font-weight:950}
-#joinRoomBtn:before{content:"🎮 "}
-#createRoomBtn:before{content:"＋ "}
-input,select{
-  border-color:rgba(148,163,184,.38);
-  box-shadow:inset 0 1px 2px rgba(15,23,42,.04);
-}
-input:focus,select:focus,button:focus-visible,.tile:focus-visible{
-  outline:4px solid rgba(14,165,233,.28);
-  outline-offset:2px;
-}
-.board .panel:first-child{
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.98),rgba(240,249,255,.96));
-}
-.board .panel:nth-child(2){
-  min-height:290px;
-  background:
-    radial-gradient(circle at center,rgba(56,189,248,.22),transparent 58%),
-    linear-gradient(145deg,var(--table),var(--table2));
-  border-color:rgba(125,211,252,.28);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.04), 0 24px 65px rgba(2,6,23,.35);
-  position:relative;
-  overflow:hidden;
-}
-.board .panel:nth-child(2):before{
-  content:"Mesa de fichas";
-  position:absolute;
-  top:16px;
-  left:18px;
-  color:rgba(219,234,254,.18);
-  font-size:42px;
-  line-height:1;
-  font-weight:950;
-  letter-spacing:-.06em;
-  pointer-events:none;
-}
-.sets{position:relative;z-index:1}
-.set{
-  background:rgba(241,245,249,.94);
-  border-color:rgba(219,234,254,.82);
-  box-shadow:0 12px 28px rgba(2,6,23,.18);
-}
-.setHead{color:#334155}
-.quickHow div{
-  background:linear-gradient(180deg,#f8fbff,#eff6ff);
-  border-color:#dbeafe;
-}
-.quickHow b{color:#1d4ed8}
-.controls{gap:10px}
-.tableHeader{gap:10px}
-.rack{
-  background:linear-gradient(180deg,rgba(7,22,47,0),rgba(7,22,47,.96) 20%,rgba(7,22,47,.98));
-  border-top:1px solid rgba(147,197,253,.22);
-}
-.rackCard{
-  border:1px solid rgba(147,197,253,.45);
-  background:rgba(248,250,252,.97);
-  box-shadow:0 -14px 46px rgba(2,6,23,.32);
-}
-.rackCard h3{color:#0f172a}
-.tiles{gap:9px}
-.tile{
-  width:54px;
-  height:70px;
-  border-radius:15px;
-  border:1px solid #d9cda7;
-  background:
-    linear-gradient(180deg,#fffaf0 0%,#fff7df 55%,#ead9a9 100%);
-  color:#111827;
-  box-shadow:
-    0 8px 0 #b9a976,
-    0 13px 20px rgba(2,6,23,.22),
-    inset 0 2px 0 rgba(255,255,255,.9);
-  font-size:25px;
-  text-shadow:0 1px 0 rgba(255,255,255,.6);
-}
-.tile:before{
-  content:"";
-  position:absolute;
-  top:7px;
-  left:50%;
-  transform:translateX(-50%);
-  width:26px;
-  height:4px;
-  border-radius:999px;
-  background:currentColor;
-  opacity:.18;
-}
-.tile small{
-  right:6px;
-  bottom:5px;
-  font-size:9px;
-  color:#94a3b8;
-}
-.tile.red{color:#dc2626;border-color:#f2b4a8}
-.tile.blue{color:#2563eb;border-color:#a7c5ff}
-.tile.yellow{color:#d97706;border-color:#f1d084}
-.tile.black{color:#111827;border-color:#babfc8}
-.tile.joker{
-  color:#7c3aed;
-  border-color:#c4b5fd;
-  background:linear-gradient(180deg,#fff7ff,#eee7ff);
-}
-.tile.selected{
-  transform:translateY(-8px);
-  outline:0;
-  box-shadow:
-    0 0 0 4px #facc15,
-    0 11px 0 #b9a976,
-    0 18px 24px rgba(250,204,21,.22);
-}
-.tile.locked{filter:saturate(.75);opacity:.62}
-.miniLog{
-  background:#0f172a;
-  color:#dbeafe;
-  border-color:rgba(147,197,253,.22);
-}
-.helpBtn{
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  box-shadow:0 18px 40px rgba(37,99,235,.34);
-}
-.modal{
-  background:rgba(255,255,255,.98);
-}
-#gameNotice{font-weight:850}
-@media(max-width:900px){
-  .topin{align-items:center}
-  .grid{display:block}
-  .sideDrawer.panel{margin-bottom:12px}
-  .startStrip{grid-template-columns:1fr}
-  .board .panel:nth-child(2):before{font-size:30px}
-  .tile{width:48px;height:64px;font-size:23px}
-  .controls{grid-template-columns:1fr}
-  .controls.two{grid-template-columns:1fr}
-  #loadDemoBtn,#joinRoomBtn,#createRoomBtn{min-height:50px;font-size:16px}
-}
-@media(max-width:430px){
-  .app{padding:8px}
-  .panel{border-radius:18px}
-  .tile{width:44px;height:60px;font-size:21px}
-  .tiles{gap:7px}
-  .logo div:last-child{max-width:220px}
-}
-
-/* === Mesa real móvil v8: juego de fichas === */
-.realGameBoard{
-  display:grid;
-  gap:12px;
-}
-.realPlayersStrip{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
-  gap:8px;
-  position:sticky;
-  top:104px;
-  z-index:7;
-}
-.opponentCard{
-  min-height:58px;
-  border:1px solid rgba(147,197,253,.28);
-  border-radius:18px;
-  padding:9px 10px;
-  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(30,58,138,.86));
-  color:#e0f2fe;
-  box-shadow:0 12px 32px rgba(2,6,23,.24);
-}
-.opponentCard.me{
-  display:none;
-}
-.opponentCard.turn{
-  outline:3px solid rgba(250,204,21,.88);
-  box-shadow:0 0 0 6px rgba(250,204,21,.14),0 12px 32px rgba(2,6,23,.24);
-}
-.opponentName{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  font-weight:950;
-  letter-spacing:-.02em;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.opponentMeta{
-  margin-top:3px;
-  font-size:12px;
-  color:#bfdbfe;
-}
-.turnDot{
-  width:10px;
-  height:10px;
-  border-radius:999px;
-  background:#38bdf8;
-  flex:0 0 auto;
-}
-.opponentCard.turn .turnDot{
-  background:#facc15;
-  box-shadow:0 0 0 5px rgba(250,204,21,.18);
-}
-.gameHudPanel{
-  order:2;
-}
-.realTablePanel{
-  order:1;
-  padding:0;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 15%,rgba(125,211,252,.22),transparent 35%),
-    linear-gradient(145deg,#082f72,#0f4f99 50%,#0a2f67);
-  border-color:rgba(147,197,253,.24);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.05), 0 28px 70px rgba(2,6,23,.34);
-}
-.realTableHeader{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-  padding:14px 14px 0;
-  color:#e0f2fe;
-}
-.realTableHeader h2{
-  color:white;
-  margin:0;
-}
-.realTableHeader .small{
-  color:#bfdbfe;
-}
-.realTableSurface{
-  position:relative;
-  display:grid;
-  gap:12px;
-  min-height:330px;
-  padding:14px;
-}
-.tableFelt{
-  position:relative;
-  min-height:220px;
-  border:1px solid rgba(191,219,254,.22);
-  border-radius:24px;
-  padding:12px;
-  background:
-    radial-gradient(circle at center,rgba(56,189,248,.17),transparent 58%),
-    repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 42px),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 42px),
-    rgba(8,47,73,.34);
-  box-shadow:inset 0 0 36px rgba(2,6,23,.28);
-}
-.tableFelt:before{
-  content:"JUGADAS VISIBLES";
-  position:absolute;
-  inset:auto 14px 12px auto;
-  color:rgba(219,234,254,.13);
-  font-size:20px;
-  font-weight:950;
-  letter-spacing:.06em;
-  pointer-events:none;
-}
-.tableFelt .sets{
-  position:relative;
-  z-index:1;
-  max-height:min(46vh,420px);
-  overflow:auto;
-  padding-right:2px;
-}
-.tableFelt .sets::-webkit-scrollbar,
-.rackTilesRail::-webkit-scrollbar{
-  height:8px;
-  width:8px;
-}
-.tableFelt .sets::-webkit-scrollbar-thumb,
-.rackTilesRail::-webkit-scrollbar-thumb{
-  background:rgba(191,219,254,.42);
-  border-radius:999px;
-}
-.tableEmptyHint{
-  color:#dbeafe;
-  border:1px dashed rgba(191,219,254,.36);
-  border-radius:18px;
-  padding:16px;
-  background:rgba(15,23,42,.22);
-}
-.poolDock{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  align-items:center;
-  gap:12px;
-  border:1px solid rgba(191,219,254,.24);
-  border-radius:22px;
-  padding:12px;
-  background:rgba(15,23,42,.34);
-  color:#e0f2fe;
-}
-.poolStack{
-  position:relative;
-  width:78px;
-  height:70px;
-}
-.poolStack:before,
-.poolStack:after{
-  content:"";
-  position:absolute;
-  inset:8px 8px 0 0;
-  border-radius:14px;
-  background:#dbeafe;
-  box-shadow:0 5px 0 rgba(2,6,23,.22);
-  transform:rotate(-8deg);
-}
-.poolStack:after{
-  inset:2px 0 6px 9px;
-  background:#bfdbfe;
-  transform:rotate(7deg);
-}
-.tileBack{
-  position:absolute;
-  z-index:2;
-  left:18px;
-  top:6px;
-  width:46px;
-  height:60px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  background:
-    radial-gradient(circle,#38bdf8 0 18%,transparent 19%),
-    linear-gradient(135deg,#1d4ed8,#0f172a);
-  color:white;
-  border:2px solid rgba(255,255,255,.75);
-  font-weight:950;
-  box-shadow:0 8px 0 rgba(2,6,23,.28);
-}
-.poolText b{
-  display:block;
-  color:white;
-  font-size:15px;
-}
-.poolText .small{
-  color:#bfdbfe;
-}
-.set{
-  background:rgba(248,250,252,.96);
-}
-.setHead span:first-child:after{
-  content:" · visible para todos";
-  color:#64748b;
-  font-weight:750;
-}
-.rack{
-  position:sticky;
-  bottom:0;
-  z-index:20;
-  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-  margin:10px -8px -8px;
-  background:linear-gradient(180deg,rgba(7,22,47,.08),rgba(7,22,47,.94) 24%,rgba(7,22,47,.98));
-  border-top:1px solid rgba(147,197,253,.24);
-}
-.rackCard{
-  border-radius:22px;
-  background:linear-gradient(180deg,#eff6ff,#ffffff);
-  border:1px solid rgba(147,197,253,.45);
-  box-shadow:0 -18px 50px rgba(2,6,23,.28);
-}
-.rack .tableHeader h3:before{
-  content:"▰ ";
-  color:#2563eb;
-}
-.rackTilesRail{
-  overflow-x:auto;
-  overflow-y:hidden;
-  padding:4px 2px 10px;
-  scroll-snap-type:x proximity;
-}
-#rackTiles{
-  flex-wrap:nowrap;
-  min-width:max-content;
-}
-#rackTiles .tile{
-  scroll-snap-align:center;
-}
-.turnActionsDock{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.primaryActionRow{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:8px;
-}
-@media(max-width:900px){
-  .realPlayersStrip{
-    top:92px;
-    grid-template-columns:repeat(3,minmax(98px,1fr));
-    gap:6px;
-  }
-  .opponentCard{
-    border-radius:14px;
-    padding:8px;
-    min-height:52px;
-  }
-  .opponentName{
-    font-size:13px;
-  }
-  .opponentMeta{
-    font-size:11px;
-  }
-  .gameHudPanel{
-    order:3;
-  }
-  .realTablePanel{
-    order:2;
-  }
-  .realTableHeader{
-    padding:12px 12px 0;
-  }
-  .realTableSurface{
-    min-height:300px;
-    padding:12px;
-  }
-  .tableFelt{
-    min-height:190px;
-    padding:10px;
-  }
-  .tableFelt .sets{
-    max-height:38vh;
-  }
-  .poolDock{
-    grid-template-columns:auto 1fr;
-    padding:10px;
-  }
-  .primaryActionRow,
-  .turnActionsDock{
-    grid-template-columns:1fr;
-  }
-  .rackCard{
-    padding:10px;
-  }
-  .rack .tableHeader{
-    align-items:flex-start;
-  }
-  .rack .tableHeader .row{
-    width:100%;
-  }
-}
-@media(max-width:480px){
-  body{
-    background:#07162f;
-  }
-  .app{
-    padding:7px;
-  }
-  .top{
-    position:sticky;
-    top:0;
-    z-index:30;
-  }
-  .gameBar{
-    overflow-x:auto;
-    flex-wrap:nowrap;
-    padding-bottom:2px;
-  }
-  .gameBar .pill{
-    white-space:nowrap;
-  }
-  .realPlayersStrip{
-    position:sticky;
-    top:96px;
-    grid-template-columns:repeat(3,minmax(88px,1fr));
-  }
-  .opponentCard{
-    padding:7px;
-  }
-  .opponentName{
-    font-size:12px;
-  }
-  .realTableHeader{
-    display:block;
-  }
-  .realTableSurface{
-    gap:9px;
-    min-height:270px;
-  }
-  .tableFelt{
-    min-height:172px;
-    border-radius:20px;
-  }
-  .tableFelt .sets{
-    max-height:34vh;
-  }
-  .set{
-    padding:8px;
-    border-radius:14px;
-  }
-  .setHead{
-    font-size:12px;
-  }
-  .setHead span:first-child:after{
-    display:none;
-  }
-  .poolDock{
-    border-radius:18px;
-  }
-  .poolStack{
-    width:62px;
-    height:60px;
-  }
-  .tileBack{
-    width:40px;
-    height:52px;
-    left:12px;
-    top:4px;
-  }
-  .tile{
-    width:42px;
-    height:58px;
-    font-size:20px;
-  }
-  #rackTiles .tile{
-    width:46px;
-    height:62px;
-    font-size:22px;
-  }
-  .rackInfoLine{
-    display:none;
-  }
-  .footerSpace{
-    height:150px;
-  }
-}
-
-
-/* === FIX v9: mesa 80% + atril 20% mobile-first === */
-@media(max-width:600px){
-  :root{
-    --mobile-top-h:76px;
-    --mobile-rack-h:20dvh;
-  }
-  html,body{
-    height:100%;
-    overflow:hidden;
-    overscroll-behavior:none;
-  }
-  body{
-    min-height:100dvh;
-  }
-
-  /* Encabezado compacto para liberar pantalla de juego */
-  .top{
-    height:var(--mobile-top-h);
-    overflow:hidden;
-  }
-  .topin{
-    height:50px;
-    padding:6px 8px 3px;
-    align-items:center;
-  }
-  .logo{
-    gap:7px;
-    min-width:0;
-  }
-  .logo .mark{
-    width:30px!important;
-    height:30px!important;
-    border-radius:10px;
-    flex:0 0 auto;
-  }
-  .logo div:last-child{
-    min-width:0;
-  }
-  #appTitle{
-    max-width:178px;
-    font-size:13px;
-    line-height:1.05;
-    white-space:normal;
-  }
-  #appSubtitle{
-    display:none;
-  }
-  .topActions select{
-    height:32px;
-    min-width:82px;
-    padding:4px 8px;
-    font-size:12px;
-  }
-  #netStatus{
-    display:none!important;
-  }
-  .gameBar{
-    height:26px;
-    padding:0 6px 4px;
-    gap:4px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scrollbar-width:none;
-  }
-  .gameBar::-webkit-scrollbar{
-    display:none;
-  }
-  .gameBar .pill{
-    padding:3px 6px;
-    font-size:10px;
-    border-radius:999px;
-    flex:0 0 auto;
-  }
-
-  /* Cuando hay partida, la pantalla se divide en mesa 80% y atril 20% */
-  .app.playing{
-    height:calc(100dvh - var(--mobile-top-h));
-    max-height:calc(100dvh - var(--mobile-top-h));
-    padding:4px;
-    display:grid;
-    grid-template-rows:minmax(0,1fr) var(--mobile-rack-h);
-    gap:4px;
-    overflow:hidden;
-  }
-  .app.playing .grid{
-    height:100%;
-    min-height:0;
-    display:block;
-    margin:0;
-    overflow:hidden;
-  }
-  .app.playing .sideDrawer{
-    display:none!important;
-  }
-  .app.playing .realGameBoard{
-    height:100%;
-    min-height:0;
-    display:grid;
-    grid-template-rows:36px 96px minmax(0,1fr);
-    gap:4px;
-    overflow:hidden;
-  }
-
-  /* Rivales: compactos, siempre visibles arriba */
-  .app.playing .realPlayersStrip{
-    position:static;
-    top:auto;
-    height:36px;
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:4px;
-    overflow:hidden;
-  }
-  .app.playing .opponentCard{
-    min-height:0;
-    height:36px;
-    border-radius:10px;
-    padding:4px 6px;
-  }
-  .app.playing .opponentName{
-    font-size:11px;
-    line-height:1.05;
-  }
-  .app.playing .opponentMeta{
-    margin-top:0;
-    font-size:9.5px;
-    line-height:1.05;
-  }
-  .app.playing .turnDot{
-    width:7px;
-    height:7px;
-  }
-
-  /* Controles de turno: compactos para no tapar la mesa */
-  .app.playing .gameHudPanel{
-    order:2;
-    height:96px;
-    min-height:96px;
-    overflow:hidden;
-    padding:5px;
-    border-radius:12px;
-    display:grid;
-    grid-template-rows:28px 28px 28px;
-    gap:3px;
-  }
-  .app.playing .gameHudPanel>.tableHeader,
-  .app.playing #gameNotice,
-  .app.playing #quickHow,
-  .app.playing #selectionInfo{
-    display:none!important;
-  }
-  .app.playing .gameHudPanel .controls{
-    display:grid;
-    gap:3px;
-  }
-  .app.playing #turnControlsTop{
-    grid-template-columns:1fr 1fr;
-  }
-  .app.playing #moveControls{
-    grid-template-columns:1fr 1fr 1fr;
-  }
-  .app.playing .gameHudPanel .controls.two{
-    grid-template-columns:1fr 1fr;
-  }
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    min-height:28px;
-    height:28px;
-    padding:2px 4px;
-    border-radius:9px;
-    font-size:10px;
-    line-height:1.05;
-  }
-
-  /* Mesa: la zona principal usa el resto de la pantalla */
-  .app.playing .realTablePanel{
-    order:3;
-    height:100%;
-    min-height:0;
-    overflow:hidden;
-    border-radius:14px;
-  }
-  .app.playing .realTableHeader{
-    padding:6px 8px 0;
-  }
-  .app.playing .realTableHeader h2{
-    font-size:14px;
-    line-height:1.05;
-  }
-  .app.playing .realTableHeader .small,
-  .app.playing #tableVisibilityPill{
-    display:none;
-  }
-  .app.playing .realTableSurface{
-    height:calc(100% - 26px);
-    min-height:0;
-    display:grid;
-    grid-template-rows:minmax(0,1fr) 52px;
-    gap:5px;
-    padding:6px;
-  }
-  .app.playing .tableFelt{
-    height:100%;
-    min-height:0;
-    padding:6px;
-    border-radius:14px;
-  }
-  .app.playing .tableFelt:before{
-    right:8px;
-    bottom:6px;
-    font-size:12px;
-  }
-  .app.playing .tableFelt .sets{
-    height:100%;
-    max-height:100%;
-    overflow:auto;
-    display:grid;
-    align-content:start;
-    gap:5px;
-    padding-right:1px;
-  }
-  .app.playing .set{
-    padding:5px;
-    border-radius:10px;
-  }
-  .app.playing .setHead{
-    margin-bottom:4px;
-    font-size:10px;
-    line-height:1.1;
-  }
-  .app.playing .set .tiles{
-    gap:4px;
-  }
-  .app.playing .set .tile{
-    width:29px!important;
-    height:39px!important;
-    font-size:14px!important;
-    border-radius:8px;
-    box-shadow:0 3px 0 #b9a976,0 5px 10px rgba(2,6,23,.18);
-  }
-  .app.playing .set .tile:before{
-    top:4px;
-    width:16px;
-    height:2px;
-  }
-  .app.playing .set .tile small{
-    right:2px;
-    bottom:2px;
-    font-size:6px;
-  }
-
-  /* Pozo visible, pero bajo y compacto */
-  .app.playing .poolDock{
-    height:52px;
-    padding:5px 7px;
-    border-radius:14px;
-    grid-template-columns:42px 1fr;
-    gap:6px;
-  }
-  .app.playing .poolStack{
-    width:42px;
-    height:42px;
-  }
-  .app.playing .tileBack{
-    width:28px;
-    height:36px;
-    left:7px;
-    top:2px;
-    font-size:12px;
-    border-radius:8px;
-  }
-  .app.playing .poolStack:before,
-  .app.playing .poolStack:after{
-    border-radius:8px;
-  }
-  .app.playing .poolText b{
-    font-size:12px;
-    line-height:1.1;
-  }
-  .app.playing .poolText .small{
-    font-size:10px;
-    line-height:1.15;
-  }
-
-  /* Atril: 20% fijo abajo, dos hileras de 7 fichas */
-  .app.playing .rack{
-    position:relative;
-    bottom:auto;
-    z-index:5;
-    height:100%;
-    min-height:0;
-    margin:0;
-    padding:0;
-    background:transparent;
-    border-top:0;
-    overflow:hidden;
-  }
-  .app.playing .rackCard{
-    height:100%;
-    min-height:0;
-    padding:5px;
-    border-radius:14px;
-    display:grid;
-    grid-template-rows:20px minmax(0,1fr);
-    gap:3px;
-    overflow:hidden;
-    box-shadow:0 -8px 26px rgba(2,6,23,.24);
-  }
-  .app.playing .rack .tableHeader{
-    display:flex;
-    align-items:center;
-    gap:4px;
-    min-height:0;
-  }
-  .app.playing .rack .tableHeader h3{
-    margin:0;
-    font-size:12px;
-    line-height:1;
-    white-space:nowrap;
-  }
-  .app.playing #rackInfo{
-    font-size:10px;
-    line-height:1;
-  }
-  .app.playing .rack .tableHeader .row{
-    display:none;
-  }
-  .app.playing .rackTilesRail{
-    height:100%;
-    min-height:0;
-    overflow-x:auto;
-    overflow-y:hidden;
-    padding:0 1px 2px;
-    scrollbar-width:thin;
-  }
-  .app.playing #rackTiles{
-    height:100%;
-    min-width:100%;
-    display:grid!important;
-    grid-template-columns:none!important;
-    grid-template-rows:repeat(2,minmax(0,1fr));
-    grid-auto-flow:column;
-    grid-auto-columns:calc((100% - 24px)/7);
-    gap:4px;
-    align-items:stretch;
-  }
-  .app.playing #rackTiles .tile{
-    width:100%!important;
-    height:100%!important;
-    min-height:0;
-    border-radius:8px;
-    font-size:16px!important;
-    box-shadow:0 3px 0 #b9a976,0 5px 9px rgba(2,6,23,.18);
-  }
-  .app.playing #rackTiles .tile:before{
-    top:4px;
-    width:16px;
-    height:2px;
-  }
-  .app.playing #rackTiles .tile small{
-    right:3px;
-    bottom:2px;
-    font-size:6px;
-  }
-  .app.playing #rackTiles .tile.selected{
-    transform:translateY(-2px);
-    box-shadow:0 0 0 2px #facc15,0 5px 0 #b9a976;
-  }
-
-  .app.playing .helpBtn,
-  .helpBtn{
-    width:34px;
-    height:34px;
-    font-size:18px;
-    right:6px;
-    bottom:calc(var(--mobile-rack-h) + 6px);
-  }
-  .app.playing .footerSpace{
-    display:none;
-  }
-}
-
-@media(max-width:360px){
-  .app.playing .gameHudPanel{
-    height:90px;
-    min-height:90px;
-    grid-template-rows:27px 27px 27px;
-  }
-  .app.playing .realGameBoard{
-    grid-template-rows:34px 90px minmax(0,1fr);
-  }
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    height:27px;
-    min-height:27px;
-    font-size:9px;
-  }
-  .app.playing #rackTiles{
-    grid-auto-columns:calc((100% - 18px)/7);
-    gap:3px;
-  }
-  .app.playing #rackTiles .tile{
-    font-size:14px!important;
-  }
-}
-
-/* FIX v10: botón de reinicio demo accesible en móvil sin abrir panel oculto */
-@media(max-width:600px){
-  .app.playing #resetDemoMobileBtn{
-    display:block;
-  }
-}
-
-
-/* === FIX v11 profesional: mesa jugable mobile-first === */
-@media(max-width:600px){
-  :root{
-    --pro-top-h:62px;
-    --pro-rack-h:clamp(94px,20dvh,116px);
-    --pro-action-h:42px;
-  }
-  html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden!important;
-    overscroll-behavior:none;
-  }
-  body{
-    min-height:100dvh;
-    background:#06142d;
-  }
-
-  /* Encabezado mínimo: no debe robar pantalla de juego */
-  .top{
-    height:var(--pro-top-h)!important;
-    max-height:var(--pro-top-h)!important;
-    overflow:hidden!important;
-    position:sticky;
-    top:0;
-    z-index:50;
-  }
-  .topin{
-    height:38px!important;
-    padding:4px 6px 1px!important;
-    align-items:center!important;
-  }
-  .logo{
-    min-width:0;
-    gap:5px!important;
-  }
-  .logo .mark{
-    width:26px!important;
-    height:26px!important;
-    border-radius:9px!important;
-  }
-  #appTitle{
-    max-width:168px!important;
-    font-size:12px!important;
-    line-height:1!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-  #appSubtitle,
-  #netStatus{
-    display:none!important;
-  }
-  .topActions select{
-    height:30px!important;
-    min-width:78px!important;
-    max-width:90px!important;
-    padding:3px 7px!important;
-    font-size:11px!important;
-  }
-  .gameBar{
-    height:24px!important;
-    padding:0 5px 3px!important;
-    gap:4px!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    scrollbar-width:none!important;
-    white-space:nowrap!important;
-  }
-  .gameBar::-webkit-scrollbar{display:none!important}
-  .gameBar .pill{
-    flex:0 0 auto!important;
-    padding:3px 6px!important;
-    font-size:9.5px!important;
-    line-height:1!important;
-    border-radius:999px!important;
-  }
-
-  /* Pantalla de partida: mesa arriba, atril abajo. Sin scroll de página. */
-  .app.playing{
-    height:calc(100dvh - var(--pro-top-h))!important;
-    max-height:calc(100dvh - var(--pro-top-h))!important;
-    padding:3px 4px 4px!important;
-    display:grid!important;
-    grid-template-rows:minmax(0,1fr) var(--pro-rack-h)!important;
-    gap:4px!important;
-    overflow:hidden!important;
-  }
-  .app.playing .grid{
-    height:100%!important;
-    min-height:0!important;
-    display:block!important;
-    margin:0!important;
-    overflow:hidden!important;
-  }
-  .app.playing .sideDrawer{
-    display:none!important;
-  }
-  .app.playing .realGameBoard{
-    position:relative!important;
-    height:100%!important;
-    min-height:0!important;
-    display:grid!important;
-    grid-template-rows:30px minmax(0,1fr)!important;
-    gap:3px!important;
-    padding-bottom:var(--pro-action-h)!important;
-    overflow:hidden!important;
-  }
-
-  /* Rivales: una franja compacta, no un panel grande. */
-  .app.playing .realPlayersStrip{
-    position:static!important;
-    top:auto!important;
-    height:30px!important;
-    min-height:30px!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:4px!important;
-    overflow:hidden!important;
-  }
-  .app.playing .opponentCard{
-    height:30px!important;
-    min-height:30px!important;
-    border-radius:9px!important;
-    padding:3px 5px!important;
-    overflow:hidden!important;
-    box-shadow:none!important;
-  }
-  .app.playing .opponentName{
-    font-size:10.5px!important;
-    line-height:1!important;
-    gap:3px!important;
-  }
-  .app.playing .opponentMeta{
-    margin-top:1px!important;
-    font-size:8.5px!important;
-    line-height:1!important;
-  }
-  .app.playing .turnDot{
-    width:6px!important;
-    height:6px!important;
-  }
-
-  /* La mesa es el área principal: ocupa casi todo el espacio útil. */
-  .app.playing .realTablePanel{
-    order:2!important;
-    height:100%!important;
-    min-height:0!important;
-    overflow:hidden!important;
-    border-radius:14px!important;
-  }
-  .app.playing .realTableHeader{
-    height:22px!important;
-    min-height:22px!important;
-    padding:5px 8px 0!important;
-    display:flex!important;
-    align-items:center!important;
-  }
-  .app.playing .realTableHeader h2{
-    margin:0!important;
-    font-size:12px!important;
-    line-height:1!important;
-  }
-  .app.playing .realTableHeader .small,
-  .app.playing #tableVisibilityPill{
-    display:none!important;
-  }
-  .app.playing .realTableSurface{
-    height:calc(100% - 22px)!important;
-    min-height:0!important;
-    display:grid!important;
-    grid-template-rows:minmax(0,1fr) 40px!important;
-    gap:4px!important;
-    padding:5px!important;
-  }
-  .app.playing .tableFelt{
-    height:100%!important;
-    min-height:0!important;
-    border-radius:13px!important;
-    padding:5px!important;
-    overflow:hidden!important;
-  }
-  .app.playing .tableFelt:before{
-    display:none!important;
-  }
-  .app.playing .tableFelt .sets{
-    height:100%!important;
-    max-height:100%!important;
-    min-height:0!important;
-    overflow:auto!important;
-    display:grid!important;
-    align-content:start!important;
-    gap:4px!important;
-    padding:0!important;
-  }
-  .app.playing .tableEmptyHint{
-    padding:9px!important;
-    border-radius:11px!important;
-    font-size:12px!important;
-    line-height:1.2!important;
-    min-height:auto!important;
-  }
-  .app.playing .set{
-    padding:5px!important;
-    border-radius:10px!important;
-  }
-  .app.playing .setHead{
-    margin-bottom:3px!important;
-    font-size:9.5px!important;
-    line-height:1!important;
-  }
-  .app.playing .set .tiles{
-    gap:3px!important;
-  }
-  .app.playing .set .tile{
-    width:28px!important;
-    height:36px!important;
-    min-width:28px!important;
-    font-size:13px!important;
-    border-radius:7px!important;
-    box-shadow:0 2px 0 #b9a976,0 4px 8px rgba(2,6,23,.16)!important;
-  }
-  .app.playing .set .tile:before{
-    top:3px!important;
-    width:14px!important;
-    height:2px!important;
-  }
-  .app.playing .set .tile small{
-    right:2px!important;
-    bottom:1px!important;
-    font-size:5.5px!important;
-  }
-
-  /* Pozo compacto: visible, pero no roba mesa. */
-  .app.playing .poolDock{
-    height:40px!important;
-    min-height:40px!important;
-    padding:4px 6px!important;
-    border-radius:12px!important;
-    grid-template-columns:34px 1fr!important;
-    gap:5px!important;
-  }
-  .app.playing .poolStack{
-    width:34px!important;
-    height:34px!important;
-  }
-  .app.playing .tileBack{
-    width:24px!important;
-    height:31px!important;
-    left:5px!important;
-    top:1px!important;
-    border-radius:7px!important;
-    font-size:10px!important;
-    box-shadow:0 3px 0 rgba(2,6,23,.26)!important;
-  }
-  .app.playing .poolStack:before,
-  .app.playing .poolStack:after{
-    border-radius:7px!important;
-  }
-  .app.playing .poolText b{
-    font-size:10.5px!important;
-    line-height:1!important;
-  }
-  .app.playing .poolText .small{
-    font-size:9px!important;
-    line-height:1.05!important;
-    max-height:20px!important;
-    overflow:hidden!important;
-  }
-
-  /* Acciones: barra horizontal compacta. No tapa la mesa ni duplica paneles. */
-  .app.playing .gameHudPanel{
-    position:absolute!important;
-    left:0!important;
-    right:0!important;
-    bottom:0!important;
-    z-index:12!important;
-    order:3!important;
-    height:var(--pro-action-h)!important;
-    min-height:var(--pro-action-h)!important;
-    padding:3px!important;
-    border-radius:12px!important;
-    display:flex!important;
-    gap:4px!important;
-    align-items:center!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    background:rgba(15,23,42,.72)!important;
-    border:1px solid rgba(147,197,253,.22)!important;
-    box-shadow:0 -8px 24px rgba(2,6,23,.24)!important;
-    scrollbar-width:none!important;
-  }
-  .app.playing .gameHudPanel::-webkit-scrollbar{display:none!important}
-  .app.playing .gameHudPanel>.tableHeader,
-  .app.playing #gameNotice,
-  .app.playing #quickHow,
-  .app.playing #selectionInfo{
-    display:none!important;
-  }
-  .app.playing .gameHudPanel .controls,
-  .app.playing .gameHudPanel .controls.two,
-  .app.playing #turnControlsTop,
-  .app.playing #moveControls{
-    display:contents!important;
-  }
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    flex:0 0 66px!important;
-    width:66px!important;
-    height:34px!important;
-    min-height:34px!important;
-    padding:2px 4px!important;
-    border-radius:10px!important;
-    font-size:8.5px!important;
-    line-height:1.05!important;
-    white-space:normal!important;
-    text-align:center!important;
-  }
-  .app.playing #newSetBtn{order:1!important; flex-basis:74px!important; width:74px!important}
-  .app.playing #drawBtn{order:2!important}
-  .app.playing #endTurnBtn{order:3!important}
-  .app.playing #targetSetSelect{order:4!important; flex-basis:82px!important; width:82px!important}
-  .app.playing #addToSetBtn{order:5!important}
-  .app.playing #clearSelectionBtn{order:6!important}
-  .app.playing #undoTurnBtn{order:7!important}
-  .app.playing #advanceDemoBtn{order:8!important}
-  .app.playing #resetDemoMobileBtn{
-    order:9!important;
-    display:block!important;
-    flex:0 0 58px!important;
-    width:58px!important;
-  }
-
-  /* Atril: 20% inferior, 2 hileras de 7 fichas reales. */
-  .app.playing .rack{
-    position:relative!important;
-    bottom:auto!important;
-    z-index:5!important;
-    height:100%!important;
-    min-height:0!important;
-    margin:0!important;
-    padding:0!important;
-    background:transparent!important;
-    border-top:0!important;
-    overflow:hidden!important;
-  }
-  .app.playing .rackCard{
-    height:100%!important;
-    min-height:0!important;
-    padding:4px 5px 5px!important;
-    border-radius:14px!important;
-    display:grid!important;
-    grid-template-rows:16px minmax(0,1fr)!important;
-    gap:3px!important;
-    overflow:hidden!important;
-  }
-  .app.playing .rack .tableHeader{
-    min-height:0!important;
-    height:16px!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:4px!important;
-  }
-  .app.playing .rack .tableHeader h3{
-    margin:0!important;
-    font-size:11px!important;
-    line-height:1!important;
-    white-space:nowrap!important;
-  }
-  .app.playing #rackInfo{
-    font-size:9px!important;
-    line-height:1!important;
-  }
-  .app.playing .rack .tableHeader .row{
-    display:none!important;
-  }
-  .app.playing .rackTilesRail{
-    height:100%!important;
-    min-height:0!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    padding:0 1px 1px!important;
-    scrollbar-width:thin!important;
-  }
-  .app.playing #rackTiles{
-    height:100%!important;
-    min-width:100%!important;
-    display:grid!important;
-    grid-template-rows:repeat(2,minmax(0,1fr))!important;
-    grid-auto-flow:column!important;
-    grid-auto-columns:calc((100% - 18px)/7)!important;
-    gap:3px!important;
-    align-items:stretch!important;
-  }
-  .app.playing #rackTiles .tile{
-    width:100%!important;
-    height:100%!important;
-    min-height:0!important;
-    border-radius:8px!important;
-    font-size:15px!important;
-    box-shadow:0 2px 0 #b9a976,0 4px 7px rgba(2,6,23,.18)!important;
-  }
-  .app.playing #rackTiles .tile:before{
-    top:3px!important;
-    width:15px!important;
-    height:2px!important;
-  }
-  .app.playing #rackTiles .tile small{
-    right:2px!important;
-    bottom:1px!important;
-    font-size:5.5px!important;
-  }
-  .app.playing #rackTiles .tile.selected{
-    transform:translateY(-1px)!important;
-    box-shadow:0 0 0 2px #facc15,0 3px 0 #b9a976!important;
-  }
-  .app.playing .helpBtn,
-  .helpBtn{
-    width:30px!important;
-    height:30px!important;
-    right:6px!important;
-    bottom:calc(var(--pro-rack-h) + var(--pro-action-h) + 7px)!important;
-    font-size:16px!important;
-    z-index:25!important;
-  }
-  .app.playing .footerSpace{
-    display:none!important;
-  }
-}
-
-@media(max-width:370px){
-  :root{
-    --pro-top-h:58px;
-    --pro-rack-h:clamp(90px,20dvh,108px);
-    --pro-action-h:38px;
-  }
-  .topin{height:35px!important}
-  #appTitle{max-width:150px!important;font-size:11px!important}
-  .topActions select{height:28px!important;min-width:74px!important;font-size:10px!important}
-  .gameBar{height:23px!important}
-  .gameBar .pill{font-size:9px!important;padding:3px 5px!important}
-  .app.playing .realGameBoard{
-    grid-template-rows:28px minmax(0,1fr)!important;
-  }
-  .app.playing .realPlayersStrip,
-  .app.playing .opponentCard{
-    height:28px!important;
-    min-height:28px!important;
-  }
-  .app.playing .opponentName{font-size:9.5px!important}
-  .app.playing .opponentMeta{font-size:8px!important}
-  .app.playing .realTableHeader{height:20px!important;padding-top:4px!important}
-  .app.playing .realTableSurface{
-    height:calc(100% - 20px)!important;
-    grid-template-rows:minmax(0,1fr) 36px!important;
-    gap:3px!important;
-    padding:4px!important;
-  }
-  .app.playing .poolDock{
-    height:36px!important;
-    min-height:36px!important;
-  }
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    height:30px!important;
-    min-height:30px!important;
-    flex-basis:60px!important;
-    width:60px!important;
-    font-size:8px!important;
-  }
-  .app.playing #newSetBtn{
-    flex-basis:68px!important;
-    width:68px!important;
-  }
-  .app.playing #targetSetSelect{
-    flex-basis:72px!important;
-    width:72px!important;
-  }
-  .app.playing #resetDemoMobileBtn{
-    flex-basis:52px!important;
-    width:52px!important;
-  }
-  .app.playing .rackCard{
-    grid-template-rows:15px minmax(0,1fr)!important;
-    padding:3px 4px 4px!important;
-  }
-  .app.playing #rackTiles{
-    grid-auto-columns:calc((100% - 15px)/7)!important;
-  }
-  .app.playing #rackTiles .tile{
-    font-size:13px!important;
-  }
-}
-
-
-/* === UI PRO v12: layout mobile-first jugable inspirado en apps de fichas === */
-@media(max-width:700px){
-  :root{
-    --game-top-h:50px;
-    --rack-h:clamp(88px,19dvh,108px);
-    --toolbar-h:34px;
-    --players-h:24px;
-    --gap-game:3px;
-  }
-
-  html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden!important;
-    overscroll-behavior:none;
-    background:#07142e;
-  }
-  body{
-    min-height:100dvh;
-    color:#eaf4ff;
-  }
-
-  /* Header mínimo, tipo juego móvil */
-  .top{
-    height:var(--game-top-h)!important;
-    max-height:var(--game-top-h)!important;
-    min-height:var(--game-top-h)!important;
-    overflow:hidden!important;
-    background:linear-gradient(180deg,#07142e,#0b1e44)!important;
-    border-bottom:1px solid rgba(147,197,253,.18)!important;
-    box-shadow:none!important;
-  }
-  .topin{
-    height:32px!important;
-    padding:3px 6px 0!important;
-    align-items:center!important;
-    gap:4px!important;
-  }
-  .logo{
-    flex:1 1 auto!important;
-    min-width:0!important;
-    gap:5px!important;
-  }
-  .logo .mark{
-    width:24px!important;
-    height:24px!important;
-    min-width:24px!important;
-    border-radius:8px!important;
-    box-shadow:none!important;
-  }
-  .logo .mark:after{
-    width:14px!important;
-    height:18px!important;
-    border-radius:5px!important;
-    box-shadow:5px 3px 0 -1px #fff7df!important;
-  }
-  #appTitle{
-    max-width:180px!important;
-    font-size:11px!important;
-    line-height:1!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-  #appSubtitle,
-  #netStatus{
-    display:none!important;
-  }
-  .topActions{
-    flex:0 0 auto!important;
-  }
-  .topActions select{
-    height:26px!important;
-    min-width:76px!important;
-    max-width:86px!important;
-    padding:2px 6px!important;
-    border-radius:999px!important;
-    font-size:10px!important;
-  }
-  .gameBar{
-    height:18px!important;
-    padding:0 5px 2px!important;
-    gap:3px!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    scrollbar-width:none!important;
-    white-space:nowrap!important;
-  }
-  .gameBar::-webkit-scrollbar{display:none!important}
-  .gameBar .pill{
-    flex:0 0 auto!important;
-    padding:2px 5px!important;
-    font-size:8.5px!important;
-    line-height:1!important;
-    min-height:14px!important;
-    border-radius:999px!important;
-    background:rgba(15,23,42,.72)!important;
-  }
-
-  /* La partida usa TODA la pantalla disponible. */
-  .app.playing{
-    height:calc(100dvh - var(--game-top-h))!important;
-    max-height:calc(100dvh - var(--game-top-h))!important;
-    min-height:0!important;
-    padding:3px!important;
-    display:grid!important;
-    grid-template-rows:minmax(0,1fr) var(--rack-h)!important;
-    gap:var(--gap-game)!important;
-    overflow:hidden!important;
-  }
-  .app.playing .grid{
-    height:100%!important;
-    min-height:0!important;
-    margin:0!important;
-    display:block!important;
-    overflow:hidden!important;
-  }
-  .app.playing .sideDrawer{
-    display:none!important;
-  }
-
-  /* Zona superior: rivales, mesa, barra de acciones compacta. */
-  .app.playing .realGameBoard{
-    height:100%!important;
-    min-height:0!important;
-    display:grid!important;
-    grid-template-rows:var(--players-h) minmax(0,1fr) var(--toolbar-h)!important;
-    gap:var(--gap-game)!important;
-    padding:0!important;
-    overflow:hidden!important;
-  }
-
-  /* Rivales: solo información útil. */
-  .app.playing .realPlayersStrip{
-    position:static!important;
-    height:var(--players-h)!important;
-    min-height:var(--players-h)!important;
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:3px!important;
-    overflow:hidden!important;
-  }
-  .app.playing .opponentCard{
-    height:var(--players-h)!important;
-    min-height:var(--players-h)!important;
-    padding:2px 5px!important;
-    border-radius:8px!important;
-    background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(30,64,175,.75))!important;
-    box-shadow:none!important;
-    overflow:hidden!important;
-  }
-  .app.playing .opponentName{
-    font-size:9.5px!important;
-    line-height:1!important;
-    gap:2px!important;
-  }
-  .app.playing .opponentMeta{
-    display:none!important;
-  }
-  .app.playing .turnDot{
-    width:6px!important;
-    height:6px!important;
-  }
-
-  /* Mesa: protagonista absoluta. Sin encabezado grande. */
-  .app.playing .realTablePanel{
-    order:2!important;
-    height:100%!important;
-    min-height:0!important;
-    border-radius:12px!important;
-    padding:0!important;
-    overflow:hidden!important;
-    border-color:rgba(125,211,252,.25)!important;
-    background:
-      radial-gradient(circle at 50% 40%,rgba(56,189,248,.20),transparent 55%),
-      linear-gradient(145deg,#07306d,#0d4c95 55%,#082855)!important;
-  }
-  .app.playing .realTableHeader{
-    display:none!important;
-  }
-  .app.playing .realTableSurface{
-    position:relative!important;
-    height:100%!important;
-    min-height:0!important;
-    display:block!important;
-    padding:4px!important;
-  }
-  .app.playing .tableFelt{
-    height:100%!important;
-    min-height:0!important;
-    padding:5px 5px 40px!important;
-    border-radius:10px!important;
-    overflow:hidden!important;
-    background:
-      radial-gradient(circle at 50% 45%,rgba(14,165,233,.18),transparent 58%),
-      rgba(8,47,73,.28)!important;
-  }
-  .app.playing .tableFelt:before{
-    display:none!important;
-  }
-  .app.playing .tableFelt .sets{
-    height:100%!important;
-    max-height:100%!important;
-    min-height:0!important;
-    overflow:auto!important;
-    display:grid!important;
-    align-content:start!important;
-    gap:4px!important;
-    padding:0!important;
-    scrollbar-width:thin!important;
-  }
-  .app.playing .tableEmptyHint{
-    margin:6px!important;
-    padding:10px!important;
-    border-radius:11px!important;
-    font-size:11px!important;
-    line-height:1.2!important;
-    min-height:0!important;
-    color:#e0f2fe!important;
-    background:rgba(15,23,42,.22)!important;
-  }
-  .app.playing .set{
-    padding:4px!important;
-    border-radius:9px!important;
-    overflow-x:auto!important;
-    background:rgba(248,250,252,.97)!important;
-  }
-  .app.playing .setHead{
-    margin:0 0 3px!important;
-    font-size:9px!important;
-    line-height:1!important;
-  }
-  .app.playing .setHead span:first-child:after{
-    display:none!important;
-  }
-  .app.playing .set .tiles{
-    flex-wrap:nowrap!important;
-    gap:3px!important;
-    min-width:max-content!important;
-  }
-  .app.playing .set .tile{
-    width:26px!important;
-    min-width:26px!important;
-    height:34px!important;
-    font-size:12px!important;
-    border-radius:6px!important;
-    box-shadow:0 2px 0 #b9a976,0 3px 6px rgba(2,6,23,.18)!important;
-  }
-  .app.playing .set .tile:before{
-    top:3px!important;
-    width:13px!important;
-    height:2px!important;
-  }
-  .app.playing .set .tile small{
-    right:2px!important;
-    bottom:1px!important;
-    font-size:5px!important;
-  }
-
-  /* Pozo como dock pequeño sobre la mesa, no como bloque gigante. */
-  .app.playing .poolDock{
-    position:absolute!important;
-    left:7px!important;
-    bottom:7px!important;
-    width:min(170px,calc(100% - 54px))!important;
-    height:33px!important;
-    min-height:33px!important;
-    padding:3px 6px!important;
-    border-radius:10px!important;
-    display:grid!important;
-    grid-template-columns:28px 1fr!important;
-    gap:5px!important;
-    background:rgba(15,23,42,.72)!important;
-    border:1px solid rgba(191,219,254,.22)!important;
-    color:#e0f2fe!important;
-    z-index:3!important;
-  }
-  .app.playing .poolStack{
-    width:28px!important;
-    height:28px!important;
-  }
-  .app.playing .poolStack:before,
-  .app.playing .poolStack:after{
-    border-radius:6px!important;
-  }
-  .app.playing .tileBack{
-    width:21px!important;
-    height:27px!important;
-    left:4px!important;
-    top:0!important;
-    border-radius:6px!important;
-    font-size:9px!important;
-    border-width:1px!important;
-    box-shadow:0 2px 0 rgba(2,6,23,.25)!important;
-  }
-  .app.playing .poolText b{
-    font-size:9.5px!important;
-    line-height:1!important;
-    white-space:nowrap!important;
-    overflow:hidden!important;
-    text-overflow:ellipsis!important;
-  }
-  .app.playing .poolText .small{
-    font-size:8px!important;
-    line-height:1!important;
-    height:10px!important;
-    overflow:hidden!important;
-    white-space:nowrap!important;
-    text-overflow:ellipsis!important;
-    color:#bfdbfe!important;
-  }
-
-  /* Barra de acciones: una línea, compacta y deslizable como app profesional. */
-  .app.playing .gameHudPanel{
-    position:static!important;
-    order:3!important;
-    height:var(--toolbar-h)!important;
-    min-height:var(--toolbar-h)!important;
-    padding:2px!important;
-    border-radius:11px!important;
-    display:flex!important;
-    gap:4px!important;
-    align-items:center!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    background:rgba(8,18,42,.92)!important;
-    border:1px solid rgba(147,197,253,.2)!important;
-    box-shadow:none!important;
-    scrollbar-width:none!important;
-  }
-  .app.playing .gameHudPanel::-webkit-scrollbar{display:none!important}
-  .app.playing .gameHudPanel>.tableHeader,
-  .app.playing #gameNotice,
-  .app.playing #quickHow,
-  .app.playing #selectionInfo{
-    display:none!important;
-  }
-  .app.playing .gameHudPanel .controls,
-  .app.playing .gameHudPanel .controls.two,
-  .app.playing #turnControlsTop,
-  .app.playing #moveControls{
-    display:contents!important;
-  }
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    flex:0 0 58px!important;
-    width:58px!important;
-    height:28px!important;
-    min-height:28px!important;
-    padding:0 4px!important;
-    border-radius:9px!important;
-    font-size:0!important;
-    line-height:1!important;
-    white-space:nowrap!important;
-    text-align:center!important;
-  }
-  .app.playing .gameHudPanel button::after,
-  .app.playing .gameHudPanel select{
-    font-size:10px!important;
-    font-weight:900!important;
-  }
-  .app.playing #newSetBtn{order:1!important;flex-basis:62px!important;width:62px!important;background:linear-gradient(135deg,#22c55e,#06b6d4)!important;color:#fff!important}
-  .app.playing #newSetBtn::after{content:"Bajar"}
-  .app.playing #drawBtn{order:2!important}
-  .app.playing #drawBtn::after{content:"Tomar"}
-  .app.playing #endTurnBtn{order:3!important;background:linear-gradient(135deg,#f59e0b,#f97316)!important;color:#fff!important}
-  .app.playing #endTurnBtn::after{content:"Fin turno"}
-  .app.playing #advanceDemoBtn{order:4!important;flex-basis:62px!important;width:62px!important}
-  .app.playing #advanceDemoBtn::after{content:"Demo ▶"}
-  .app.playing #resetDemoMobileBtn{order:5!important;display:block!important;flex-basis:52px!important;width:52px!important}
-  .app.playing #resetDemoMobileBtn::after{content:"Reset"}
-  .app.playing #targetSetSelect{order:6!important;flex-basis:72px!important;width:72px!important;font-size:9px!important}
-  .app.playing #addToSetBtn{order:7!important}
-  .app.playing #addToSetBtn::after{content:"Agregar"}
-  .app.playing #clearSelectionBtn{order:8!important}
-  .app.playing #clearSelectionBtn::after{content:"Quitar"}
-  .app.playing #undoTurnBtn{order:9!important}
-  .app.playing #undoTurnBtn::after{content:"Deshacer"}
-
-  /* Atril real: máximo 20%, dos hileras de 7. */
-  .app.playing .rack{
-    position:relative!important;
-    height:100%!important;
-    min-height:0!important;
-    margin:0!important;
-    padding:0!important;
-    background:transparent!important;
-    border:0!important;
-    overflow:hidden!important;
-  }
-  .app.playing .rackCard{
-    height:100%!important;
-    min-height:0!important;
-    padding:3px 4px 4px!important;
-    border-radius:12px!important;
-    display:grid!important;
-    grid-template-rows:13px minmax(0,1fr)!important;
-    gap:2px!important;
-    overflow:hidden!important;
-    background:linear-gradient(180deg,#eff6ff,#ffffff)!important;
-    box-shadow:0 -8px 22px rgba(2,6,23,.22)!important;
-  }
-  .app.playing .rack .tableHeader{
-    height:13px!important;
-    min-height:13px!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:4px!important;
-  }
-  .app.playing .rack .tableHeader h3{
-    margin:0!important;
-    font-size:10.5px!important;
-    line-height:1!important;
-  }
-  .app.playing #rackInfo{
-    font-size:8.5px!important;
-    line-height:1!important;
-  }
-  .app.playing .rack .tableHeader .row{
-    display:none!important;
-  }
-  .app.playing .rackTilesRail{
-    height:100%!important;
-    min-height:0!important;
-    overflow-x:auto!important;
-    overflow-y:hidden!important;
-    padding:0!important;
-    scrollbar-width:thin!important;
-  }
-  .app.playing #rackTiles{
-    height:100%!important;
-    min-width:100%!important;
-    display:grid!important;
-    grid-auto-flow:column!important;
-    grid-template-rows:repeat(2,minmax(0,1fr))!important;
-    grid-auto-columns:calc((100% - 18px)/7)!important;
-    gap:3px!important;
-    align-items:stretch!important;
-  }
-  .app.playing #rackTiles .tile{
-    width:100%!important;
-    height:100%!important;
-    min-width:0!important;
-    min-height:0!important;
-    border-radius:7px!important;
-    font-size:14px!important;
-    box-shadow:0 2px 0 #b9a976,0 3px 6px rgba(2,6,23,.18)!important;
-  }
-  .app.playing #rackTiles .tile:before{
-    top:3px!important;
-    width:13px!important;
-    height:2px!important;
-  }
-  .app.playing #rackTiles .tile small{
-    right:2px!important;
-    bottom:1px!important;
-    font-size:5px!important;
-  }
-  .app.playing #rackTiles .tile.selected{
-    transform:translateY(-1px)!important;
-    box-shadow:0 0 0 2px #facc15,0 3px 0 #b9a976!important;
-  }
-
-  .app.playing .helpBtn,
-  .helpBtn{
-    width:28px!important;
-    height:28px!important;
-    right:6px!important;
-    bottom:calc(var(--rack-h) + var(--toolbar-h) + 6px)!important;
-    font-size:15px!important;
-    z-index:25!important;
-  }
-  .app.playing .footerSpace{
-    display:none!important;
-  }
-}
-
-@media(max-width:370px){
-  :root{
-    --game-top-h:48px;
-    --rack-h:clamp(84px,18.5dvh,100px);
-    --toolbar-h:32px;
-    --players-h:22px;
-  }
-  .topin{height:31px!important}
-  #appTitle{max-width:150px!important;font-size:10.5px!important}
-  .topActions select{height:25px!important;min-width:72px!important;font-size:9.5px!important}
-  .gameBar{height:17px!important}
-  .gameBar .pill{font-size:8px!important;padding:2px 4px!important}
-  .app.playing .opponentCard{padding:2px 4px!important}
-  .app.playing .opponentName{font-size:9px!important}
-  .app.playing .realTableSurface{padding:3px!important}
-  .app.playing .tableFelt{padding:4px 4px 38px!important}
-  .app.playing .poolDock{height:31px!important;width:min(158px,calc(100% - 48px))!important}
-  .app.playing .gameHudPanel button,
-  .app.playing .gameHudPanel select{
-    height:27px!important;
-    min-height:27px!important;
-    flex-basis:54px!important;
-    width:54px!important;
-  }
-  .app.playing #newSetBtn,
-  .app.playing #advanceDemoBtn{
-    flex-basis:58px!important;
-    width:58px!important;
-  }
-  .app.playing #targetSetSelect{
-    flex-basis:66px!important;
-    width:66px!important;
-  }
-  .app.playing #rackTiles{
-    grid-auto-columns:calc((100% - 15px)/7)!important;
-    gap:2.5px!important;
-  }
-  .app.playing #rackTiles .tile{
-    font-size:13px!important;
-  }
-}
-
+    :root{
+      --bg:#071426;--panel:#0b1f3b;--panel2:#102b54;--felt:#0d4f94;--felt2:#0a3970;
+      --line:rgba(191,219,254,.22);--txt:#eef8ff;--muted:#9cc3e7;--tile:#fff5d6;
+      --blue:#2f6df6;--cyan:#16c7e7;--orange:#ff8a1f;--green:#16a34a;--red:#dc2626;
+      --rackH:118px;--actionsH:46px;--topH:44px;--playersH:42px
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt)}
+    button,select,input{font:inherit}
+    button{border:0;border-radius:12px;min-height:36px;padding:8px 10px;font-weight:900;cursor:pointer;color:white;background:#1d4ed8;box-shadow:0 4px 14px rgba(0,0,0,.22);touch-action:manipulation}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    button.primary{background:linear-gradient(135deg,#2563eb,#06b6d4)}
+    button.warn{background:linear-gradient(135deg,#f59e0b,#f97316)}
+    button.ghost{background:#dbeafe;color:#0f172a}
+    button.danger{background:#fee2e2;color:#991b1b}
+    input,select{border:1px solid rgba(191,219,254,.34);border-radius:12px;padding:9px 10px;background:#f8fbff;color:#0f172a;font-weight:800}
+    .appShell{height:100dvh;max-width:520px;margin:0 auto;display:grid;grid-template-rows:var(--topH) var(--playersH) minmax(0,1fr) var(--actionsH) var(--rackH);background:linear-gradient(180deg,#061126,#09224a 44%,#061126);border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08)}
+    .top{height:var(--topH);display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:5px 8px;background:rgba(3,10,25,.96);border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:7px;min-width:0}
+    .brandMark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#2563eb);position:relative;flex:0 0 auto}
+    .brandMark:after{content:"";position:absolute;left:8px;top:6px;width:15px;height:19px;border-radius:5px;background:var(--tile);box-shadow:5px 3px 0 -1px #f8e9b8}
+    .brandText{min-width:0}
+    #appTitle{font-weight:950;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #appSubtitle{font-size:10px;color:var(--muted);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topRight{display:flex;gap:5px;align-items:center}
+    #langSelect{width:82px;min-height:30px;padding:5px 7px;border-radius:999px;font-size:11px}
+    #netStatus{font-size:10px;font-weight:950;background:#0f2d55;border:1px solid var(--line);border-radius:999px;padding:5px 7px;color:#dbeafe;display:none}
+    .gameBar{display:none}
+    .playersStrip{height:var(--playersH);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px 7px;background:rgba(7,20,38,.82);border-bottom:1px solid var(--line)}
+    .opponent{border:1px solid rgba(125,211,252,.22);border-radius:10px;padding:4px 6px;background:rgba(15,40,76,.9);min-width:0}
+    .opponent.turn{outline:2px solid #facc15}
+    .opponent b{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .opponent span{display:block;font-size:10px;color:#bfdbfe;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tableZone{min-height:0;position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px;padding:7px;background:radial-gradient(circle at 50% 20%,rgba(56,189,248,.16),transparent 46%),linear-gradient(180deg,var(--felt),var(--felt2))}
+    .tableInfo{display:grid;grid-template-columns:1fr auto auto;gap:5px;align-items:center}
+    .pill{font-size:10px;font-weight:950;color:#dbeafe;background:rgba(4,12,27,.58);border:1px solid var(--line);border-radius:999px;padding:4px 7px;white-space:nowrap}
+    .notice{font-size:11px;font-weight:800;color:#dbeafe;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sets{min-height:0;overflow:auto;display:flex;align-content:flex-start;gap:6px;flex-wrap:wrap;padding:8px;border:1px solid rgba(219,234,254,.18);border-radius:16px;background:rgba(3,10,25,.18)}
+    .emptyTable{width:100%;align-self:center;text-align:center;color:#dbeafe;font-weight:850;font-size:14px;border:1px dashed rgba(219,234,254,.35);border-radius:14px;padding:16px;background:rgba(15,23,42,.18)}
+    .set{max-width:100%;border:1px solid rgba(219,234,254,.32);border-radius:14px;background:rgba(248,250,252,.97);color:#0f172a;padding:6px}
+    .setHead{font-size:10px;font-weight:950;color:#334155;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+    .set .tiles{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto}
+    .poolDock{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;border:1px solid rgba(219,234,254,.22);border-radius:14px;background:rgba(3,10,25,.42);padding:7px;min-height:48px}
+    .poolStack{width:44px;height:38px;position:relative}
+    .poolStack:before,.poolStack:after{content:"";position:absolute;border-radius:8px;background:#dbeafe;width:28px;height:36px;box-shadow:0 3px 0 rgba(0,0,0,.22);transform:rotate(-8deg);left:4px;top:1px}
+    .poolStack:after{transform:rotate(7deg);left:12px;top:0;background:#bfdbfe}
+    .tileBack{position:absolute;z-index:2;left:9px;top:1px;width:29px;height:38px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,#2563eb,#0f172a);border:2px solid #dbeafe;color:white;font-size:13px;font-weight:950}
+    .poolText b{font-size:12px}
+    .poolText .small{font-size:10px;color:#bfdbfe;line-height:1.15}
+    .actionDock{height:var(--actionsH);display:flex;gap:5px;padding:5px 7px;background:#071426;border-top:1px solid var(--line);z-index:5;overflow-x:auto;overflow-y:hidden}
+    .actionDock button{flex:0 0 86px;min-height:36px;font-size:10px;border-radius:10px;padding:5px 6px;white-space:normal;line-height:1.05}
+    #newSetBtn{background:linear-gradient(135deg,#22c55e,#06b6d4)}
+    #drawBtn{background:linear-gradient(135deg,#2563eb,#38bdf8)}
+    #endTurnBtn{background:linear-gradient(135deg,#f59e0b,#f97316)}
+    .rack{height:var(--rackH);background:#eaf3ff;color:#0f172a;border-top:2px solid rgba(147,197,253,.45);padding:5px 7px 7px;display:grid;grid-template-rows:20px minmax(0,1fr);gap:4px}
+    .rackHead{height:20px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+    .rackHead h3{margin:0;font-size:13px;font-weight:950}
+    .rackInfoLine{font-size:10px;color:#475569;font-weight:850;white-space:nowrap}
+    .rackSort{display:flex;gap:4px}
+    .rackSort button{min-height:22px;padding:2px 6px;border-radius:8px;font-size:10px;background:#dbeafe;color:#1e3a8a;box-shadow:none}
+    .rackRail{min-height:0;overflow-x:auto;overflow-y:hidden}
+    #rackTiles{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,40px);grid-auto-columns:34px;gap:4px;align-items:center;justify-items:center;min-width:max-content;padding:1px 2px 5px}
+    .tile{position:relative;width:31px;height:38px;border:1px solid #d8c894;border-radius:8px;background:linear-gradient(180deg,#fff9e8,#ead9a2);display:grid;place-items:center;font-weight:950;font-size:16px;line-height:1;color:#111827;box-shadow:0 3px 0 #b9a66d,0 5px 7px rgba(2,6,23,.22);user-select:none;padding:0}
+    .tile:before{content:"";position:absolute;top:4px;left:50%;transform:translateX(-50%);width:16px;height:2px;border-radius:9px;background:currentColor;opacity:.18}
+    .tile small{position:absolute;right:3px;bottom:2px;font-size:6px;color:#64748b}
+    .tile.red{color:#dc2626}.tile.blue{color:#2563eb}.tile.yellow{color:#d97706}.tile.black{color:#111827}.tile.joker{color:#7c3aed;background:linear-gradient(180deg,#fff7ff,#e9ddff)}
+    .tile.selected{outline:3px solid #facc15;transform:translateY(-2px)}
+    .set .tile{width:28px;height:35px;font-size:14px}
+    .setupButton{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);z-index:2;display:grid;gap:9px;min-width:230px;background:rgba(3,10,25,.72);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:0 20px 45px rgba(0,0,0,.34)}
+    .setupButton h2{margin:0;font-size:18px}.setupButton p{margin:0;color:#bfdbfe;font-size:12px;font-weight:750}.setupButton button{min-height:42px}
+    .sideDrawer{display:none}
+    .modalBack{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.62);display:grid;place-items:center;padding:14px}
+    .modalBack.hide{display:none}
+    .modal{width:min(460px,100%);max-height:86vh;overflow:auto;border-radius:18px;background:#f8fbff;color:#0f172a;border:1px solid #dbeafe;padding:14px;display:grid;gap:10px}
+    .modal h2,.modal h3{margin:0}.small{font-size:12px;color:#64748b}.stack{display:grid;gap:8px}.row{display:flex;gap:6px}.row>*{flex:1}.players{font-size:12px;color:#1e293b}.helpBtn{position:fixed;right:8px;bottom:calc(var(--rackH) + var(--actionsH) + 8px);z-index:8;width:36px;height:36px;border-radius:999px;background:#7c3aed;color:white;font-size:18px;padding:0}
+    .hidden{display:none!important}
+    @media (min-width:700px){
+      :root{--topH:52px;--playersH:48px;--actionsH:54px;--rackH:132px}
+      .appShell{max-width:960px}
+      #appTitle{font-size:16px}.brandMark{width:36px;height:36px}
+      .tableZone{padding:10px}.actionDock button{font-size:13px}
+      #rackTiles{grid-auto-columns:42px;grid-template-rows:repeat(2,48px);gap:6px}.tile{width:38px;height:46px;font-size:19px}.set .tile{width:34px;height:42px}
+    }
   </style>
 </head>
 <body>
-<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa móvil profesional · fichas · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
-<main class="app" id="app">
-  <div class="grid">
-    <details class="panel stack sideDrawer" id="sideDrawer" open><summary class="drawerSummary"><span id="drawerTitle">Sala y configuración</span><span id="drawerHint">tocar para abrir/cerrar</span></summary>
-      <div class="startStrip" aria-label="Inicio rápido">
-        <div class="startBadge">Juego de fichas</div>
-        <div class="startTitle">Empezá en 3 pasos</div>
-        <div class="startText">Poné tu nombre, elegí demo o sala familiar, y jugá desde el atril.</div>
+<div class="appShell" id="app">
+  <header class="top">
+    <div class="brand">
+      <div class="brandMark" aria-hidden="true"></div>
+      <div class="brandText">
+        <div id="appTitle">Rummy Familiar de Fichas</div>
+        <div id="appSubtitle">Mesa real móvil · fichas · online/PWA</div>
       </div>
-      <section class="stack">
-        <h2>1. Tu nombre</h2>
-        <div><label>Tu nombre</label><input id="nameInput" placeholder="Ej: Aldo" maxlength="24" /></div>
-        <button class="primary" id="saveNameBtn">Guardar nombre</button>
-        <div class="small" id="whoami">Sin nombre guardado.</div>
-      </section>
-      <section class="stack adminbox">
-        <h3>2. Crear partida familiar</h3>
-        <div><label>Crear sala con nombre</label><input id="newRoomName" placeholder="Ej: FAMILIA" maxlength="32" /></div>
-        <button class="primary" id="createRoomBtn">Crear sala</button>
-        <button class="ghost" id="refreshRoomsBtn">Actualizar lista</button>
-        <div class="small">Las salas aparecerán en el desplegable. Para uso familiar no hay clave real de administrador.</div>
-      </section>
-      <section class="stack">
-        <h3>3. Entrar a una sala</h3>
-        <div><label>Salas disponibles</label><select id="roomSelect"><option value="">Cargando salas...</option></select></div>
-        <div class="row"><button class="primary" id="joinRoomBtn">Entrar a sala</button><button class="danger" id="leaveRoomBtn">Salir</button></div>
-        <div id="roomInfo" class="small">Sin sala.</div>
-      </section>
-      <section class="stack">
-        <h3>Jugadores</h3>
-        <div id="playersList" class="players"></div>
-      </section>
-      <section class="stack">
-        <h3>Partida</h3>
-        <div class="row"><button class="primary" id="startGameBtn">Iniciar / reiniciar mano</button><button class="warn" id="resetBoardBtn">Reiniciar sala</button></div>
-        <div class="row"><button class="ghost" id="loadDemoBtn">Jugar demo ahora</button><button class="ghost" id="resetDemoBtn">Reiniciar demo</button></div>
-        <div class="small" id="demoInfo">Demo local con fichas ficticias para aprender sin crear sala ni tocar datos reales.</div>
-        <div class="warnbox"><b>Regla base:</b> versión Rummikub con 106 fichas, 14 iniciales, apertura de 30 puntos, sin descarte.</div>
-      </section>
-      <section class="stack">
-        <h3>Eventos</h3>
-        <div id="log" class="miniLog"></div>
-      </section>
-    </details>
-    <section class="board realGameBoard">
-      <div class="realPlayersStrip" id="opponentsStrip" aria-label="Jugadores rivales y turno"></div>
-      <div class="panel stack gameHudPanel">
-        <div class="tableHeader"><div><h2>Control de turno</h2><div class="small" id="turnInfo">Sin partida iniciada.</div></div><div class="row" style="flex:0 0 auto"><span class="pill" id="poolInfo">Pila: -</span><span class="pill" id="openedInfo">Apertura: -</span></div></div>
-        <div id="gameNotice" class="okbox">Entrá a una sala para comenzar.</div><div class="quickHow" id="quickHow"><div><b id="qh1t">1. Elegí fichas</b><span id="qh1b">Tocá fichas de tu atril.</span></div><div><b id="qh2t">2. Bajá jugada</b><span id="qh2b">Serie o escalera válida.</span></div><div><b id="qh3t">3. Terminá turno</b><span id="qh3b">Validá mesa o tomá 1 ficha.</span></div></div>
-        <div class="controls two turnActionsDock" id="turnControlsTop">
-          <button class="primary" id="drawBtn">Tomar 1 ficha y pasar</button>
-          <button class="warn" id="endTurnBtn">Terminar turno</button>
-        </div>
-        <div class="controls primaryActionRow" id="moveControls">
-          <button id="newSetBtn">Bajar fichas seleccionadas</button>
-          <select id="targetSetSelect"><option value="">Elegir jugada destino</option></select>
-          <button id="addToSetBtn">Agregar a jugada</button>
-        </div>
-        <div class="controls two">
-          <button class="ghost" id="clearSelectionBtn">Quitar selección</button>
-          <button class="danger" id="undoTurnBtn">Deshacer mi turno</button>
-        </div>
-        <div class="controls two">
-          <button class="ghost" id="advanceDemoBtn">Avanzar jugador demo</button>
-          <button class="ghost" id="resetDemoMobileBtn">Reiniciar demo</button>
-        </div>
-        <div class="small" id="selectionInfo">Sin selección.</div>
+    </div>
+    <div class="topRight">
+      <select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select>
+      <div class="status" id="netStatus">DEMO</div>
+    </div>
+  </header>
+
+  <div class="playersStrip" id="opponentsStrip" aria-label="Rivales"></div>
+
+  <main class="tableZone" aria-label="Mesa de juego">
+    <div class="tableInfo">
+      <div class="notice" id="turnInfo">Sin partida iniciada.</div>
+      <span class="pill" id="poolInfo">Pila: -</span>
+      <span class="pill" id="openedInfo">Apertura: -</span>
+    </div>
+    <div class="sets" id="sets" aria-label="Jugadas en la mesa"></div>
+    <div class="poolDock" id="poolDock" aria-label="Pozo de fichas">
+      <div class="poolStack" aria-hidden="true"><div class="tileBack">▦</div></div>
+      <div class="poolText">
+        <b id="poolDockTitle">Pozo de fichas</b>
+        <div class="small" id="poolDockInfo">Fichas restantes en la mesa.</div>
       </div>
-      <div class="panel realTablePanel">
-        <div class="realTableHeader">
-          <div>
-            <h2>Jugadas en la mesa</h2>
-            <div class="small">Acá se ven todas las jugadas bajadas por todos los jugadores.</div>
-          </div>
-          <span class="pill" id="tableVisibilityPill">Mesa común</span>
-        </div>
-        <div class="realTableSurface">
-          <div class="tableFelt" aria-label="Mesa central con jugadas visibles">
-            <div class="sets" id="sets"></div>
-          </div>
-          <div class="poolDock" id="poolDock" aria-label="Pozo de fichas">
-            <div class="poolStack" aria-hidden="true"><div class="tileBack">▦</div></div>
-            <div class="poolText">
-              <b id="poolDockTitle">Pozo de fichas</b>
-              <div class="small" id="poolDockInfo">Las fichas restantes quedan en la mesa. Tocá “Tomar 1 ficha y pasar” cuando no bajes jugada.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
+    <div class="setupButton" id="startPanel">
+      <h2>Jugadas en la mesa</h2>
+      <p>Mesa real móvil. Las jugadas de todos quedan visibles y tu atril no tapa la partida.</p>
+      <button class="primary" id="loadDemoBtn">Jugar demo ahora</button>
+      <button class="ghost" id="openSetupBtn">Sala y configuración</button>
+    </div>
+  </main>
+
+  <section class="actionDock" aria-label="Acciones del turno">
+    <button id="drawBtn">Tomar ficha</button>
+    <button id="newSetBtn">Bajar fichas seleccionadas</button>
+    <button class="warn" id="endTurnBtn">Terminar turno</button>
+    <button class="ghost" id="resetDemoMobileBtn">Reiniciar demo</button>
+    <button class="ghost" id="advanceDemoBtn">Avanzar jugador demo</button>
+  </section>
+
+  <section class="rack" aria-label="Mi atril">
+    <div class="rackHead">
+      <h3>Mi atril</h3>
+      <div class="rackInfoLine" id="rackInfo">0 fichas</div>
+      <div class="rackSort"><button id="sortNumBtn">N°</button><button id="sortColorBtn">Color</button></div>
+    </div>
+    <div class="rackRail"><div id="rackTiles" class="tiles"></div></div>
+  </section>
+</div>
+
+<button class="helpBtn" id="helpBtn" aria-label="Ayuda">?</button>
+
+<div class="modalBack hide" id="setupModal">
+  <div class="modal">
+    <div class="row"><h2 style="flex:1">Inicio y sala</h2><button class="ghost" id="closeSetupBtn">Cerrar</button></div>
+    <div class="stack">
+      <label>Tu nombre</label>
+      <input id="nameInput" maxlength="24" placeholder="Ej: Aldo">
+      <button class="primary" id="saveNameBtn">Guardar nombre</button>
+      <div class="small" id="whoami">Sin nombre guardado.</div>
+    </div>
+    <div class="stack">
+      <h3>Crear sala familiar</h3>
+      <input id="newRoomName" maxlength="32" placeholder="Ej: FAMILIA">
+      <button class="primary" id="createRoomBtn">Crear sala</button>
+      <button class="ghost" id="refreshRoomsBtn">Actualizar salas</button>
+    </div>
+    <div class="stack">
+      <h3>Entrar a sala</h3>
+      <select id="roomSelect"><option value="">No hay salas cargadas</option></select>
+      <div class="row"><button class="primary" id="joinRoomBtn">Entrar</button><button class="danger" id="leaveRoomBtn">Salir</button></div>
+      <div class="small" id="roomInfo">Sin sala.</div>
+    </div>
+    <div class="stack">
+      <h3>Demo y partida</h3>
+      <div class="row"><button class="ghost" id="resetDemoBtn">Reiniciar demo</button><button class="primary" id="startGameBtn">Iniciar mano</button></div>
+      <button class="danger" id="resetBoardBtn">Reiniciar sala</button>
+      <div class="small" id="demoInfo">Demo local con fichas ficticias para aprender sin datos reales.</div>
+    </div>
+    <div class="stack"><h3>Jugadores</h3><div id="playersList" class="players"></div></div>
+    <div class="stack"><h3>Eventos</h3><div id="log" class="small"></div></div>
   </div>
-  <div class="rack"><div class="rackCard stack"><div class="tableHeader"><div><h3>Mi atril</h3><div class="small" id="rackInfo">0 fichas</div></div><div class="row" style="flex:0 0 auto"><button class="ghost" id="sortNumBtn">Ordenar número</button><button class="ghost" id="sortColorBtn">Ordenar color</button></div></div><div class="rackTilesRail"><div id="rackTiles" class="tiles"></div></div></div></div>
-  <div class="footerSpace"></div>
-</main>
-<button class="helpBtn" id="helpBtn">?</button>
-<div class="modalBack hide" id="helpModal"><div class="modal stack"><div class="tableHeader"><h2 id="helpTitle">Reglas implementadas</h2><button class="ghost" id="closeHelpBtn">Cerrar</button></div><ul class="rulesList" id="rulesList"></ul><div class="small" id="helpFoot">Versión mesa real: atril móvil, pozo central y jugadas visibles para todos.</div></div></div>
+</div>
+
+<details class="sideDrawer" id="sideDrawer"><summary id="drawerTitle">Inicio y sala</summary><span id="drawerHint">abrir/cerrar</span></details>
+
+<div class="modalBack hide" id="helpModal">
+  <div class="modal">
+    <div class="row"><h2 id="helpTitle" style="flex:1">Ayuda rápida</h2><button class="ghost" id="closeHelpBtn">Cerrar</button></div>
+    <ul id="rulesList"></ul>
+    <div class="small" id="helpFoot">Mesa real móvil: atril compacto, pozo central y jugadas visibles para todos.</div>
+  </div>
+</div>
+
+<select id="targetSetSelect" class="hidden"><option value="">Elegir jugada destino</option></select>
+<button id="addToSetBtn" class="hidden">Agregar a jugada</button>
+<button id="clearSelectionBtn" class="hidden">Quitar selección</button>
+<button id="undoTurnBtn" class="hidden">Deshacer turno</button>
+<div id="selectionInfo" class="hidden">Sin selección.</div>
+<div id="gameNotice" class="hidden">Entrá a una sala para comenzar. Bajar fichas seleccionadas. Terminar turno. Jugadas en la mesa. Mesa real móvil.</div>
+<div id="barRoom" class="hidden">Sala: -</div><div id="barTurn" class="hidden">Turno: -</div><div id="barPlayers" class="hidden">Jugadores: 0</div><div id="barPool" class="hidden">Pila: -</div>
+
 <script type="module">
 let initializeApp, getAuth, signInAnonymously, onAuthStateChanged, getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction;
 async function loadFirebaseModules(){
@@ -2256,272 +216,113 @@ async function loadFirebaseModules(){
   ({getAuth, signInAnonymously, onAuthStateChanged}=authModule);
   ({getDatabase, ref, set, update, get, onValue, serverTimestamp, onDisconnect, runTransaction}=dbModule);
 }
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB44y1oNQ_VMsQdKqCZNk52UivV0P62dyQ",
-  authDomain: "rummy-familiar.firebaseapp.com",
-  databaseURL: "https://rummy-familiar-default-rtdb.firebaseio.com",
-  projectId: "rummy-familiar",
-  storageBucket: "rummy-familiar.firebasestorage.app",
-  messagingSenderId: "164902041970",
-  appId: "1:164902041970:web:cf948efd46c7e64a6085eb"
-};
-const PATH='rummyRoomsV1';
 const VERSION=5;
+const CACHE_BUST='professional-rebuild-v17-hotfix';
 const DEMO_ROOM_ID='demo_local';
 const DEMO_USER_ID='demo_user_local';
 const DEMO_BOT_UID='demo_bot_ana';
 const COLORS=['red','blue','yellow','black'];
-const COLOR_NAME={red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'};
-const I18N={
-  es:{
-    connecting:'Conectando...', firebase:'Conectando Firebase...', online:'Online', offline:'Sin conexión', firebaseErr:'Error Firebase',
-    title:'Rummy Familiar de Fichas', subtitle:'Mesa móvil profesional · fichas · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
-    entry:'1. Tu nombre', nameLabel:'Tu nombre para jugar', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Listo: ${n}`,
-    admin:'2. Crear partida familiar', createRoomLabel:'Nombre de la sala', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar salas', adminNote:'Creá una sala y compartí el nombre con tu familia. No hace falta configurar nada técnico.',
-    chooseRoom:'3. Entrar a una sala', availableRooms:'Salas familiares', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a jugar', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Demo y partida', start:'Iniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: juego de fichas tipo Rummy/Rummikub, 106 fichas, 14 iniciales, apertura de 30 puntos, pozo central y sin descarte.', events:'Actividad',
-    table:'Mesa de juego', noGame:'Sin partida iniciada.', pool:'Pila', opening:'Apertura', alreadyOpened:'Ya abriste', draw:'Tomar 1 ficha y pasar', end:'Terminar turno', newSet:'Bajar fichas seleccionadas', target:'Elegir jugada de la mesa', add:'Agregar a jugada', clear:'Quitar selección', undo:'Deshacer turno', noSelection:'Tocá fichas de tu atril para jugar.', rack:'Mi atril', sortNum:'Ordenar por número', sortColor:'Ordenar por color',
-    qh1t:'1. Tocá fichas', qh1b:'Seleccioná desde tu atril.', qh2t:'2. Bajalas a la mesa', qh2b:'Formá serie o escalera.', qh3t:'3. Terminá turno', qh3b:'La app valida la mesa.',
-    helpTitle:'Ayuda rápida', close:'Cerrar', helpFoot:'Interfaz mesa real v8: atril móvil, pozo central y jugadas visibles para todos.', rules:['Juego de fichas tipo Rummy/Rummikub: 106 fichas = 2 juegos del 1 al 13 en 4 colores + 2 comodines.','Cada jugador recibe 14 fichas.','Jugadas válidas: serie = 3 o 4 fichas del mismo número y colores distintos; escalera = 3 o más fichas consecutivas del mismo color. El 1 no va después del 13.','Para abrir: uno o más conjuntos desde tu atril que sumen 30 puntos o más.','Si no jugás, tomás 1 ficha de la pila y termina tu turno. No hay descarte.','Después de abrir, podés crear jugadas, agregar fichas y reorganizar la mesa. Al terminar el turno, toda la mesa debe quedar válida.','Comodín: vale la ficha que representa. Si queda en el atril al final, penaliza 30 puntos.'],
-    colors:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'}, types:{group:'Serie',run:'Escalera'}, valid:'Válida', invalid:'Inválida', set:'Jugada', points:'pts', emptyTable:'Mesa vacía. Las jugadas que bajen los jugadores aparecerán acá.', noTiles:'Sin fichas o no estás en una mano.', selection:(r,b)=>`Selección: ${r} de tu atril + ${b} de la mesa.`, roomInfo:(name,status)=>`Sala: ${name} · Estado: ${status||'lobby'}`, roomBar:name=>`Sala: ${name||'-'}`, turnBar:name=>`Turno: ${name||'-'}`, playersBar:n=>`Jugadores: ${n}`, poolBar:n=>`Pila: ${n??'-'}`, turnInfo:(name,mine)=>`Turno de ${name}${mine?' · TE TOCA':''}`, won:name=>`Ganó ${name}.`, host:'Anfitrión', opened:'Abrió', notOpened:'Sin abrir', tiles:n=>`${n} fichas`, playing:'jugando', demoBadge:'DEMO', demoLoad:'Jugar demo ahora', demoReset:'Reiniciar demo', demoAdvance:'Avanzar jugador demo', demoInfo:'Demo local con fichas ficticias. Sirve para aprender sin crear sala ni usar Firebase.', demoRoom:'DEMO LOCAL', demoPlayer:'Jugador Demo', demoBot:'Demo Ana', demoLoaded:'Demo cargado. Tocá las fichas 10-10-10, bajalas a la mesa y terminá turno.', demoResetDone:'Demo reiniciado con datos ficticios.', demoOnly:'Disponible solo en modo demo local.', demoTurnOnly:'Este botón se usa cuando el turno es de Demo Ana.',
-    msg:{writeName:'Escribí tu nombre primero.', chooseRoom:'Elegí una sala.', roomInvalid:'Sala inválida', roomName:'Poné un nombre de sala, por ejemplo FAMILIA.', created:n=>`Sala ${n} creada.`, joined:'Entraste a la sala.', left:'Saliste de la sala.', need2:'Necesitás al menos 2 jugadores online.', max4:'Rummikub clásico es para 2 a 4 jugadores.', hostOnly:'Solo quien creó la sala puede iniciar la mano.', onlyHostReset:'Solo el anfitrión puede reiniciar la sala.', confirmReset:'¿Reiniciar la sala y borrar la mano actual?', reset:'Sala reiniciada.', noStarted:'No hay mano iniciada.', notTurn:'Todavía no es tu turno.', selectFirst:'Seleccioná fichas primero.', openNoBoard:'Para abrir no podés usar fichas de la mesa.', invalidSelection:r=>`La selección no forma jugada válida: ${r}.`, createdSet:t=>`Jugada creada: ${t}.`, chooseTarget:'Elegí una jugada destino.', addFirst:'Seleccioná fichas para agregar.', open30:'Para abrir tenés que crear jugadas nuevas desde tu atril y sumar 30.', badTarget:'Destino inválido.', added:'Ficha(s) agregada(s). Validá la mesa antes de terminar.', alreadyMoved:'Ya moviste fichas. Tenés que terminar turno o deshacer.', poolEmpty:'La pila está vacía.', boardInvalid:'La mesa todavía tiene jugadas inválidas. Corregí o deshacé tu turno.', needOpen:s=>`Para abrir necesitás 30 puntos. Llevás ${s}. Podés seguir bajando conjuntos o deshacer.`, noUndo:'No hay movimientos para deshacer en este turno.', undone:'Turno deshecho.', roomCreated:n=>`Sala ${n} creada`, entered:n=>`${n} entró a la sala`, handStarted:n=>`Mano iniciada. Juega ${n}. Cada jugador recibió 14 fichas.`, draw:n=>`${n} tomó 1 ficha de la pila.`, next:n=>`Ahora juega ${n}.`, ended:n=>`${n} terminó su turno.`, won:n=>`${n} hizo Rummikub y ganó la mano.`, firebaseError:'No pude conectar con Firebase. Revisá internet o dominio autorizado.', noValid:'no es serie ni escalera válida', min3:'mínimo 3 fichas', noJokers:'no puede ser solo comodines'}
-  },
-  en:{
-    connecting:'Connecting...', firebase:'Connecting Firebase...', online:'Online', offline:'Offline', firebaseErr:'Firebase error',
-    title:'Family Tile Rummy', subtitle:'Professional mobile table · tiles · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
-    entry:'1. Your name', nameLabel:'Your player name', namePh:'Ex: Alex', saveName:'Save name', noName:'No saved name.', savedName:n=>`Ready: ${n}`,
-    admin:'2. Create family game', createRoomLabel:'Room name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh rooms', adminNote:'Create a room and share its name with your family. No technical setup needed.',
-    chooseRoom:'3. Join a room', availableRooms:'Family rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Start playing', leave:'Leave', noRoom:'No room.', players:'Players', game:'Demo and game', start:'Start hand', reset:'Reset room', baseRule:'Base rule: tile Rummy/Rummikub style, 106 tiles, 14 initial tiles, 30-point opening, central pool and no discard.', events:'Activity',
-    table:'Game table', noGame:'No hand started.', pool:'Pool', opening:'Opening', alreadyOpened:'Opened', draw:'Draw 1 tile and pass', end:'End turn', newSet:'Play selected tiles', target:'Choose table meld', add:'Add to meld', clear:'Clear selection', undo:'Undo turn', noSelection:'Tap tiles from your rack to play.', rack:'My rack', sortNum:'Sort by number', sortColor:'Sort by color',
-    qh1t:'1. Tap tiles', qh1b:'Select from your rack.', qh2t:'2. Move to table', qh2b:'Make a group or run.', qh3t:'3. End turn', qh3b:'The app validates the table.',
-    helpTitle:'Quick help', close:'Close', helpFoot:'Real-table v8: mobile rack, central pool and shared melds visible to everyone.', rules:['Tile Rummy/Rummikub style: 106 tiles = two sets of 1 to 13 in four colors + 2 jokers.','Each player receives 14 tiles.','Valid melds: group = 3 or 4 tiles with the same number and different colors; run = 3 or more consecutive tiles of the same color. 1 does not follow 13.','Initial meld: one or more melds from your rack totaling 30 points or more.','If you do not play, draw 1 tile from the pool and your turn ends. There is no discard.','After opening, you may create melds, add tiles, and rearrange the table. At the end of your turn, the whole table must be valid.','Joker: represents the needed tile. If left in the rack at the end, it is worth 30 penalty points.'],
-    colors:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}, types:{group:'Group',run:'Run'}, valid:'Valid', invalid:'Invalid', set:'Meld', points:'pts', emptyTable:'Empty table. Melds played by any player will appear here.', noTiles:'No tiles or you are not in a hand.', selection:(r,b)=>`Selection: ${r} from your rack + ${b} from table.`, roomInfo:(name,status)=>`Room: ${name} · Status: ${status||'lobby'}`, roomBar:name=>`Room: ${name||'-'}`, turnBar:name=>`Turn: ${name||'-'}`, playersBar:n=>`Players: ${n}`, poolBar:n=>`Pool: ${n??'-'}`, turnInfo:(name,mine)=>`${name}'s turn${mine?' · YOUR TURN':''}`, won:name=>`${name} won.`, host:'Host', opened:'Opened', notOpened:'Not opened', tiles:n=>`${n} tiles`, playing:'playing', demoBadge:'DEMO', demoLoad:'Play demo now', demoReset:'Reset demo', demoAdvance:'Advance demo player', demoInfo:'Local demo with fictitious tiles. Learn without creating a room or using Firebase.', demoRoom:'LOCAL DEMO', demoPlayer:'Demo Player', demoBot:'Demo Ana', demoLoaded:'Demo loaded. Tap the 10-10-10 tiles, play them to the table and end your turn.', demoResetDone:'Demo reset with fictitious data.', demoOnly:'Available only in local demo mode.', demoTurnOnly:"Use this button when it is Demo Ana's turn.",
-    msg:{writeName:'Write your name first.', chooseRoom:'Choose a room.', roomInvalid:'Invalid room', roomName:'Enter a room name, for example FAMILY.', created:n=>`Room ${n} created.`, joined:'You joined the room.', left:'You left the room.', need2:'You need at least 2 online players.', max4:'Classic Rummikub is for 2 to 4 players.', hostOnly:'Only the room creator can start the hand.', onlyHostReset:'Only the host can reset the room.', confirmReset:'Reset the room and erase the current hand?', reset:'Room reset.', noStarted:'No hand started.', notTurn:'It is not your turn yet.', selectFirst:'Select tiles first.', openNoBoard:'For your initial meld, you cannot use table tiles.', invalidSelection:r=>`The selection is not a valid meld: ${r}.`, createdSet:t=>`Meld created: ${t}.`, chooseTarget:'Choose a target meld.', addFirst:'Select tiles to add.', open30:'For your initial meld you must create new melds from your rack totaling 30.', badTarget:'Invalid target.', added:'Tile(s) added. Validate the table before ending your turn.', alreadyMoved:'You already moved tiles. End turn or undo.', poolEmpty:'The pool is empty.', boardInvalid:'The table still has invalid melds. Fix it or undo your turn.', needOpen:s=>`Initial meld needs 30 points. You have ${s}. You can keep playing melds or undo.`, noUndo:'There are no moves to undo this turn.', undone:'Turn undone.', roomCreated:n=>`Room ${n} created`, entered:n=>`${n} joined the room`, handStarted:n=>`Hand started. ${n} plays first. Each player received 14 tiles.`, draw:n=>`${n} drew 1 tile from the pool.`, next:n=>`Now ${n} plays.`, ended:n=>`${n} ended the turn.`, won:n=>`${n} called Rummikub and won the hand.`, firebaseError:'Could not connect to Firebase. Check internet or authorized domain.', noValid:'not a valid group or run', min3:'minimum 3 tiles', noJokers:'cannot be only jokers'}
-  }
+const COLOR_LABEL={es:{red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'},en:{red:'Red',blue:'Blue',yellow:'Yellow',black:'Black'}};
+const TEXT={
+  es:{demo:'Jugar demo ahora', reset:'Reiniciar demo', room:'DEMO LOCAL', player:'Jugador Demo', bot:'Demo Ana', rack:n=>`${n} fichas`, pool:n=>`Pila: ${n??'-'}`, opening:s=>s?'Ya abriste':'Apertura: -', turn:n=>`Turno: ${n}`, empty:'Mesa vacía. Las jugadas que bajen los jugadores aparecerán acá.', set:'Jugada', typeGroup:'Serie', typeRun:'Escalera', visible:'visible para todos', draw:'Tomar ficha', play:'Bajar fichas', end:'Terminar', noSel:'Sin selección.', sel:n=>`Selección: ${n} fichas`, poolInfo:n=>`Fichas restantes en el pozo central: ${n}.`, helpTitle:'Ayuda rápida', helpFoot:'Mesa real móvil: atril compacto, pozo central y jugadas visibles para todos.', rules:['Juego de fichas tipo Rummikub/Rummy: 106 fichas, 14 iniciales por jugador.','Serie: 3 o 4 fichas del mismo número y colores distintos.','Escalera: 3 o más fichas consecutivas del mismo color.','Para abrir necesitás 30 puntos bajados desde tu atril.','Si no bajás jugada, tomás 1 ficha del pozo y pasa el turno.']},
+  en:{demo:'Play demo now', reset:'Reset demo', room:'LOCAL DEMO', player:'Demo Player', bot:'Demo Ana', rack:n=>`${n} tiles`, pool:n=>`Pool: ${n??'-'}`, opening:s=>s?'Opened':'Opening: -', turn:n=>`${n}'s turn`, empty:'Empty table. Melds played by any player will appear here.', set:'Meld', typeGroup:'Group', typeRun:'Run', visible:'visible for everyone', draw:'Draw tile', play:'Play tiles', end:'End', noSel:'No selection.', sel:n=>`Selection: ${n} tiles`, poolInfo:n=>`Tiles left in central pool: ${n}.`, helpTitle:'Quick help', helpFoot:'Real mobile table: compact rack, central pool and visible melds for everyone.', rules:['Rummikub/Rummy tile game: 106 tiles, 14 initial tiles per player.','Group: 3 or 4 same-number tiles in different colors.','Run: 3 or more consecutive tiles of the same color.','Initial meld requires 30 points from your rack.','If you do not play, draw 1 tile from the pool and pass.']}
 };
-let lang=localStorage.getItem('rk_lang') || (((navigator.language||'es').toLowerCase().startsWith('en'))?'en':'es');
-function tr(k){return I18N[lang][k]??I18N.es[k]??k;}
-function msg(k,...args){const v=I18N[lang].msg[k]??I18N.es.msg[k]??k; return typeof v==='function'?v(...args):v;}
-function typeName(type){ if(type==='Serie'||type==='Group') return I18N[lang].types.group; if(type==='Escalera'||type==='Run') return I18N[lang].types.run; return type;}
-function colorName(c){return I18N[lang].colors[c]||c;}
-
-let app, auth, db, uid=null, userName=localStorage.getItem('rk_name')||'', roomId=localStorage.getItem('rk_room')||'', rooms={}, room=null;
-let demoMode=localStorage.getItem('rk_demo_mode')==='1';
+let lang=localStorage.getItem('rk_lang')||'es';
+let uid=DEMO_USER_ID;
+let userName=localStorage.getItem('rk_name')||'';
+let roomId='';
+let room=null;
 let selectedRack=new Set();
-let selectedBoard=new Map();
-let unsubRoom=null, unsubRooms=null;
-let busy=false;
-let lastRoomStatus='';
 const $=id=>document.getElementById(id);
-const el={app:$('app'),netStatus:$('netStatus'),langSelect:$('langSelect'),barRoom:$('barRoom'),barTurn:$('barTurn'),barPlayers:$('barPlayers'),barPool:$('barPool'),sideDrawer:$('sideDrawer'),drawerTitle:$('drawerTitle'),drawerHint:$('drawerHint'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),helpTitle:$('helpTitle'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),qh1t:$('qh1t'),qh1b:$('qh1b'),qh2t:$('qh2t'),qh2b:$('qh2b'),qh3t:$('qh3t'),qh3b:$('qh3b'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),log:$('log'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),gameNotice:$('gameNotice'),drawBtn:$('drawBtn'),endTurnBtn:$('endTurnBtn'),newSetBtn:$('newSetBtn'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),selectionInfo:$('selectionInfo'),sets:$('sets'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),closeHelpBtn:$('closeHelpBtn'),loadDemoBtn:$('loadDemoBtn'),resetDemoBtn:$('resetDemoBtn'),demoInfo:$('demoInfo'),advanceDemoBtn:$('advanceDemoBtn'),resetDemoMobileBtn:$('resetDemoMobileBtn')};
-
-function toast(msg,type='ok'){el.gameNotice.className= type==='err'?'errbox':type==='warn'?'warnbox':'okbox'; el.gameNotice.textContent=msg;}
-function log(msg){const t=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}); el.log.innerHTML=`<div><b>${t}</b> ${escapeHtml(msg)}</div>`+el.log.innerHTML;}
-function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function slugify(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,36)||'SALA';}
-function safeRoomId(id){ return (typeof id==='string' && id.trim()) ? id.trim() : roomId; }
-function roomRef(id=roomId){ id=safeRoomId(id); if(!id) throw new Error(msg('roomInvalid')); return ref(db,`${PATH}/${id}`)}
-function uidRef(path){return ref(db,path)}
-function now(){return Date.now()}
-function randId(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
-function isLocalDemo(){return demoMode || roomId===DEMO_ROOM_ID || room?.demo===true;}
-function setNestedValue(target,path,value){const parts=String(path).split('/').filter(Boolean); let cur=target; while(parts.length>1){const p=parts.shift(); if(!cur[p] || typeof cur[p]!=='object')cur[p]={}; cur=cur[p];} cur[parts[0]]=value;}
-function applyLocalUpdates(target,updates){for(const [path,value] of Object.entries(updates||{})){setNestedValue(target,path,value);}}
-function saveLocalDemo(){if(isLocalDemo()&&room){localStorage.setItem('rk_demo_mode','1'); localStorage.setItem('rk_demo_room',JSON.stringify({room,roomId,userName,uid}));}}
-async function saveRoomUpdate(updates){if(isLocalDemo()){applyLocalUpdates(room,updates); saveLocalDemo(); render(); return;} return update(roomRef(),updates);}
-async function saveGameUpdate(updates){if(isLocalDemo()){room.game=room.game||{}; applyLocalUpdates(room.game,updates); saveLocalDemo(); render(); return;} return update(ref(db,`${PATH}/${roomId}/game`),updates);}
-function demoTile(color,num,id){return {id:id||`${color}_${num}_${randId()}`,color,num,joker:false};}
-function demoJoker(id){return {id:id||`joker_${randId()}`,joker:true};}
-function demoRackBase(){
-  return [
-    demoTile('red',10,'demo_r10'),demoTile('blue',10,'demo_b10'),demoTile('yellow',10,'demo_y10'),
-    demoTile('red',1,'demo_r1'),demoTile('red',2,'demo_r2'),demoTile('red',3,'demo_r3'),
-    demoTile('black',5,'demo_k5'),demoTile('black',6,'demo_k6'),demoTile('black',7,'demo_k7'),
-    demoTile('blue',4,'demo_b4'),demoTile('blue',5,'demo_b5'),demoTile('yellow',8,'demo_y8'),
-    demoTile('yellow',9,'demo_y9'),demoJoker('demo_joker')
-  ];
-}
-function createDemoGame(playerId){
-  const pool=buildTiles().slice(0,44);
-  const botRack=[demoTile('black',10,'bot_k10'),demoTile('red',11,'bot_r11'),demoTile('blue',11,'bot_b11'),demoTile('yellow',11,'bot_y11'),demoTile('red',4,'bot_r4'),demoTile('red',5,'bot_r5'),demoTile('red',6,'bot_r6'),demoTile('blue',8,'bot_b8'),demoTile('blue',9,'bot_b9'),demoTile('blue',10,'bot_b10'),demoTile('yellow',2,'bot_y2'),demoTile('yellow',3,'bot_y3'),demoTile('black',12,'bot_k12'),demoJoker('bot_joker')];
-  return {startedAt:now(),order:[playerId,DEMO_BOT_UID],turnIndex:0,pool,board:[],racks:{[playerId]:demoRackBase(),[DEMO_BOT_UID]:botRack},opened:{},turn:{uid:playerId,startedAt:now(),moves:0,initialScore:0,snapshot:null},winner:null,demo:true};
-}
-function loadDemoRoom(options={}){
-  const silent=!!options.silent;
-  demoMode=true;
-  localStorage.setItem('rk_demo_mode','1');
-  uid=uid||DEMO_USER_ID;
-  userName=(userName||tr('demoPlayer')).trim();
-  localStorage.setItem('rk_name',userName);
-  roomId=DEMO_ROOM_ID;
-  localStorage.setItem('rk_room',roomId);
-  room={version:VERSION,kind:'rummikub',demo:true,name:tr('demoRoom'),slug:DEMO_ROOM_ID,createdAt:now(),createdBy:uid,host:uid,status:'playing',players:{[uid]:{name:userName,online:true,is_demo:true},[DEMO_BOT_UID]:{name:tr('demoBot'),online:true,is_demo:true}},log:[{t:now(),m:tr('demoLoaded')}],settings:{initialTiles:14,initialMeld:30},game:createDemoGame(uid)};
-  rooms={...rooms,[DEMO_ROOM_ID]:room};
-  selectedRack.clear(); selectedBoard.clear();
-  el.nameInput.value=userName;
-  renderName(); render(); saveLocalDemo();
-  el.netStatus.textContent=tr('demoBadge')||'DEMO';
-  if(!silent)toast(tr('demoLoaded'),'ok');
-}
-function resetLocalDemo(){localStorage.removeItem('rk_demo_room'); loadDemoRoom({silent:true}); toast(tr('demoResetDone'),'ok');}
-function exitDemoMode(){demoMode=false; localStorage.removeItem('rk_demo_mode'); localStorage.removeItem('rk_demo_room'); if(auth?.currentUser)uid=auth.currentUser.uid; if(roomId===DEMO_ROOM_ID){room=null; roomId=''; localStorage.removeItem('rk_room');}}
-async function advanceDemoTurn(){await withBusy(async()=>{ if(!isLocalDemo()){toast(tr('demoOnly'),'warn');return;} if(currentUid()!==DEMO_BOT_UID){toast(tr('demoTurnOnly'),'warn');return;} const pool=(room.game.pool||[]).slice(); const rack=(room.game.racks?.[DEMO_BOT_UID]||[]).slice(); if(pool.length)rack.push(pool.pop()); await saveGameUpdate({pool,[`racks/${DEMO_BOT_UID}`]:rack}); await passTurn(msg('draw',playerName(DEMO_BOT_UID))); clearSelection();});}
-
-function applyLang(){
-  document.documentElement.lang=lang;
-  el.langSelect.value=lang;
-  el.appTitle.textContent=tr('title'); el.appSubtitle.textContent=tr('subtitle');
-  el.drawerTitle.textContent=tr('drawerTitle'); el.drawerHint.textContent=(room?.status==='playing')?tr('drawerHintPlay'):tr('drawerHint');
-  const h2=[...document.querySelectorAll('h2,h3')];
-  const labels=[...document.querySelectorAll('label')];
-  if(h2[0])h2[0].textContent=tr('entry'); if(labels[0])labels[0].textContent=tr('nameLabel'); el.nameInput.placeholder=tr('namePh'); el.saveNameBtn.textContent=tr('saveName');
-  if(h2[1])h2[1].textContent=tr('admin'); if(labels[1])labels[1].textContent=tr('createRoomLabel'); el.newRoomName.placeholder=tr('roomPh'); el.createRoomBtn.textContent=tr('createRoom'); el.refreshRoomsBtn.textContent=tr('refresh');
-  const adminSmall=document.querySelector('.adminbox .small'); if(adminSmall) adminSmall.textContent=tr('adminNote');
-  if(h2[2])h2[2].textContent=tr('chooseRoom'); if(labels[2])labels[2].textContent=tr('availableRooms'); el.joinRoomBtn.textContent=tr('join'); el.leaveRoomBtn.textContent=tr('leave');
-  if(h2[3])h2[3].textContent=tr('players'); if(h2[4])h2[4].textContent=tr('game'); el.startGameBtn.textContent=tr('start'); el.resetBoardBtn.textContent=tr('reset'); el.loadDemoBtn.textContent=tr('demoLoad'); el.resetDemoBtn.textContent=tr('demoReset'); el.demoInfo.textContent=tr('demoInfo');
-  const wb=document.querySelector('.warnbox'); if(wb) wb.innerHTML='<b>'+tr('baseRule').split(':')[0]+':</b>'+tr('baseRule').slice(tr('baseRule').indexOf(':')+1);
-  if(h2[5])h2[5].textContent=tr('events'); if(h2[6])h2[6].textContent=tr('table');
-  el.drawBtn.textContent=tr('draw'); el.endTurnBtn.textContent=tr('end'); el.newSetBtn.textContent=tr('newSet'); el.addToSetBtn.textContent=tr('add'); el.clearSelectionBtn.textContent=tr('clear'); el.undoTurnBtn.textContent=tr('undo'); el.advanceDemoBtn.textContent=tr('demoAdvance'); if(el.resetDemoMobileBtn) el.resetDemoMobileBtn.textContent=tr('demoReset');
-  if(h2[7])h2[7].textContent=tr('rack'); el.sortNumBtn.textContent=tr('sortNum'); el.sortColorBtn.textContent=tr('sortColor');
-  el.qh1t.textContent=tr('qh1t'); el.qh1b.textContent=tr('qh1b'); el.qh2t.textContent=tr('qh2t'); el.qh2b.textContent=tr('qh2b'); el.qh3t.textContent=tr('qh3t'); el.qh3b.textContent=tr('qh3b');
-  el.helpTitle.textContent=tr('helpTitle'); el.closeHelpBtn.textContent=tr('close'); el.helpFoot.textContent=tr('helpFoot'); el.rulesList.innerHTML=tr('rules').map(x=>`<li>${escapeHtml(x)}</li>`).join('');
-  renderName(); render();
-}
-
-async function init(){
-  el.nameInput.value=userName; bind(); if(demoMode) loadDemoRoom({silent:true}); applyLang();
-  if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
-  try{await loadFirebaseModules(); app=initializeApp(firebaseConfig); auth=getAuth(app); db=getDatabase(app); if(!demoMode)el.netStatus.textContent=tr('firebase'); await signInAnonymously(auth); onAuthStateChanged(auth,u=>{if(u && !demoMode){uid=u.uid; el.netStatus.textContent=tr('online'); afterAuth();}});}catch(e){console.error(e); if(!demoMode)el.netStatus.textContent=tr('firebaseErr'); toast(msg('firebaseError'), 'warn');}
-}
-function bind(){
-  el.langSelect.onchange=()=>{lang=el.langSelect.value; localStorage.setItem('rk_lang',lang); applyLang();}; el.saveNameBtn.onclick=saveName; el.createRoomBtn.onclick=createRoom; el.refreshRoomsBtn.onclick=listenRooms; el.joinRoomBtn.onclick=()=>joinRoom(); el.leaveRoomBtn.onclick=leaveRoom;
-  el.startGameBtn.onclick=startGame; el.resetBoardBtn.onclick=resetRoom; el.loadDemoBtn.onclick=()=>loadDemoRoom(); el.resetDemoBtn.onclick=resetLocalDemo;
-  el.drawBtn.onclick=drawAndPass; el.endTurnBtn.onclick=endTurn; el.newSetBtn.onclick=createSetFromSelection; el.addToSetBtn.onclick=addSelectionToSet; el.clearSelectionBtn.onclick=clearSelection;
-  el.undoTurnBtn.onclick=undoTurn; el.advanceDemoBtn.onclick=advanceDemoTurn; if(el.resetDemoMobileBtn) el.resetDemoMobileBtn.onclick=resetLocalDemo; el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color'); el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
-}
-function afterAuth(){if(demoMode)return; listenRooms(); if(roomId) subscribeRoom(roomId);}
-function saveName(){userName=el.nameInput.value.trim().slice(0,24); if(!userName){toast(msg('writeName'),'warn');return;} localStorage.setItem('rk_name',userName); renderName(); if(roomId) updatePlayerPresence();}
-function renderName(){el.whoami.textContent=userName?tr('savedName')(userName):tr('noName');}
-function listenRooms(){ if(demoMode){rooms={...rooms,[DEMO_ROOM_ID]:room}; renderRooms(); return;} if(!db||!uid)return; if(unsubRooms)unsubRooms(); unsubRooms=onValue(ref(db,PATH),snap=>{rooms=snap.val()||{}; renderRooms();});}
-function renderRooms(){const entries=Object.entries(rooms).filter(([id,r])=>r&&r.version===VERSION&&r.kind==='rummikub').sort((a,b)=>(a[1].name||a[0]).localeCompare(b[1].name||b[0])); el.roomSelect.innerHTML=''; if(!entries.length){el.roomSelect.innerHTML=`<option value="">${tr('noRooms')}</option>`; return;} for(const [id,r] of entries){const opt=document.createElement('option'); opt.value=id; opt.textContent=`${r.name||id}${r.status==='playing'?' · '+tr('playing'):''}`; if(id===roomId)opt.selected=true; el.roomSelect.appendChild(opt);} }
-async function createRoom(){ if(!requireName())return; if(demoMode)exitDemoMode(); if(!db||!uid){toast(msg('firebaseError'),'err');return;} const name=el.newRoomName.value.trim(); if(!name){toast(msg('roomName'),'warn');return;} const id='rk_'+slugify(name); const base={version:VERSION,kind:'rummikub',name:name.trim(),slug:id,createdAt:serverTimestamp(),createdBy:uid,host:uid,status:'lobby',players:{},log:[{t:now(),m:msg('roomCreated',name)}],settings:{initialTiles:14,initialMeld:30}}; await set(roomRef(id),base); if(demoMode && id!==DEMO_ROOM_ID)exitDemoMode(); roomId=id; localStorage.setItem('rk_room',roomId); subscribeRoom(id); await joinRoom(id); el.newRoomName.value=''; toast(msg('created',name), 'ok');}
-async function joinRoom(idOverride){
-  if(!requireName())return;
-  const id=(typeof idOverride==='string' && idOverride.trim()) ? idOverride.trim() : el.roomSelect.value;
-  if(!id){toast(msg('chooseRoom'),'warn');return;}
-  if(demoMode && id!==DEMO_ROOM_ID)exitDemoMode(); roomId=id; localStorage.setItem('rk_room',roomId);
-  subscribeRoom(id);
-  await updatePlayerPresence(true);
-  toast(msg('joined'),'ok');
-}
-async function updatePlayerPresence(join=false){ if(!uid||!roomId||!userName)return; if(isLocalDemo()){room.players[uid]={...(room.players[uid]||{}),name:userName,online:true,is_demo:true}; saveLocalDemo(); render(); if(join) await addLog(msg('entered',userName)); return;} const existing=room?.players?.[uid]||{}; const p={name:userName,online:true,joinedAt:existing.joinedAt||serverTimestamp(),lastSeen:serverTimestamp()}; await update(ref(db,`${PATH}/${roomId}/players/${uid}`),p); onDisconnect(ref(db,`${PATH}/${roomId}/players/${uid}/online`)).set(false); if(join) await addLog(msg('entered',userName));}
-async function leaveRoom(){ if(!uid||!roomId)return; if(isLocalDemo()){exitDemoMode(); render(); toast(msg('left')); return;} await update(ref(db,`${PATH}/${roomId}/players/${uid}`),{online:false,lastSeen:serverTimestamp()}); if(unsubRoom)unsubRoom(); room=null; roomId=''; localStorage.removeItem('rk_room'); render(); toast(msg('left'));}
-function subscribeRoom(id){
-  id=safeRoomId(id);
-  if(!id){toast(msg('roomInvalid'), 'err'); return;}
-  if(unsubRoom)unsubRoom();
-  if(demoMode && id===DEMO_ROOM_ID){rooms={...rooms,[DEMO_ROOM_ID]:room}; render(); return;}
-  unsubRoom=onValue(roomRef(id),snap=>{room=snap.val(); if(!room){roomId='';localStorage.removeItem('rk_room')} render();});
-}
-function requireName(){ if(!userName){toast(msg('writeName'),'warn'); return false;} return true;}
-function playersArr(){return Object.entries(room?.players||{}).map(([id,p])=>({id,...p})).filter(p=>p.online!==false);}
-function playerName(id){return room?.players?.[id]?.name||(lang==='en'?'Player':'Jugador');}
-function me(){return room?.players?.[uid]||{};}
-function order(){return room?.game?.order||[];}
-function currentUid(){const o=order(); return o[room?.game?.turnIndex||0];}
-function isMyTurn(){return room?.status==='playing' && currentUid()===uid;}
-function hasOpened(id=uid){return !!room?.game?.opened?.[id];}
-function myRack(){return room?.game?.racks?.[uid]||[];}
-function board(){return room?.game?.board||[];}
-function turnData(){return room?.game?.turn||{};}
-function isHost(){return room?.host===uid || room?.createdBy===uid;}
-async function addLog(m){const logs=(room?.log||[]).slice(-40); logs.push({t:now(),m}); await saveRoomUpdate({log:logs});}
-
-function buildTiles(){const tiles=[]; for(let copy=1;copy<=2;copy++){for(const c of COLORS){for(let n=1;n<=13;n++){tiles.push({id:`${c[0]}${n}_${copy}_${randId()}`,color:c,num:n,joker:false});}}} tiles.push({id:`J1_${randId()}`,joker:true}); tiles.push({id:`J2_${randId()}`,joker:true}); return shuffle(tiles);}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;}
-async function startGame(){ if(!roomId||!room)return; if(!isHost()){toast(msg('hostOnly'),'warn');return;} const ps=playersArr(); if(ps.length<2){toast(msg('need2'),'warn');return;} if(ps.length>4){toast(msg('max4'),'warn');return;} const tiles=buildTiles(); const racks={}; for(const p of ps){racks[p.id]=tiles.splice(0,14);} const game={startedAt:serverTimestamp(),order:ps.map(p=>p.id),turnIndex:0,pool:tiles,board:[],racks,opened:{},turn:{uid:ps[0].id,startedAt:now(),moves:0,initialScore:0,snapshot:null},winner:null}; await saveRoomUpdate({status:'playing',game}); await addLog(msg('handStarted',ps[0].name)); clearSelection();}
-async function resetRoom(){ if(!roomId||!isHost()){toast(msg('onlyHostReset'),'warn');return;} if(!confirm(msg('confirmReset')))return; await saveRoomUpdate({status:'lobby',game:null}); await addLog(msg('reset'));}
-function getTileById(id){return [...myRack(),...board().flat()].find(t=>t.id===id)}
-function tileScore(t,assignedNum=null){return t.joker? (assignedNum||30):t.num;}
-function validateSet(tiles){ if(!tiles||tiles.length<3)return {ok:false,reason:msg('min3')}; const jokers=tiles.filter(t=>t.joker); const normal=tiles.filter(t=>!t.joker); if(normal.length===0)return {ok:false,reason:msg('noJokers')}; const group=validateGroup(normal,jokers.length,tiles.length); if(group.ok)return group; const run=validateRun(normal,jokers.length,tiles.length); if(run.ok)return run; return {ok:false,reason:msg('noValid')};}
-function validateGroup(normal,jokersCount,total){ if(total<3||total>4)return {ok:false}; const n=normal[0]?.num; if(!normal.every(t=>t.num===n))return {ok:false}; const colors=new Set(normal.map(t=>t.color)); if(colors.size!==normal.length)return {ok:false}; if(normal.length+jokersCount>4)return {ok:false}; return {ok:true,type:'Group',score:n*total,assigned:normal.map(t=>t.num).concat(Array(jokersCount).fill(n))};}
-function validateRun(normal,jokersCount,total){ if(total<3)return {ok:false}; const color=normal[0]?.color; if(!normal.every(t=>t.color===color))return {ok:false}; const nums=normal.map(t=>t.num).sort((a,b)=>a-b); if(new Set(nums).size!==nums.length)return {ok:false}; for(let start=1; start<=14-total; start++){const end=start+total-1; if(nums.every(n=>n>=start&&n<=end)){const missing=[]; for(let x=start;x<=end;x++) if(!nums.includes(x)) missing.push(x); if(missing.length===jokersCount){return {ok:true,type:'Run',score:Array.from({length:total},(_,i)=>start+i).reduce((a,b)=>a+b,0),start,end,color,assigned:Array.from({length:total},(_,i)=>start+i)};}}} return {ok:false};}
-function validateBoard(b=board()){const res=[]; let all=true; b.forEach((s,i)=>{const v=validateSet(s); res.push(v); if(!v.ok)all=false;}); return {ok:all,sets:res};}
-async function ensureSnapshot(){ if(!isMyTurn())throw new Error('No es tu turno'); if(turnData().snapshot)return; const snap={rack:myRack(),board:board(),opened:room.game.opened||{},initialScore:turnData().initialScore||0,moves:turnData().moves||0}; await saveGameUpdate({'turn/snapshot':snap});}
-async function createSetFromSelection(){await withBusy(async()=>{ if(!canMove())return; const rackIds=[...selectedRack]; const boardItems=[...selectedBoard.entries()].flatMap(([si,ids])=>ids.map(id=>({si,id}))); if(!rackIds.length && !boardItems.length){toast(msg('selectFirst'),'warn');return;} if(!hasOpened() && boardItems.length){toast(msg('openNoBoard'),'warn');return;} await ensureSnapshot(); let rack=myRack().slice(), b=board().map(s=>s.slice()); const moving=[]; for(const id of rackIds){const ix=rack.findIndex(t=>t.id===id); if(ix>=0)moving.push(rack.splice(ix,1)[0]);}
-    boardItems.sort((a,b)=>b.si-a.si); for(const {si,id} of boardItems){const set=b[si]||[]; const ix=set.findIndex(t=>t.id===id); if(ix>=0)moving.push(set.splice(ix,1)[0]);}
-    b=b.filter(s=>s.length>0); const v=validateSet(moving); if(!v.ok){toast(msg('invalidSelection',v.reason), 'err'); return;} b.push(moving); let inc=0; if(!hasOpened()){inc=v.score;} await saveGameUpdate({board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1,[`turn/initialScore`]:(turnData().initialScore||0)+inc}); clearSelection(); toast(msg('createdSet',typeName(v.type)), 'ok');});}
-async function addSelectionToSet(){await withBusy(async()=>{ if(!canMove())return; const target=Number(el.targetSetSelect.value); if(Number.isNaN(target)){toast(msg('chooseTarget'),'warn');return;} const rackIds=[...selectedRack]; const boardItems=[...selectedBoard.entries()].flatMap(([si,ids])=>ids.map(id=>({si,id}))).filter(x=>x.si!==target); if(!rackIds.length && !boardItems.length){toast(msg('addFirst'),'warn');return;} if(!hasOpened()){toast(msg('open30'),'warn');return;} await ensureSnapshot(); let rack=myRack().slice(), b=board().map(s=>s.slice()); const moving=[]; for(const id of rackIds){const ix=rack.findIndex(t=>t.id===id); if(ix>=0)moving.push(rack.splice(ix,1)[0]);}
-    boardItems.sort((a,b)=>b.si-a.si); for(const {si,id} of boardItems){const set=b[si]||[]; const ix=set.findIndex(t=>t.id===id); if(ix>=0)moving.push(set.splice(ix,1)[0]);}
-    if(!b[target]){toast(msg('badTarget'),'err');return;} b[target]=b[target].concat(moving); b=b.filter(s=>s.length>0); await saveGameUpdate({board:b,[`racks/${uid}`]:rack,[`turn/moves`]:(turnData().moves||0)+1}); clearSelection(); toast(msg('added'), 'ok');});}
-function canMove(){ if(!room||room.status!=='playing'){toast(msg('noStarted'),'warn');return false;} if(!isMyTurn()){toast(msg('notTurn'),'warn');return false;} return true;}
-async function drawAndPass(){await withBusy(async()=>{ if(!canMove())return; if((turnData().moves||0)>0){toast(msg('alreadyMoved'),'warn');return;} const pool=(room.game.pool||[]).slice(); if(!pool.length){toast(msg('poolEmpty'),'warn');return;} const tile=pool.pop(); const rack=myRack().concat([tile]); await saveGameUpdate({pool,[`racks/${uid}`]:rack}); await passTurn(msg('draw',playerName(uid))); clearSelection();});}
-async function endTurn(){await withBusy(async()=>{ if(!canMove())return; const v=validateBoard(); if(!v.ok){toast(msg('boardInvalid'),'err'); return;} const updates={}; if(!hasOpened()){const score=turnData().initialScore||0; if(score<30){toast(msg('needOpen',score), 'warn');return;} updates[`game/opened/${uid}`]=true;}
-    if(myRack().length===0){updates.status='finished'; updates['game/winner']=uid; await saveRoomUpdate(updates); await addLog(msg('won',playerName(uid))); toast(tr('won')(playerName(uid)), 'ok'); return;}
-    if(Object.keys(updates).length) await saveRoomUpdate(updates); await passTurn(msg('ended',playerName(uid))); clearSelection();});}
-async function passTurn(message){const o=order(); const idx=(room.game.turnIndex||0); const next=(idx+1)%o.length; const nextUid=o[next]; await saveGameUpdate({turnIndex:next,turn:{uid:nextUid,startedAt:now(),moves:0,initialScore:0,snapshot:null}}); await addLog(`${message} ${msg('next',playerName(nextUid))}`);}
-async function undoTurn(){await withBusy(async()=>{ if(!canMove())return; const snap=turnData().snapshot; if(!snap){toast(msg('noUndo'),'warn');return;} await saveGameUpdate({board:snap.board,[`racks/${uid}`]:snap.rack,opened:snap.opened,turn:{uid,startedAt:turnData().startedAt||now(),moves:0,initialScore:0,snapshot:null}}); clearSelection(); toast(msg('undone'),'ok');});}
-async function sortRack(mode){ if(!room||!myRack().length)return; const orderColor={red:1,blue:2,yellow:3,black:4}; const rack=myRack().slice().sort((a,b)=>{if(a.joker&&!b.joker)return 1;if(!a.joker&&b.joker)return -1;if(a.joker&&b.joker)return 0; if(mode==='color')return orderColor[a.color]-orderColor[b.color]||a.num-b.num; return a.num-b.num||orderColor[a.color]-orderColor[b.color];}); await saveGameUpdate({[`racks/${uid}`]:rack});}
-async function withBusy(fn){ if(busy)return; busy=true; try{await fn();}catch(e){console.error(e);toast(e.message||(lang==='en'?'Unexpected error':'Error inesperado'),'err')} finally{busy=false;}}
-function clearSelection(){selectedRack.clear(); selectedBoard.clear(); renderSelection(); renderRack(); renderBoard();}
-function toggleRack(id){ if(!isMyTurn())return; selectedRack.has(id)?selectedRack.delete(id):selectedRack.add(id); renderSelection(); renderRack();}
-function toggleBoard(si,id){ if(!isMyTurn()||!hasOpened())return; const set=selectedBoard.get(si)||new Set(); set.has(id)?set.delete(id):set.add(id); if(set.size)selectedBoard.set(si,set); else selectedBoard.delete(si); renderSelection(); renderBoard();}
-function renderSelection(){const br=[...selectedBoard.values()].reduce((a,s)=>a+s.size,0); el.selectionInfo.textContent=tr('selection')(selectedRack.size,br);}
-
-function renderTableContext(){
-  const strip=$('opponentsStrip');
-  if(strip){
-    const ps=playersArr();
-    const cur=currentUid();
-    const rivals=ps.filter(p=>p.id!==uid);
-    if(!room||!ps.length){
-      strip.innerHTML=`<div class="opponentCard"><div class="opponentName">Rivales<span class="turnDot"></span></div><div class="opponentMeta">Los jugadores aparecerán acá.</div></div>`;
-    } else if(!rivals.length){
-      strip.innerHTML=`<div class="opponentCard"><div class="opponentName">Esperando jugadores<span class="turnDot"></span></div><div class="opponentMeta">Compartí la sala para jugar en familia.</div></div>`;
-    } else {
-      strip.innerHTML=rivals.map(p=>{
-        const rackCount=room?.game?.racks?.[p.id]?.length;
-        const rackText=Number.isFinite(rackCount)?tr('tiles')(rackCount):(lang==='en'?'waiting':'esperando');
-        const turn=p.id===cur;
-        const status=turn?(lang==='en'?'turn':'turno'):(hasOpened(p.id)?tr('opened'):tr('notOpened'));
-        return `<div class="opponentCard ${turn?'turn':''}" data-player="${escapeHtml(p.id)}"><div class="opponentName"><span>${escapeHtml(p.name||playerName(p.id))}</span><span class="turnDot" aria-hidden="true"></span></div><div class="opponentMeta">${rackText} · ${status}</div></div>`;
-      }).join('');
+const el={app:$('app'),appTitle:$('appTitle'),appSubtitle:$('appSubtitle'),langSelect:$('langSelect'),netStatus:$('netStatus'),opponentsStrip:$('opponentsStrip'),turnInfo:$('turnInfo'),poolInfo:$('poolInfo'),openedInfo:$('openedInfo'),sets:$('sets'),poolDock:$('poolDock'),poolDockTitle:$('poolDockTitle'),poolDockInfo:$('poolDockInfo'),startPanel:$('startPanel'),loadDemoBtn:$('loadDemoBtn'),drawBtn:$('drawBtn'),newSetBtn:$('newSetBtn'),endTurnBtn:$('endTurnBtn'),rackInfo:$('rackInfo'),rackTiles:$('rackTiles'),sortNumBtn:$('sortNumBtn'),sortColorBtn:$('sortColorBtn'),setupModal:$('setupModal'),openSetupBtn:$('openSetupBtn'),closeSetupBtn:$('closeSetupBtn'),nameInput:$('nameInput'),saveNameBtn:$('saveNameBtn'),whoami:$('whoami'),newRoomName:$('newRoomName'),createRoomBtn:$('createRoomBtn'),refreshRoomsBtn:$('refreshRoomsBtn'),roomSelect:$('roomSelect'),joinRoomBtn:$('joinRoomBtn'),leaveRoomBtn:$('leaveRoomBtn'),roomInfo:$('roomInfo'),playersList:$('playersList'),startGameBtn:$('startGameBtn'),resetBoardBtn:$('resetBoardBtn'),resetDemoBtn:$('resetDemoBtn'),demoInfo:$('demoInfo'),log:$('log'),helpBtn:$('helpBtn'),helpModal:$('helpModal'),helpTitle:$('helpTitle'),closeHelpBtn:$('closeHelpBtn'),rulesList:$('rulesList'),helpFoot:$('helpFoot'),targetSetSelect:$('targetSetSelect'),addToSetBtn:$('addToSetBtn'),clearSelectionBtn:$('clearSelectionBtn'),undoTurnBtn:$('undoTurnBtn'),advanceDemoBtn:$('advanceDemoBtn'),resetDemoMobileBtn:$('resetDemoMobileBtn'),selectionInfo:$('selectionInfo'),gameNotice:$('gameNotice')};
+function t(){return TEXT[lang]||TEXT.es}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function randId(){return Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4)}
+function tile(color,num,id){return {id:id||`${color}_${num}_${randId()}`,color,num,joker:false}}
+function joker(id){return {id:id||`joker_${randId()}`,joker:true}}
+function tileLabel(x){if(x.joker)return 'Comodín';return `${COLOR_LABEL[lang][x.color]} ${x.num}`}
+function buildTiles(){const out=[]; for(let copy=0;copy<2;copy++) for(const c of COLORS) for(let n=1;n<=13;n++) out.push(tile(c,n,`${c}_${n}_${copy}`)); out.push(joker('joker_1'),joker('joker_2')); return out.sort(()=>Math.random()-.5)}
+function demoRackBase(){return [tile('red',10,'demo_r10'),tile('blue',10,'demo_b10'),tile('yellow',10,'demo_y10'),tile('red',1,'demo_r1'),tile('red',2,'demo_r2'),tile('red',3,'demo_r3'),tile('black',5,'demo_k5'),tile('black',6,'demo_k6'),tile('black',7,'demo_k7'),tile('blue',4,'demo_b4'),tile('blue',5,'demo_b5'),tile('yellow',8,'demo_y8'),tile('yellow',9,'demo_y9'),joker('demo_joker')]}
+function createDemoGame(playerId){return {order:[playerId,DEMO_BOT_UID],turnIndex:0,pool:buildTiles().slice(0,44),board:[],racks:{[playerId]:demoRackBase(),[DEMO_BOT_UID]:demoRackBase()},opened:{},winner:null}}
+function loadDemoRoom(){uid=DEMO_USER_ID; userName=userName||t().player; roomId=DEMO_ROOM_ID; selectedRack.clear(); room={demo:true,name:t().room,status:'playing',players:{[uid]:{name:userName,online:true},[DEMO_BOT_UID]:{name:t().bot,online:true}},game:createDemoGame(uid)}; localStorage.setItem('rk_demo_room',JSON.stringify(room)); render()}
+function resetLocalDemo(){loadDemoRoom()}
+function advanceDemoTurn(){if(!room||currentUid()!==DEMO_BOT_UID)return; const g=room.game; const rack=g.racks[DEMO_BOT_UID]; if(g.pool.length)rack.push(g.pool.pop()); g.turnIndex=0; render()}
+function currentUid(){return room?.game?.order?.[room.game.turnIndex]||uid}
+function playerName(id){return room?.players?.[id]?.name||id}
+function myRack(){return room?.game?.racks?.[uid]||[]}
+function currentSelectedTiles(){const rack=myRack(); return [...selectedRack].map(id=>rack.find(x=>x.id===id)).filter(Boolean)}
+function validateSet(tiles){
+  if(!tiles||tiles.length<3)return {ok:false,type:'',points:0,reason:'min3'};
+  const jokers=tiles.filter(x=>x.joker).length; const normal=tiles.filter(x=>!x.joker);
+  if(!normal.length)return {ok:false,type:'',points:0,reason:'jokers'};
+  const nums=[...new Set(normal.map(x=>x.num))]; const colors=[...new Set(normal.map(x=>x.color))];
+  if(nums.length===1 && new Set(normal.map(x=>x.color)).size===normal.length && tiles.length<=4){
+    return {ok:true,type:t().typeGroup,points:tiles.reduce((s,x)=>s+(x.joker?normal[0].num:x.num),0)};
+  }
+  if(colors.length===1){
+    const sorted=normal.map(x=>x.num).sort((a,b)=>a-b);
+    let gaps=0; for(let i=1;i<sorted.length;i++)gaps+=Math.max(0,sorted[i]-sorted[i-1]-1);
+    if(new Set(sorted).size===sorted.length && gaps<=jokers){
+      const first=sorted[0]; const total=Array.from({length:tiles.length},(_,i)=>first+i).reduce((a,b)=>a+b,0);
+      return {ok:true,type:t().typeRun,points:total};
     }
   }
-  const poolInfo=$('poolDockInfo');
-  if(poolInfo){
-    const n=room?.game?.pool?.length;
-    poolInfo.textContent=room?.status==='playing'
-      ? `${lang==='en'?'Tiles left in the central pool':'Fichas restantes en el pozo central'}: ${n??0}. ${lang==='en'?'All played melds stay visible on the table.':'Todas las jugadas bajadas quedan visibles en la mesa.'}`
-      : (lang==='en'?'Start a hand or load demo to see the pool.':'Iniciá una mano o cargá demo para ver el pozo.');
-  }
+  return {ok:false,type:'',points:0,reason:'noValid'};
 }
-
-
-function renderGameMode(){
-  const playing=room?.status==='playing';
-  el.app.classList.toggle('playing',!!playing);
-  el.drawerHint.textContent=playing?tr('drawerHintPlay'):tr('drawerHint');
-  if(playing && lastRoomStatus!=='playing') el.sideDrawer.open=false;
-  lastRoomStatus=room?.status||'';
-  const ps=playersArr();
-  el.barRoom.textContent=tr('roomBar')(room?.name||roomId||'-');
-  el.barTurn.textContent=(room?.status==='playing')?tr('turnBar')(playerName(currentUid())):tr('turnBar')('-');
-  el.barPlayers.textContent=tr('playersBar')(ps.length);
-  el.barPool.textContent=tr('poolBar')(room?.game?.pool?.length);
+function validateBoard(board){return (board||[]).every(s=>validateSet(s.tiles).ok)}
+function playSelectedSet(){
+  if(!room)return;
+  const g=room.game; if(currentUid()!==uid)return;
+  const chosen=currentSelectedTiles(); const valid=validateSet(chosen);
+  if(!valid.ok)return;
+  if(!g.opened[uid] && valid.points<30)return;
+  g.board.push({id:randId(),owner:playerName(uid),tiles:chosen});
+  g.racks[uid]=myRack().filter(x=>!selectedRack.has(x.id));
+  g.opened[uid]=true;
+  selectedRack.clear();
+  render();
 }
-
-function render(){renderRooms(); renderRoomInfo(); renderPlayers(); renderGame(); renderRack(); renderBoard(); renderTableContext(); renderLog(); renderButtons(); renderGameMode();}
-function renderRoomInfo(){ if(!roomId||!room){el.roomInfo.textContent=tr('noRoom'); return;} el.roomInfo.textContent=tr('roomInfo')(room.name||roomId,room.status||'lobby');}
-function renderPlayers(){ const ps=playersArr(); if(!ps.length){el.playersList.innerHTML=`<div class="small">${tr('players')}: 0</div>`; return;} const cur=currentUid(); el.playersList.innerHTML=ps.map(p=>{const rackCount=room?.game?.racks?.[p.id]?.length; const rackText=Number.isFinite(rackCount)?` · ${tr('tiles')(rackCount)}`:''; const demoText=p.is_demo?` · ${tr('demoBadge')||'DEMO'}`:''; return `<div class="player ${p.id===uid?'me':''} ${p.id===cur?'turn':''}"><div><b>${escapeHtml(p.name||playerName(p.id))}</b><div class="small">${p.id===room?.host?tr('host')+' · ':''}${hasOpened(p.id)?tr('opened'):tr('notOpened')}${rackText}${demoText}</div></div><span class="pill">${p.online===false?'off':'online'}</span></div>`;}).join('');}
-function renderGame(){ if(!room||room.status==='lobby'){el.turnInfo.textContent=tr('noGame'); el.poolInfo.textContent=tr('pool')+': -'; el.openedInfo.textContent=tr('opening')+': -'; return;} if(room.status==='finished'){el.turnInfo.textContent=tr('won')(playerName(room.game?.winner));} else {el.turnInfo.textContent=tr('turnInfo')(playerName(currentUid()),isMyTurn());} el.poolInfo.textContent=tr('pool')+`: ${room.game?.pool?.length??0}`; const score=turnData().initialScore||0; el.openedInfo.textContent=hasOpened()? tr('alreadyOpened') : `${tr('opening')}: ${score}/30`;}
-function renderRack(){ const rack=myRack(); el.rackInfo.textContent=tr('tiles')(rack.length); el.rackTiles.innerHTML=''; if(!rack.length){el.rackTiles.innerHTML=`<div class="small">${tr('noTiles')}</div>`; return;} for(const t of rack){const d=tileEl(t); d.classList.toggle('selected',selectedRack.has(t.id)); d.onclick=()=>toggleRack(t.id); el.rackTiles.appendChild(d);} }
-function tileEl(t){const d=document.createElement('button'); d.type='button'; d.className=`tile ${t.joker?'joker':t.color}`; d.innerHTML=t.joker?'★':`${t.num}<small>${(colorName(t.color)||'')[0]||''}</small>`; d.title=t.joker?'Joker':`${colorName(t.color)} ${t.num}`; return d;}
-function renderBoard(){ const b=board(); const vals=validateBoard(b); el.sets.innerHTML=''; el.targetSetSelect.innerHTML=`<option value="">${tr('target')}</option>`; if(!b.length){el.sets.innerHTML=`<div class="tableEmptyHint">${tr('emptyTable')}</div>`; return;} b.forEach((s,i)=>{const v=vals.sets[i]||validateSet(s); const wrap=document.createElement('div'); wrap.className=`set ${v.ok?'':'invalid'}`; wrap.innerHTML=`<div class="setHead"><span>${tr('set')} ${i+1} · ${v.ok?`${typeName(v.type)} · ${v.score} ${tr('points')}`:tr('invalid')}</span><span>${v.ok?'✓':'⚠'}</span></div>`; const tiles=document.createElement('div'); tiles.className='tiles'; s.forEach(t=>{const d=tileEl(t); const sel=selectedBoard.get(i)?.has(t.id); d.classList.toggle('selected',!!sel); d.onclick=()=>toggleBoard(i,t.id); tiles.appendChild(d);}); wrap.appendChild(tiles); el.sets.appendChild(wrap); const opt=document.createElement('option'); opt.value=i; opt.textContent=`${tr('set')} ${i+1}`; el.targetSetSelect.appendChild(opt);});}
-function renderLog(){const logs=(room?.log||[]).slice().reverse(); if(logs.length)el.log.innerHTML=logs.map(x=>`<div><b>${new Date(x.t||Date.now()).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</b> ${escapeHtml(x.m)}</div>`).join('');}
-function renderButtons(){const inRoom=!!room; const playing=room?.status==='playing'; const myTurn=isMyTurn(); el.startGameBtn.disabled=!inRoom||!isHost()||isLocalDemo(); el.resetBoardBtn.disabled=!inRoom||!isHost(); el.drawBtn.disabled=!myTurn || (turnData().moves||0)>0; el.endTurnBtn.disabled=!myTurn; el.newSetBtn.disabled=!myTurn; el.addToSetBtn.disabled=!myTurn||!hasOpened(); el.undoTurnBtn.disabled=!myTurn||!turnData().snapshot; el.advanceDemoBtn.disabled=!isLocalDemo()||currentUid()!==DEMO_BOT_UID; if(el.resetDemoMobileBtn){el.resetDemoMobileBtn.disabled=!isLocalDemo(); el.resetDemoMobileBtn.classList.toggle('hide',!isLocalDemo());}}
-window.addEventListener('online',()=>el.netStatus.textContent=tr('online')); window.addEventListener('offline',()=>el.netStatus.textContent=tr('offline'));
-init();
+function drawAndPass(){if(!room)return; const g=room.game; if(currentUid()!==uid)return; if(g.pool.length)g.racks[uid].push(g.pool.pop()); passTurn()}
+function endTurn(){if(!room)return; if(!validateBoard(room.game.board))return; passTurn()}
+function passTurn(){const g=room.game; g.turnIndex=(g.turnIndex+1)%g.order.length; selectedRack.clear(); render()}
+function sortRack(mode){const rack=myRack(); rack.sort((a,b)=>{if(a.joker)return 1;if(b.joker)return -1;return mode==='color'?(a.color.localeCompare(b.color)||a.num-b.num):(a.num-b.num||a.color.localeCompare(b.color))}); render()}
+function tileHtml(x,extra=''){const cls=`tile ${x.joker?'joker':x.color} ${extra}`; const label=tileLabel(x); return `<button class="${cls}" data-id="${x.id}" title="${escapeHtml(label)}">${x.joker?'★':x.num}<small>${x.joker?'J':(COLOR_LABEL[lang][x.color]||x.color)[0]}</small></button>`}
+function renderOpponents(){if(!room){el.opponentsStrip.innerHTML='<div class="opponent"><b>Rivales</b><span>Esperando partida</span></div><div class="opponent"><b>Mesa</b><span>0 jugadas</span></div><div class="opponent"><b>Pila</b><span>-</span></div>';return} const ids=Object.keys(room.players); el.opponentsStrip.innerHTML=ids.map(id=>`<div class="opponent ${currentUid()===id?'turn':''}"><b>${escapeHtml(room.players[id].name)}</b><span>${t().rack((room.game.racks[id]||[]).length)} ${room.game.opened?.[id]?'· abierto':''}</span></div>`).join('')}
+function renderSets(){if(!room||!room.game.board.length){el.sets.innerHTML=`<div class="emptyTable">${t().empty}</div>`;return} el.sets.innerHTML=room.game.board.map((s,i)=>{const v=validateSet(s.tiles);return `<div class="set"><div class="setHead"><span>${t().set} ${i+1} · ${v.type||''} · ${v.points} pts</span><span>${escapeHtml(s.owner)} · ${t().visible}</span></div><div class="tiles">${s.tiles.map(x=>tileHtml(x)).join('')}</div></div>`}).join('')}
+function renderRack(){const rack=myRack(); el.rackInfo.textContent=t().rack(rack.length); el.rackTiles.innerHTML=rack.map(x=>tileHtml(x,selectedRack.has(x.id)?'selected':'')).join('')}
+function renderText(){el.loadDemoBtn.textContent=t().demo; el.resetDemoBtn.textContent=t().reset; el.resetDemoMobileBtn.textContent=t().reset; el.drawBtn.textContent=t().draw; el.newSetBtn.textContent=t().play; el.endTurnBtn.textContent=t().end; el.helpTitle.textContent=t().helpTitle; el.helpFoot.textContent=t().helpFoot; el.rulesList.innerHTML=t().rules.map(r=>`<li>${escapeHtml(r)}</li>`).join(''); if(el.poolDockTitle) el.poolDockTitle.textContent=lang==='en'?'Tile pool':'Pozo de fichas'}
+function render(){
+  renderText();
+  const has=!!room; const g=room?.game;
+  el.netStatus.textContent=has?'DEMO':'Listo'; el.netStatus.style.display='block';
+  el.startPanel.classList.toggle('hidden',has);
+  el.roomInfo.textContent=has?`Sala: ${room.name}`:'Sin sala.';
+  el.playersList.textContent=has?Object.values(room.players).map(p=>p.name).join(' · '):'Sin jugadores.';
+  el.poolInfo.textContent=t().pool(g?.pool?.length);
+  el.openedInfo.textContent=t().opening(!!g?.opened?.[uid]);
+  el.poolDockInfo.textContent=t().poolInfo(g?.pool?.length??0);
+  el.turnInfo.textContent=has?t().turn(playerName(currentUid())):'Sin partida iniciada.';
+  el.selectionInfo.textContent=selectedRack.size?t().sel(selectedRack.size):t().noSel;
+  el.advanceDemoBtn.disabled=!has||currentUid()!==DEMO_BOT_UID;
+  renderOpponents(); renderSets(); renderRack();
+}
+function initEvents(){
+  el.loadDemoBtn.onclick=loadDemoRoom; el.resetDemoBtn.onclick=resetLocalDemo; el.resetDemoMobileBtn.onclick=resetLocalDemo;
+  el.newSetBtn.onclick=playSelectedSet; el.drawBtn.onclick=drawAndPass; el.endTurnBtn.onclick=endTurn; el.advanceDemoBtn.onclick=advanceDemoTurn;
+  el.sortNumBtn.onclick=()=>sortRack('num'); el.sortColorBtn.onclick=()=>sortRack('color');
+  el.rackTiles.addEventListener('click',ev=>{const btn=ev.target.closest('.tile'); if(!btn)return; const id=btn.dataset.id; selectedRack.has(id)?selectedRack.delete(id):selectedRack.add(id); render()});
+  el.langSelect.onchange=()=>{lang=el.langSelect.value; localStorage.setItem('rk_lang',lang); render()};
+  el.openSetupBtn.onclick=()=>el.setupModal.classList.remove('hide'); el.closeSetupBtn.onclick=()=>el.setupModal.classList.add('hide');
+  el.helpBtn.onclick=()=>el.helpModal.classList.remove('hide'); el.closeHelpBtn.onclick=()=>el.helpModal.classList.add('hide');
+  el.saveNameBtn.onclick=()=>{userName=el.nameInput.value.trim()||userName||t().player; localStorage.setItem('rk_name',userName); el.whoami.textContent=userName; if(room){room.players[uid].name=userName; render()}};
+  el.createRoomBtn.onclick=()=>{el.roomInfo.textContent='Sala creada localmente. Para jugar ahora usá Demo.'};
+  el.joinRoomBtn.onclick=()=>{el.roomInfo.textContent='Modo sala pendiente. Usá Demo para jugar ahora.'};
+  el.leaveRoomBtn.onclick=()=>{room=null;roomId='';selectedRack.clear();render()};
+  el.startGameBtn.onclick=loadDemoRoom; el.resetBoardBtn.onclick=()=>{room=null;selectedRack.clear();render()};
+}
+async function initFirebaseOptional(){try{await loadFirebaseModules(); el.netStatus.textContent='Firebase';}catch{el.netStatus.textContent='DEMO'}}
+function boot(){el.langSelect.value=lang; el.nameInput.value=userName; initEvents(); render(); initFirebaseOptional(); if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}}
+boot();
 </script>
 </body>
 </html>

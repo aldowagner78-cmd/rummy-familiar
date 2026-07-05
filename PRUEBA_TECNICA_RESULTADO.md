@@ -1,50 +1,49 @@
-# Resultado técnico
+# Hotfix v17 - Demo y pruebas Playwright
 
-## Fecha
-2026-07-05
+Fecha: 2026-07-05
 
-## Validación realizada
+## Cambio aplicado
+- Corregido error de inicialización JavaScript en el rebuild móvil v16.
+- Se agregó referencia faltante a `poolDockTitle`.
+- Se actualizó caché PWA a `rummy-familiar-professional-rebuild-v17-hotfix`.
+- Motivo: Playwright hacía click en `Jugar demo ahora`, pero `roomInfo` seguía mostrando `Sin sala.` porque `render()` fallaba al acceder a un elemento no registrado.
 
-Se validó que el cambio mantiene estructura de app estática y PWA.
-
-Comandos ejecutados en el entorno de preparación:
-
-```bash
-node --check tools/validar-estatico.mjs
-npm run test:static
-```
-
-## Resultado
-
-```text
-Resultado: validación estática correcta.
-```
-
-## Archivos verificados
-
-- `index.html`
-- `sw.js`
-- `manifest.webmanifest`
-- documentación obligatoria
-- IDs principales de UI
-- bloques funcionales principales
-- cache PWA versionada
-
-## Alcance de la validación
-
-Se validó sintaxis y estructura. La prueba Playwright completa debe ejecutarse en Windows con:
-
+## Cómo probar
+Desde `C:\Users\usuario\Desktop\Rummy_Git`:
 ```powershell
 npm test
 ```
 
-## Cambio principal
+Resultado esperado:
+```text
+Resultado: validación estática correcta.
+8 passed
+```
 
-Se agregó `UI PRO v12`, pensado para móvil:
+---
 
-- header mínimo,
-- rivales compactos,
-- mesa protagonista,
-- pozo compacto sobre la mesa,
-- barra de acciones baja,
-- atril inferior en 2 hileras de 7 fichas.
+# Prueba técnica - resultado
+
+## 2026-07-05
+
+## Validaciones ejecutadas en entorno de generación
+Comando:
+```bash
+node tools/validar-estatico.mjs
+```
+
+Resultado:
+```text
+Resultado: validación estática correcta.
+```
+
+## Alcance
+- Sintaxis principal de `index.html`.
+- Sintaxis de `sw.js`.
+- Manifest PWA.
+- IDs requeridos por pruebas.
+- Textos principales.
+- Documentación obligatoria.
+
+## Nota honesta
+En este entorno no pude ejecutar Playwright visual completo porque no hay navegador Playwright disponible. El parche fue diseñado para corregir el error reportado donde `#rackTiles` interceptaba `#newSetBtn`, separando físicamente barra de acciones y atril.
