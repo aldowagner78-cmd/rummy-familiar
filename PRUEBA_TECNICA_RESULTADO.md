@@ -1,24 +1,50 @@
 # Resultado técnico
 
-## Estado
-Parche preparado para corregir el último fallo E2E móvil.
+## Fecha
+2026-07-05
 
-## Falla observada
-- `7 passed`
-- `1 failed`
-- La prueba móvil `reinicia el demo y restaura los datos ficticios` fallaba porque `#resetDemoBtn` estaba dentro del panel lateral oculto durante partida móvil.
+## Validación realizada
 
-## Corrección aplicada
-- Se agregó `#resetDemoMobileBtn` en los controles visibles de partida.
-- Se enlazó al mismo comportamiento `resetLocalDemo`.
-- Solo queda visible/activo en modo demo local.
-- La prueba E2E usa el botón móvil visible cuando existe.
+Se validó que el cambio mantiene estructura de app estática y PWA.
 
-## Validación esperada
-- `npm test`
-- Resultado esperado: `8 passed`.
+Comandos ejecutados en el entorno de preparación:
 
-## Archivos críticos
+```bash
+node --check tools/validar-estatico.mjs
+npm run test:static
+```
+
+## Resultado
+
+```text
+Resultado: validación estática correcta.
+```
+
+## Archivos verificados
+
 - `index.html`
-- `tests/e2e/rummy-demo.spec.js`
 - `sw.js`
+- `manifest.webmanifest`
+- documentación obligatoria
+- IDs principales de UI
+- bloques funcionales principales
+- cache PWA versionada
+
+## Alcance de la validación
+
+Se validó sintaxis y estructura. La prueba Playwright completa debe ejecutarse en Windows con:
+
+```powershell
+npm test
+```
+
+## Cambio principal
+
+Se agregó `UI PRO v12`, pensado para móvil:
+
+- header mínimo,
+- rivales compactos,
+- mesa protagonista,
+- pozo compacto sobre la mesa,
+- barra de acciones baja,
+- atril inferior en 2 hileras de 7 fichas.

@@ -1,0 +1,23 @@
+# Layout profesional móvil
+
+Este parche corrige la jugabilidad móvil.
+
+Cambios principales:
+- Mesa central mucho más grande.
+- Atril inferior compacto.
+- Fichas del atril en 2 hileras.
+- Pozo compacto.
+- Controles en barra horizontal pequeña.
+- Header reducido.
+- Panel lateral oculto durante partida.
+
+Para probar:
+1. npm test
+2. npm run serve
+3. abrir http://127.0.0.1:8000
+
+Para ver en GitHub Pages:
+https://aldowagner78-cmd.github.io/rummy-familiar/?v=mobile-v11
+
+Si Firefox muestra versión vieja:
+about:serviceworkers -> unregister -> recargar.

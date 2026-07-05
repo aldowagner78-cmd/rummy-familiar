@@ -1,0 +1,21 @@
+# UI PRO móvil v12
+
+Este parche corrige la experiencia móvil para que sea jugable como app de fichas.
+
+Cambios principales:
+- Header mínimo.
+- Rivales arriba en franja compacta.
+- Mesa como zona principal.
+- Pozo compacto sobre la mesa.
+- Acciones en barra baja y deslizable.
+- Atril inferior de aproximadamente 19-20%.
+- Fichas del atril en 2 hileras de 7.
+
+Prueba recomendada:
+1. Ejecutar `npm test`.
+2. Abrir `http://127.0.0.1:8000`.
+3. Cargar demo local.
+4. Validar que la mesa queda visible y que el atril no tapa el juego.
+
+Para GitHub Pages:
+https://aldowagner78-cmd.github.io/rummy-familiar/?v=ui-pro-v12

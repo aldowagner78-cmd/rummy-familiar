@@ -329,3 +329,45 @@ https://aldowagner78-cmd.github.io/rummy-familiar/
 Si se ve una versión vieja por cache PWA:
 - presionar `Ctrl + F5`,
 - o borrar datos del sitio desde DevTools > Application > Storage > Clear site data.
+
+## Layout móvil profesional
+
+La versión actual está pensada para jugar desde celular:
+
+- mesa central grande,
+- jugadas visibles,
+- pozo compacto,
+- atril inferior en 2 hileras,
+- controles en barra horizontal.
+
+Para verificar cambios después de publicar, abrir:
+
+```text
+https://aldowagner78-cmd.github.io/rummy-familiar/?v=mobile-v11
+```
+
+Si Firefox muestra una versión vieja:
+
+```text
+about:serviceworkers
+```
+
+Buscar el service worker de `rummy-familiar`, usar `Unregister` y recargar.
+
+
+
+## Nota UI profesional móvil v12
+
+La interfaz móvil está diseñada para parecerse más a una app de fichas:
+- mesa como zona principal,
+- rivales compactos arriba,
+- pozo visible pero pequeño,
+- controles en barra baja,
+- atril inferior de aproximadamente 20%,
+- 14 fichas iniciales en 2 hileras de 7.
+
+Para forzar recarga en GitHub Pages:
+
+```text
+https://aldowagner78-cmd.github.io/rummy-familiar/?v=ui-pro-v12
+```

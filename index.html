@@ -1130,10 +1130,1025 @@ input:focus,select:focus,button:focus-visible,.tile:focus-visible{
   }
 }
 
+
+/* === FIX v11 profesional: mesa jugable mobile-first === */
+@media(max-width:600px){
+  :root{
+    --pro-top-h:62px;
+    --pro-rack-h:clamp(94px,20dvh,116px);
+    --pro-action-h:42px;
+  }
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden!important;
+    overscroll-behavior:none;
+  }
+  body{
+    min-height:100dvh;
+    background:#06142d;
+  }
+
+  /* Encabezado mínimo: no debe robar pantalla de juego */
+  .top{
+    height:var(--pro-top-h)!important;
+    max-height:var(--pro-top-h)!important;
+    overflow:hidden!important;
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .topin{
+    height:38px!important;
+    padding:4px 6px 1px!important;
+    align-items:center!important;
+  }
+  .logo{
+    min-width:0;
+    gap:5px!important;
+  }
+  .logo .mark{
+    width:26px!important;
+    height:26px!important;
+    border-radius:9px!important;
+  }
+  #appTitle{
+    max-width:168px!important;
+    font-size:12px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #appSubtitle,
+  #netStatus{
+    display:none!important;
+  }
+  .topActions select{
+    height:30px!important;
+    min-width:78px!important;
+    max-width:90px!important;
+    padding:3px 7px!important;
+    font-size:11px!important;
+  }
+  .gameBar{
+    height:24px!important;
+    padding:0 5px 3px!important;
+    gap:4px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+    white-space:nowrap!important;
+  }
+  .gameBar::-webkit-scrollbar{display:none!important}
+  .gameBar .pill{
+    flex:0 0 auto!important;
+    padding:3px 6px!important;
+    font-size:9.5px!important;
+    line-height:1!important;
+    border-radius:999px!important;
+  }
+
+  /* Pantalla de partida: mesa arriba, atril abajo. Sin scroll de página. */
+  .app.playing{
+    height:calc(100dvh - var(--pro-top-h))!important;
+    max-height:calc(100dvh - var(--pro-top-h))!important;
+    padding:3px 4px 4px!important;
+    display:grid!important;
+    grid-template-rows:minmax(0,1fr) var(--pro-rack-h)!important;
+    gap:4px!important;
+    overflow:hidden!important;
+  }
+  .app.playing .grid{
+    height:100%!important;
+    min-height:0!important;
+    display:block!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+  .app.playing .sideDrawer{
+    display:none!important;
+  }
+  .app.playing .realGameBoard{
+    position:relative!important;
+    height:100%!important;
+    min-height:0!important;
+    display:grid!important;
+    grid-template-rows:30px minmax(0,1fr)!important;
+    gap:3px!important;
+    padding-bottom:var(--pro-action-h)!important;
+    overflow:hidden!important;
+  }
+
+  /* Rivales: una franja compacta, no un panel grande. */
+  .app.playing .realPlayersStrip{
+    position:static!important;
+    top:auto!important;
+    height:30px!important;
+    min-height:30px!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+    overflow:hidden!important;
+  }
+  .app.playing .opponentCard{
+    height:30px!important;
+    min-height:30px!important;
+    border-radius:9px!important;
+    padding:3px 5px!important;
+    overflow:hidden!important;
+    box-shadow:none!important;
+  }
+  .app.playing .opponentName{
+    font-size:10.5px!important;
+    line-height:1!important;
+    gap:3px!important;
+  }
+  .app.playing .opponentMeta{
+    margin-top:1px!important;
+    font-size:8.5px!important;
+    line-height:1!important;
+  }
+  .app.playing .turnDot{
+    width:6px!important;
+    height:6px!important;
+  }
+
+  /* La mesa es el área principal: ocupa casi todo el espacio útil. */
+  .app.playing .realTablePanel{
+    order:2!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    border-radius:14px!important;
+  }
+  .app.playing .realTableHeader{
+    height:22px!important;
+    min-height:22px!important;
+    padding:5px 8px 0!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+  .app.playing .realTableHeader h2{
+    margin:0!important;
+    font-size:12px!important;
+    line-height:1!important;
+  }
+  .app.playing .realTableHeader .small,
+  .app.playing #tableVisibilityPill{
+    display:none!important;
+  }
+  .app.playing .realTableSurface{
+    height:calc(100% - 22px)!important;
+    min-height:0!important;
+    display:grid!important;
+    grid-template-rows:minmax(0,1fr) 40px!important;
+    gap:4px!important;
+    padding:5px!important;
+  }
+  .app.playing .tableFelt{
+    height:100%!important;
+    min-height:0!important;
+    border-radius:13px!important;
+    padding:5px!important;
+    overflow:hidden!important;
+  }
+  .app.playing .tableFelt:before{
+    display:none!important;
+  }
+  .app.playing .tableFelt .sets{
+    height:100%!important;
+    max-height:100%!important;
+    min-height:0!important;
+    overflow:auto!important;
+    display:grid!important;
+    align-content:start!important;
+    gap:4px!important;
+    padding:0!important;
+  }
+  .app.playing .tableEmptyHint{
+    padding:9px!important;
+    border-radius:11px!important;
+    font-size:12px!important;
+    line-height:1.2!important;
+    min-height:auto!important;
+  }
+  .app.playing .set{
+    padding:5px!important;
+    border-radius:10px!important;
+  }
+  .app.playing .setHead{
+    margin-bottom:3px!important;
+    font-size:9.5px!important;
+    line-height:1!important;
+  }
+  .app.playing .set .tiles{
+    gap:3px!important;
+  }
+  .app.playing .set .tile{
+    width:28px!important;
+    height:36px!important;
+    min-width:28px!important;
+    font-size:13px!important;
+    border-radius:7px!important;
+    box-shadow:0 2px 0 #b9a976,0 4px 8px rgba(2,6,23,.16)!important;
+  }
+  .app.playing .set .tile:before{
+    top:3px!important;
+    width:14px!important;
+    height:2px!important;
+  }
+  .app.playing .set .tile small{
+    right:2px!important;
+    bottom:1px!important;
+    font-size:5.5px!important;
+  }
+
+  /* Pozo compacto: visible, pero no roba mesa. */
+  .app.playing .poolDock{
+    height:40px!important;
+    min-height:40px!important;
+    padding:4px 6px!important;
+    border-radius:12px!important;
+    grid-template-columns:34px 1fr!important;
+    gap:5px!important;
+  }
+  .app.playing .poolStack{
+    width:34px!important;
+    height:34px!important;
+  }
+  .app.playing .tileBack{
+    width:24px!important;
+    height:31px!important;
+    left:5px!important;
+    top:1px!important;
+    border-radius:7px!important;
+    font-size:10px!important;
+    box-shadow:0 3px 0 rgba(2,6,23,.26)!important;
+  }
+  .app.playing .poolStack:before,
+  .app.playing .poolStack:after{
+    border-radius:7px!important;
+  }
+  .app.playing .poolText b{
+    font-size:10.5px!important;
+    line-height:1!important;
+  }
+  .app.playing .poolText .small{
+    font-size:9px!important;
+    line-height:1.05!important;
+    max-height:20px!important;
+    overflow:hidden!important;
+  }
+
+  /* Acciones: barra horizontal compacta. No tapa la mesa ni duplica paneles. */
+  .app.playing .gameHudPanel{
+    position:absolute!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    z-index:12!important;
+    order:3!important;
+    height:var(--pro-action-h)!important;
+    min-height:var(--pro-action-h)!important;
+    padding:3px!important;
+    border-radius:12px!important;
+    display:flex!important;
+    gap:4px!important;
+    align-items:center!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    background:rgba(15,23,42,.72)!important;
+    border:1px solid rgba(147,197,253,.22)!important;
+    box-shadow:0 -8px 24px rgba(2,6,23,.24)!important;
+    scrollbar-width:none!important;
+  }
+  .app.playing .gameHudPanel::-webkit-scrollbar{display:none!important}
+  .app.playing .gameHudPanel>.tableHeader,
+  .app.playing #gameNotice,
+  .app.playing #quickHow,
+  .app.playing #selectionInfo{
+    display:none!important;
+  }
+  .app.playing .gameHudPanel .controls,
+  .app.playing .gameHudPanel .controls.two,
+  .app.playing #turnControlsTop,
+  .app.playing #moveControls{
+    display:contents!important;
+  }
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    flex:0 0 66px!important;
+    width:66px!important;
+    height:34px!important;
+    min-height:34px!important;
+    padding:2px 4px!important;
+    border-radius:10px!important;
+    font-size:8.5px!important;
+    line-height:1.05!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+  .app.playing #newSetBtn{order:1!important; flex-basis:74px!important; width:74px!important}
+  .app.playing #drawBtn{order:2!important}
+  .app.playing #endTurnBtn{order:3!important}
+  .app.playing #targetSetSelect{order:4!important; flex-basis:82px!important; width:82px!important}
+  .app.playing #addToSetBtn{order:5!important}
+  .app.playing #clearSelectionBtn{order:6!important}
+  .app.playing #undoTurnBtn{order:7!important}
+  .app.playing #advanceDemoBtn{order:8!important}
+  .app.playing #resetDemoMobileBtn{
+    order:9!important;
+    display:block!important;
+    flex:0 0 58px!important;
+    width:58px!important;
+  }
+
+  /* Atril: 20% inferior, 2 hileras de 7 fichas reales. */
+  .app.playing .rack{
+    position:relative!important;
+    bottom:auto!important;
+    z-index:5!important;
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border-top:0!important;
+    overflow:hidden!important;
+  }
+  .app.playing .rackCard{
+    height:100%!important;
+    min-height:0!important;
+    padding:4px 5px 5px!important;
+    border-radius:14px!important;
+    display:grid!important;
+    grid-template-rows:16px minmax(0,1fr)!important;
+    gap:3px!important;
+    overflow:hidden!important;
+  }
+  .app.playing .rack .tableHeader{
+    min-height:0!important;
+    height:16px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:4px!important;
+  }
+  .app.playing .rack .tableHeader h3{
+    margin:0!important;
+    font-size:11px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  .app.playing #rackInfo{
+    font-size:9px!important;
+    line-height:1!important;
+  }
+  .app.playing .rack .tableHeader .row{
+    display:none!important;
+  }
+  .app.playing .rackTilesRail{
+    height:100%!important;
+    min-height:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 1px 1px!important;
+    scrollbar-width:thin!important;
+  }
+  .app.playing #rackTiles{
+    height:100%!important;
+    min-width:100%!important;
+    display:grid!important;
+    grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    grid-auto-flow:column!important;
+    grid-auto-columns:calc((100% - 18px)/7)!important;
+    gap:3px!important;
+    align-items:stretch!important;
+  }
+  .app.playing #rackTiles .tile{
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    border-radius:8px!important;
+    font-size:15px!important;
+    box-shadow:0 2px 0 #b9a976,0 4px 7px rgba(2,6,23,.18)!important;
+  }
+  .app.playing #rackTiles .tile:before{
+    top:3px!important;
+    width:15px!important;
+    height:2px!important;
+  }
+  .app.playing #rackTiles .tile small{
+    right:2px!important;
+    bottom:1px!important;
+    font-size:5.5px!important;
+  }
+  .app.playing #rackTiles .tile.selected{
+    transform:translateY(-1px)!important;
+    box-shadow:0 0 0 2px #facc15,0 3px 0 #b9a976!important;
+  }
+  .app.playing .helpBtn,
+  .helpBtn{
+    width:30px!important;
+    height:30px!important;
+    right:6px!important;
+    bottom:calc(var(--pro-rack-h) + var(--pro-action-h) + 7px)!important;
+    font-size:16px!important;
+    z-index:25!important;
+  }
+  .app.playing .footerSpace{
+    display:none!important;
+  }
+}
+
+@media(max-width:370px){
+  :root{
+    --pro-top-h:58px;
+    --pro-rack-h:clamp(90px,20dvh,108px);
+    --pro-action-h:38px;
+  }
+  .topin{height:35px!important}
+  #appTitle{max-width:150px!important;font-size:11px!important}
+  .topActions select{height:28px!important;min-width:74px!important;font-size:10px!important}
+  .gameBar{height:23px!important}
+  .gameBar .pill{font-size:9px!important;padding:3px 5px!important}
+  .app.playing .realGameBoard{
+    grid-template-rows:28px minmax(0,1fr)!important;
+  }
+  .app.playing .realPlayersStrip,
+  .app.playing .opponentCard{
+    height:28px!important;
+    min-height:28px!important;
+  }
+  .app.playing .opponentName{font-size:9.5px!important}
+  .app.playing .opponentMeta{font-size:8px!important}
+  .app.playing .realTableHeader{height:20px!important;padding-top:4px!important}
+  .app.playing .realTableSurface{
+    height:calc(100% - 20px)!important;
+    grid-template-rows:minmax(0,1fr) 36px!important;
+    gap:3px!important;
+    padding:4px!important;
+  }
+  .app.playing .poolDock{
+    height:36px!important;
+    min-height:36px!important;
+  }
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    height:30px!important;
+    min-height:30px!important;
+    flex-basis:60px!important;
+    width:60px!important;
+    font-size:8px!important;
+  }
+  .app.playing #newSetBtn{
+    flex-basis:68px!important;
+    width:68px!important;
+  }
+  .app.playing #targetSetSelect{
+    flex-basis:72px!important;
+    width:72px!important;
+  }
+  .app.playing #resetDemoMobileBtn{
+    flex-basis:52px!important;
+    width:52px!important;
+  }
+  .app.playing .rackCard{
+    grid-template-rows:15px minmax(0,1fr)!important;
+    padding:3px 4px 4px!important;
+  }
+  .app.playing #rackTiles{
+    grid-auto-columns:calc((100% - 15px)/7)!important;
+  }
+  .app.playing #rackTiles .tile{
+    font-size:13px!important;
+  }
+}
+
+
+/* === UI PRO v12: layout mobile-first jugable inspirado en apps de fichas === */
+@media(max-width:700px){
+  :root{
+    --game-top-h:50px;
+    --rack-h:clamp(88px,19dvh,108px);
+    --toolbar-h:34px;
+    --players-h:24px;
+    --gap-game:3px;
+  }
+
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden!important;
+    overscroll-behavior:none;
+    background:#07142e;
+  }
+  body{
+    min-height:100dvh;
+    color:#eaf4ff;
+  }
+
+  /* Header mínimo, tipo juego móvil */
+  .top{
+    height:var(--game-top-h)!important;
+    max-height:var(--game-top-h)!important;
+    min-height:var(--game-top-h)!important;
+    overflow:hidden!important;
+    background:linear-gradient(180deg,#07142e,#0b1e44)!important;
+    border-bottom:1px solid rgba(147,197,253,.18)!important;
+    box-shadow:none!important;
+  }
+  .topin{
+    height:32px!important;
+    padding:3px 6px 0!important;
+    align-items:center!important;
+    gap:4px!important;
+  }
+  .logo{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    gap:5px!important;
+  }
+  .logo .mark{
+    width:24px!important;
+    height:24px!important;
+    min-width:24px!important;
+    border-radius:8px!important;
+    box-shadow:none!important;
+  }
+  .logo .mark:after{
+    width:14px!important;
+    height:18px!important;
+    border-radius:5px!important;
+    box-shadow:5px 3px 0 -1px #fff7df!important;
+  }
+  #appTitle{
+    max-width:180px!important;
+    font-size:11px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #appSubtitle,
+  #netStatus{
+    display:none!important;
+  }
+  .topActions{
+    flex:0 0 auto!important;
+  }
+  .topActions select{
+    height:26px!important;
+    min-width:76px!important;
+    max-width:86px!important;
+    padding:2px 6px!important;
+    border-radius:999px!important;
+    font-size:10px!important;
+  }
+  .gameBar{
+    height:18px!important;
+    padding:0 5px 2px!important;
+    gap:3px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+    white-space:nowrap!important;
+  }
+  .gameBar::-webkit-scrollbar{display:none!important}
+  .gameBar .pill{
+    flex:0 0 auto!important;
+    padding:2px 5px!important;
+    font-size:8.5px!important;
+    line-height:1!important;
+    min-height:14px!important;
+    border-radius:999px!important;
+    background:rgba(15,23,42,.72)!important;
+  }
+
+  /* La partida usa TODA la pantalla disponible. */
+  .app.playing{
+    height:calc(100dvh - var(--game-top-h))!important;
+    max-height:calc(100dvh - var(--game-top-h))!important;
+    min-height:0!important;
+    padding:3px!important;
+    display:grid!important;
+    grid-template-rows:minmax(0,1fr) var(--rack-h)!important;
+    gap:var(--gap-game)!important;
+    overflow:hidden!important;
+  }
+  .app.playing .grid{
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    display:block!important;
+    overflow:hidden!important;
+  }
+  .app.playing .sideDrawer{
+    display:none!important;
+  }
+
+  /* Zona superior: rivales, mesa, barra de acciones compacta. */
+  .app.playing .realGameBoard{
+    height:100%!important;
+    min-height:0!important;
+    display:grid!important;
+    grid-template-rows:var(--players-h) minmax(0,1fr) var(--toolbar-h)!important;
+    gap:var(--gap-game)!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Rivales: solo información útil. */
+  .app.playing .realPlayersStrip{
+    position:static!important;
+    height:var(--players-h)!important;
+    min-height:var(--players-h)!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:3px!important;
+    overflow:hidden!important;
+  }
+  .app.playing .opponentCard{
+    height:var(--players-h)!important;
+    min-height:var(--players-h)!important;
+    padding:2px 5px!important;
+    border-radius:8px!important;
+    background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(30,64,175,.75))!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+  .app.playing .opponentName{
+    font-size:9.5px!important;
+    line-height:1!important;
+    gap:2px!important;
+  }
+  .app.playing .opponentMeta{
+    display:none!important;
+  }
+  .app.playing .turnDot{
+    width:6px!important;
+    height:6px!important;
+  }
+
+  /* Mesa: protagonista absoluta. Sin encabezado grande. */
+  .app.playing .realTablePanel{
+    order:2!important;
+    height:100%!important;
+    min-height:0!important;
+    border-radius:12px!important;
+    padding:0!important;
+    overflow:hidden!important;
+    border-color:rgba(125,211,252,.25)!important;
+    background:
+      radial-gradient(circle at 50% 40%,rgba(56,189,248,.20),transparent 55%),
+      linear-gradient(145deg,#07306d,#0d4c95 55%,#082855)!important;
+  }
+  .app.playing .realTableHeader{
+    display:none!important;
+  }
+  .app.playing .realTableSurface{
+    position:relative!important;
+    height:100%!important;
+    min-height:0!important;
+    display:block!important;
+    padding:4px!important;
+  }
+  .app.playing .tableFelt{
+    height:100%!important;
+    min-height:0!important;
+    padding:5px 5px 40px!important;
+    border-radius:10px!important;
+    overflow:hidden!important;
+    background:
+      radial-gradient(circle at 50% 45%,rgba(14,165,233,.18),transparent 58%),
+      rgba(8,47,73,.28)!important;
+  }
+  .app.playing .tableFelt:before{
+    display:none!important;
+  }
+  .app.playing .tableFelt .sets{
+    height:100%!important;
+    max-height:100%!important;
+    min-height:0!important;
+    overflow:auto!important;
+    display:grid!important;
+    align-content:start!important;
+    gap:4px!important;
+    padding:0!important;
+    scrollbar-width:thin!important;
+  }
+  .app.playing .tableEmptyHint{
+    margin:6px!important;
+    padding:10px!important;
+    border-radius:11px!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+    min-height:0!important;
+    color:#e0f2fe!important;
+    background:rgba(15,23,42,.22)!important;
+  }
+  .app.playing .set{
+    padding:4px!important;
+    border-radius:9px!important;
+    overflow-x:auto!important;
+    background:rgba(248,250,252,.97)!important;
+  }
+  .app.playing .setHead{
+    margin:0 0 3px!important;
+    font-size:9px!important;
+    line-height:1!important;
+  }
+  .app.playing .setHead span:first-child:after{
+    display:none!important;
+  }
+  .app.playing .set .tiles{
+    flex-wrap:nowrap!important;
+    gap:3px!important;
+    min-width:max-content!important;
+  }
+  .app.playing .set .tile{
+    width:26px!important;
+    min-width:26px!important;
+    height:34px!important;
+    font-size:12px!important;
+    border-radius:6px!important;
+    box-shadow:0 2px 0 #b9a976,0 3px 6px rgba(2,6,23,.18)!important;
+  }
+  .app.playing .set .tile:before{
+    top:3px!important;
+    width:13px!important;
+    height:2px!important;
+  }
+  .app.playing .set .tile small{
+    right:2px!important;
+    bottom:1px!important;
+    font-size:5px!important;
+  }
+
+  /* Pozo como dock pequeño sobre la mesa, no como bloque gigante. */
+  .app.playing .poolDock{
+    position:absolute!important;
+    left:7px!important;
+    bottom:7px!important;
+    width:min(170px,calc(100% - 54px))!important;
+    height:33px!important;
+    min-height:33px!important;
+    padding:3px 6px!important;
+    border-radius:10px!important;
+    display:grid!important;
+    grid-template-columns:28px 1fr!important;
+    gap:5px!important;
+    background:rgba(15,23,42,.72)!important;
+    border:1px solid rgba(191,219,254,.22)!important;
+    color:#e0f2fe!important;
+    z-index:3!important;
+  }
+  .app.playing .poolStack{
+    width:28px!important;
+    height:28px!important;
+  }
+  .app.playing .poolStack:before,
+  .app.playing .poolStack:after{
+    border-radius:6px!important;
+  }
+  .app.playing .tileBack{
+    width:21px!important;
+    height:27px!important;
+    left:4px!important;
+    top:0!important;
+    border-radius:6px!important;
+    font-size:9px!important;
+    border-width:1px!important;
+    box-shadow:0 2px 0 rgba(2,6,23,.25)!important;
+  }
+  .app.playing .poolText b{
+    font-size:9.5px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .app.playing .poolText .small{
+    font-size:8px!important;
+    line-height:1!important;
+    height:10px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    color:#bfdbfe!important;
+  }
+
+  /* Barra de acciones: una línea, compacta y deslizable como app profesional. */
+  .app.playing .gameHudPanel{
+    position:static!important;
+    order:3!important;
+    height:var(--toolbar-h)!important;
+    min-height:var(--toolbar-h)!important;
+    padding:2px!important;
+    border-radius:11px!important;
+    display:flex!important;
+    gap:4px!important;
+    align-items:center!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    background:rgba(8,18,42,.92)!important;
+    border:1px solid rgba(147,197,253,.2)!important;
+    box-shadow:none!important;
+    scrollbar-width:none!important;
+  }
+  .app.playing .gameHudPanel::-webkit-scrollbar{display:none!important}
+  .app.playing .gameHudPanel>.tableHeader,
+  .app.playing #gameNotice,
+  .app.playing #quickHow,
+  .app.playing #selectionInfo{
+    display:none!important;
+  }
+  .app.playing .gameHudPanel .controls,
+  .app.playing .gameHudPanel .controls.two,
+  .app.playing #turnControlsTop,
+  .app.playing #moveControls{
+    display:contents!important;
+  }
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    flex:0 0 58px!important;
+    width:58px!important;
+    height:28px!important;
+    min-height:28px!important;
+    padding:0 4px!important;
+    border-radius:9px!important;
+    font-size:0!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    text-align:center!important;
+  }
+  .app.playing .gameHudPanel button::after,
+  .app.playing .gameHudPanel select{
+    font-size:10px!important;
+    font-weight:900!important;
+  }
+  .app.playing #newSetBtn{order:1!important;flex-basis:62px!important;width:62px!important;background:linear-gradient(135deg,#22c55e,#06b6d4)!important;color:#fff!important}
+  .app.playing #newSetBtn::after{content:"Bajar"}
+  .app.playing #drawBtn{order:2!important}
+  .app.playing #drawBtn::after{content:"Tomar"}
+  .app.playing #endTurnBtn{order:3!important;background:linear-gradient(135deg,#f59e0b,#f97316)!important;color:#fff!important}
+  .app.playing #endTurnBtn::after{content:"Fin turno"}
+  .app.playing #advanceDemoBtn{order:4!important;flex-basis:62px!important;width:62px!important}
+  .app.playing #advanceDemoBtn::after{content:"Demo ▶"}
+  .app.playing #resetDemoMobileBtn{order:5!important;display:block!important;flex-basis:52px!important;width:52px!important}
+  .app.playing #resetDemoMobileBtn::after{content:"Reset"}
+  .app.playing #targetSetSelect{order:6!important;flex-basis:72px!important;width:72px!important;font-size:9px!important}
+  .app.playing #addToSetBtn{order:7!important}
+  .app.playing #addToSetBtn::after{content:"Agregar"}
+  .app.playing #clearSelectionBtn{order:8!important}
+  .app.playing #clearSelectionBtn::after{content:"Quitar"}
+  .app.playing #undoTurnBtn{order:9!important}
+  .app.playing #undoTurnBtn::after{content:"Deshacer"}
+
+  /* Atril real: máximo 20%, dos hileras de 7. */
+  .app.playing .rack{
+    position:relative!important;
+    height:100%!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+  .app.playing .rackCard{
+    height:100%!important;
+    min-height:0!important;
+    padding:3px 4px 4px!important;
+    border-radius:12px!important;
+    display:grid!important;
+    grid-template-rows:13px minmax(0,1fr)!important;
+    gap:2px!important;
+    overflow:hidden!important;
+    background:linear-gradient(180deg,#eff6ff,#ffffff)!important;
+    box-shadow:0 -8px 22px rgba(2,6,23,.22)!important;
+  }
+  .app.playing .rack .tableHeader{
+    height:13px!important;
+    min-height:13px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:4px!important;
+  }
+  .app.playing .rack .tableHeader h3{
+    margin:0!important;
+    font-size:10.5px!important;
+    line-height:1!important;
+  }
+  .app.playing #rackInfo{
+    font-size:8.5px!important;
+    line-height:1!important;
+  }
+  .app.playing .rack .tableHeader .row{
+    display:none!important;
+  }
+  .app.playing .rackTilesRail{
+    height:100%!important;
+    min-height:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0!important;
+    scrollbar-width:thin!important;
+  }
+  .app.playing #rackTiles{
+    height:100%!important;
+    min-width:100%!important;
+    display:grid!important;
+    grid-auto-flow:column!important;
+    grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    grid-auto-columns:calc((100% - 18px)/7)!important;
+    gap:3px!important;
+    align-items:stretch!important;
+  }
+  .app.playing #rackTiles .tile{
+    width:100%!important;
+    height:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    border-radius:7px!important;
+    font-size:14px!important;
+    box-shadow:0 2px 0 #b9a976,0 3px 6px rgba(2,6,23,.18)!important;
+  }
+  .app.playing #rackTiles .tile:before{
+    top:3px!important;
+    width:13px!important;
+    height:2px!important;
+  }
+  .app.playing #rackTiles .tile small{
+    right:2px!important;
+    bottom:1px!important;
+    font-size:5px!important;
+  }
+  .app.playing #rackTiles .tile.selected{
+    transform:translateY(-1px)!important;
+    box-shadow:0 0 0 2px #facc15,0 3px 0 #b9a976!important;
+  }
+
+  .app.playing .helpBtn,
+  .helpBtn{
+    width:28px!important;
+    height:28px!important;
+    right:6px!important;
+    bottom:calc(var(--rack-h) + var(--toolbar-h) + 6px)!important;
+    font-size:15px!important;
+    z-index:25!important;
+  }
+  .app.playing .footerSpace{
+    display:none!important;
+  }
+}
+
+@media(max-width:370px){
+  :root{
+    --game-top-h:48px;
+    --rack-h:clamp(84px,18.5dvh,100px);
+    --toolbar-h:32px;
+    --players-h:22px;
+  }
+  .topin{height:31px!important}
+  #appTitle{max-width:150px!important;font-size:10.5px!important}
+  .topActions select{height:25px!important;min-width:72px!important;font-size:9.5px!important}
+  .gameBar{height:17px!important}
+  .gameBar .pill{font-size:8px!important;padding:2px 4px!important}
+  .app.playing .opponentCard{padding:2px 4px!important}
+  .app.playing .opponentName{font-size:9px!important}
+  .app.playing .realTableSurface{padding:3px!important}
+  .app.playing .tableFelt{padding:4px 4px 38px!important}
+  .app.playing .poolDock{height:31px!important;width:min(158px,calc(100% - 48px))!important}
+  .app.playing .gameHudPanel button,
+  .app.playing .gameHudPanel select{
+    height:27px!important;
+    min-height:27px!important;
+    flex-basis:54px!important;
+    width:54px!important;
+  }
+  .app.playing #newSetBtn,
+  .app.playing #advanceDemoBtn{
+    flex-basis:58px!important;
+    width:58px!important;
+  }
+  .app.playing #targetSetSelect{
+    flex-basis:66px!important;
+    width:66px!important;
+  }
+  .app.playing #rackTiles{
+    grid-auto-columns:calc((100% - 15px)/7)!important;
+    gap:2.5px!important;
+  }
+  .app.playing #rackTiles .tile{
+    font-size:13px!important;
+  }
+}
+
   </style>
 </head>
 <body>
-<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa real móvil · fichas · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
+<header class="top"><div class="topin"><div class="logo"><div class="mark">▦</div><div><div id="appTitle">Rummy Familiar de Fichas</div><div class="small" id="appSubtitle">Mesa móvil profesional · fichas · online/PWA</div></div></div><div class="topActions"><select id="langSelect" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select><div class="status" id="netStatus">Conectando...</div></div></div><div class="gameBar" id="gameBar"><span class="pill" id="barRoom">Sala: -</span><span class="pill" id="barTurn">Turno: -</span><span class="pill" id="barPlayers">Jugadores: 0</span><span class="pill" id="barPool">Pila: -</span></div></header>
 <main class="app" id="app">
   <div class="grid">
     <details class="panel stack sideDrawer" id="sideDrawer" open><summary class="drawerSummary"><span id="drawerTitle">Sala y configuración</span><span id="drawerHint">tocar para abrir/cerrar</span></summary>
@@ -1261,7 +2276,7 @@ const COLOR_NAME={red:'Rojo',blue:'Azul',yellow:'Amarillo',black:'Negro'};
 const I18N={
   es:{
     connecting:'Conectando...', firebase:'Conectando Firebase...', online:'Online', offline:'Sin conexión', firebaseErr:'Error Firebase',
-    title:'Rummy Familiar de Fichas', subtitle:'Mesa real móvil · fichas · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
+    title:'Rummy Familiar de Fichas', subtitle:'Mesa móvil profesional · fichas · online/PWA', drawerTitle:'Inicio y sala', drawerHint:'abrir/cerrar', drawerHintPlay:'partida activa: abrir solo si hace falta',
     entry:'1. Tu nombre', nameLabel:'Tu nombre para jugar', namePh:'Ej: Aldo', saveName:'Guardar nombre', noName:'Sin nombre guardado.', savedName:n=>`Listo: ${n}`,
     admin:'2. Crear partida familiar', createRoomLabel:'Nombre de la sala', roomPh:'Ej: FAMILIA', createRoom:'Crear sala', refresh:'Actualizar salas', adminNote:'Creá una sala y compartí el nombre con tu familia. No hace falta configurar nada técnico.',
     chooseRoom:'3. Entrar a una sala', availableRooms:'Salas familiares', loadingRooms:'Cargando salas...', noRooms:'No hay salas creadas', join:'Entrar a jugar', leave:'Salir', noRoom:'Sin sala.', players:'Jugadores', game:'Demo y partida', start:'Iniciar mano', reset:'Reiniciar sala', baseRule:'Regla base: juego de fichas tipo Rummy/Rummikub, 106 fichas, 14 iniciales, apertura de 30 puntos, pozo central y sin descarte.', events:'Actividad',
@@ -1273,7 +2288,7 @@ const I18N={
   },
   en:{
     connecting:'Connecting...', firebase:'Connecting Firebase...', online:'Online', offline:'Offline', firebaseErr:'Firebase error',
-    title:'Family Tile Rummy', subtitle:'Real mobile table · tiles · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
+    title:'Family Tile Rummy', subtitle:'Professional mobile table · tiles · online/PWA', drawerTitle:'Start and room', drawerHint:'open/close', drawerHintPlay:'game active: open only if needed',
     entry:'1. Your name', nameLabel:'Your player name', namePh:'Ex: Alex', saveName:'Save name', noName:'No saved name.', savedName:n=>`Ready: ${n}`,
     admin:'2. Create family game', createRoomLabel:'Room name', roomPh:'Ex: FAMILY', createRoom:'Create room', refresh:'Refresh rooms', adminNote:'Create a room and share its name with your family. No technical setup needed.',
     chooseRoom:'3. Join a room', availableRooms:'Family rooms', loadingRooms:'Loading rooms...', noRooms:'No rooms created', join:'Start playing', leave:'Leave', noRoom:'No room.', players:'Players', game:'Demo and game', start:'Start hand', reset:'Reset room', baseRule:'Base rule: tile Rummy/Rummikub style, 106 tiles, 14 initial tiles, 30-point opening, central pool and no discard.', events:'Activity',

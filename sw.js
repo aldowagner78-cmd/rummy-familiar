@@ -1,4 +1,4 @@
-const CACHE = 'rummy-familiar-mesa-real-v10-reset-demo-mobile-20260704';
+const CACHE = 'rummy-familiar-ui-pro-mobile-v12-20260705';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
